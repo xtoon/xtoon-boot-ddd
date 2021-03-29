@@ -40,7 +40,8 @@ public class UserFactory {
             }
         }
         if(account == null) {
-            account = new Account(null,mobile,email,password,null,null);
+            AccountId accountId = accountRepository.store(new Account(mobile, email, password));
+            account = accountRepository.find(accountId);
         }
         if(roleIdList == null || roleIdList.isEmpty()) {
             throw new RuntimeException("角色未分配");

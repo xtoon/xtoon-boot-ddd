@@ -44,20 +44,13 @@ public interface RoleRepository {
      *
      * @param role
      */
-    void store(Role role);
-
-    /**
-     * 更新
-     *
-     * @param role
-     */
-    void update(Role role);
+    RoleId store(Role role);
 
     /**
      * 删除
      *
      * @param roleIds
      */
-    void delete(List<RoleId> roleIds);
+    void remove(List<RoleId> roleIds);
 
 }

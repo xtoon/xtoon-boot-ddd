@@ -66,6 +66,6 @@ class PermissionRepositoryImplTest {
 
     @Test
     void delete() {
-        permissionRepository.delete(new PermissionId("1362006127461568513"));
+        permissionRepository.remove(new PermissionId("1362006127461568513"));
     }
 }

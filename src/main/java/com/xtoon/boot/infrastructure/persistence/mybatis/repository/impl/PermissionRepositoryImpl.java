@@ -36,8 +36,7 @@ public class PermissionRepositoryImpl extends ServiceImpl<SysPermissionMapper, S
         List<Permission> permissions = new ArrayList<>();
         List<SysPermissionDO> list = getBaseMapper().queryList(params);
         for(SysPermissionDO sysPermissionDO : list) {
-            Permission permission = PermissionConverter.toPermission(sysPermissionDO);
-            setParentPermission(permission,sysPermissionDO.getParentId());
+            Permission permission = PermissionConverter.toPermission(sysPermissionDO, getParentPermission(sysPermissionDO.getParentId()),null);
             permissions.add(permission);
         }
         return permissions;
@@ -48,8 +47,7 @@ public class PermissionRepositoryImpl extends ServiceImpl<SysPermissionMapper, S
         List<Permission> permissions = new ArrayList<>();
         List<SysPermissionDO> list = getBaseMapper().queryPermissionByRoleCode(rolecode.getCode());
         for(SysPermissionDO sysPermissionDO : list) {
-            Permission permission = PermissionConverter.toPermission(sysPermissionDO);
-            setParentPermission(permission,sysPermissionDO.getParentId());
+            Permission permission = PermissionConverter.toPermission(sysPermissionDO, getParentPermission(sysPermissionDO.getParentId()),null);
             permissions.add(permission);
         }
         return permissions;
@@ -61,9 +59,7 @@ public class PermissionRepositoryImpl extends ServiceImpl<SysPermissionMapper, S
         if(sysPermissionDO == null) {
             return null;
         }
-        Permission permission = PermissionConverter.toPermission(sysPermissionDO);
-        setParentPermission(permission,sysPermissionDO.getParentId());
-        setSubPermission(permission);
+        Permission permission = PermissionConverter.toPermission(sysPermissionDO, getParentPermission(sysPermissionDO.getParentId()), getSubPermission(sysPermissionDO.getId()));
         return permission;
     }
 
@@ -73,54 +69,42 @@ public class PermissionRepositoryImpl extends ServiceImpl<SysPermissionMapper, S
         if(sysPermissionDO == null) {
             return null;
         }
-        Permission permission = PermissionConverter.toPermission(sysPermissionDO);
-        setParentPermission(permission,sysPermissionDO.getParentId());
-        setSubPermission(permission);
+        Permission permission = PermissionConverter.toPermission(sysPermissionDO, getParentPermission(sysPermissionDO.getParentId()), getSubPermission(sysPermissionDO.getId()));
         return permission;
     }
 
     /**
      * 设置父权限
      *
-     * @param permission
      * @param parentId
      */
-    private void setParentPermission(Permission permission, String parentId) {
-        if(parentId != null && !Permission.ROOT_ID.equals(permission.getPermissionId().getId())) {
-            SysPermissionDO parent = this.getById(parentId);
-            if(parent != null) {
-                permission.setParent(PermissionConverter.toPermission(parent));
-            }
+    private SysPermissionDO getParentPermission(String parentId) {
+        SysPermissionDO parent = null;
+        if(parentId != null) {
+            parent = this.getById(parentId);
         }
+        return parent;
     }
 
     /**
      * 设置子权限
      *
-     * @param permission
+     * @param permissionId
      */
-    private void setSubPermission(Permission permission) {
-        List<SysPermissionDO> list = this.list(new QueryWrapper<SysPermissionDO>().eq("parent_id", permission.getPermissionId().getId()));
-        if(list != null && !list.isEmpty()) {
-            List<Permission> subPermissions = new ArrayList<>();
-            for(SysPermissionDO subSysPermissionDO : list) {
-                Permission subPermission = PermissionConverter.toPermission(subSysPermissionDO);
-                subPermission.setParent(permission);
-                subPermissions.add(subPermission);
-            }
-            permission.setSubList(subPermissions);
-        }
+    private List<SysPermissionDO> getSubPermission(String permissionId) {
+        List<SysPermissionDO> list = this.list(new QueryWrapper<SysPermissionDO>().eq("parent_id", permissionId));
+        return list;
     }
 
     @Override
-    public void store(Permission permission) {
+    public PermissionId store(Permission permission) {
         SysPermissionDO sysPermissionDO = PermissionConverter.fromPermission(permission);
         this.saveOrUpdate(sysPermissionDO);
-        permission.setPermissionId(new PermissionId(sysPermissionDO.getId()));
+        return new PermissionId(sysPermissionDO.getId());
     }
 
     @Override
-    public void delete(PermissionId permissionId) {
+    public void remove(PermissionId permissionId) {
         this.removeById(permissionId.getId());
         List<String> permissionIds = new ArrayList<>();
         permissionIds.add(permissionId.getId());

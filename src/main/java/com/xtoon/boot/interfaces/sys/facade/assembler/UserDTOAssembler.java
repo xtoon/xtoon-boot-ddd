@@ -32,7 +32,7 @@ public class UserDTOAssembler {
         if(userDTO.getUserName() != null) {
             userName = new UserName(userDTO.getUserName());
         }
-        return new User(new UserId(userDTO.getId()),userName, StatusEnum.getStatusEnum(userDTO.getStatus()),null, roleList);
+        return new User(new UserId(userDTO.getId()),userName, StatusEnum.getStatusEnum(userDTO.getStatus()),null,null, roleList);
     }
 
     public static UserDTO fromUser(final User user) {

@@ -53,12 +53,12 @@ public interface PermissionRepository {
      *
      * @param permission
      */
-    void store(Permission permission);
+    PermissionId store(Permission permission);
 
     /**
      * 删除
      *
      * @param permissionId
      */
-    void delete(PermissionId permissionId);
+    void remove(PermissionId permissionId);
 }

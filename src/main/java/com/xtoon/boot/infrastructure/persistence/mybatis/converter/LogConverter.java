@@ -17,10 +17,4 @@ public class LogConverter {
         BeanUtils.copyProperties(log, sysLogDO);
         return sysLogDO;
     }
-
-    public static Log toLog(SysLogDO sysLogDO) {
-        Log log = new Log();
-        BeanUtils.copyProperties(sysLogDO, log);
-        return log;
-    }
 }

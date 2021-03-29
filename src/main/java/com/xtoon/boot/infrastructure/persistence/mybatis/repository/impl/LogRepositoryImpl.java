@@ -19,13 +19,12 @@ import org.springframework.stereotype.Repository;
 public class LogRepositoryImpl extends ServiceImpl<SysLogMapper, SysLogDO> implements LogRepository, IService<SysLogDO> {
 
     @Override
-    public Log store(Log log) {
+    public void store(Log log) {
         SysLogDO sysLogDO = LogConverter.fromLog(log);
         if (sysLogDO.getId() == null) {
             this.save(sysLogDO);
         } else {
             this.updateById(sysLogDO);
         }
-        return LogConverter.toLog(sysLogDO);
     }
 }

@@ -42,6 +42,6 @@ public interface TenantRepository {
      *
      * @param tenant
      */
-    void store(Tenant tenant);
+    TenantId store(Tenant tenant);
 
 }

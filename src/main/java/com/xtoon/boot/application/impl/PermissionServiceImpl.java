@@ -1,10 +1,10 @@
 package com.xtoon.boot.application.impl;
 
 import com.xtoon.boot.application.PermissionService;
-import com.xtoon.boot.domain.factory.PermissionFactory;
 import com.xtoon.boot.domain.model.user.Permission;
 import com.xtoon.boot.domain.model.user.types.PermissionId;
 import com.xtoon.boot.domain.repository.PermissionRepository;
+import com.xtoon.boot.domain.specification.PermissionCreateSpecification;
 import com.xtoon.boot.domain.specification.PermissionDeleteSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,13 +22,11 @@ public class PermissionServiceImpl implements PermissionService {
     @Autowired
     private PermissionRepository permissionRepository;
 
-    @Autowired
-    private PermissionFactory permissionFactory;
-
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveOrUpdate(Permission permission, PermissionId parentPermissionId) {
-        permissionFactory.createPermission(permission,parentPermissionId);
+    public void saveOrUpdate(Permission permission) {
+        PermissionCreateSpecification permissionCreateSpecification = new PermissionCreateSpecification(permissionRepository);
+        permissionCreateSpecification.isSatisfiedBy(permission);
         permissionRepository.store(permission);
     }
 
@@ -37,7 +35,7 @@ public class PermissionServiceImpl implements PermissionService {
     public void delete(PermissionId permissionId) {
         PermissionDeleteSpecification permissionDeleteSpecification = new PermissionDeleteSpecification(permissionRepository);
         permissionDeleteSpecification.isSatisfiedBy(permissionId);
-        permissionRepository.delete(permissionId);
+        permissionRepository.remove(permissionId);
     }
 
     @Override

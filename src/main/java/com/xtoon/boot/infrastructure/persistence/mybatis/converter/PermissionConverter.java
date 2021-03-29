@@ -17,9 +17,32 @@ import java.util.*;
  **/
 public class PermissionConverter {
 
-    public static Permission toPermission(SysPermissionDO sysPermissionDO) {
+    public static Permission toPermission(SysPermissionDO sysPermissionDO, SysPermissionDO parentPermissionDO, List<SysPermissionDO> subPermissionDOList) {
         if(sysPermissionDO == null) {
             throw new XTException("未找到权限");
+        }
+        MenuUrl menuUrl = null;
+        if(sysPermissionDO.getMenuUrl() != null) {
+            menuUrl = new MenuUrl(sysPermissionDO.getMenuUrl());
+        }
+        Permission parent = PermissionConverter.toPermission(parentPermissionDO);
+        List<Permission> subPermissions = null;
+        if(subPermissionDOList != null && !subPermissionDOList.isEmpty()) {
+            subPermissions = new ArrayList<>();
+            for(SysPermissionDO subSysPermissionDO : subPermissionDOList) {
+                Permission subPermission = PermissionConverter.toPermission(subSysPermissionDO);
+                subPermissions.add(subPermission);
+            }
+        }
+        Permission permission = new Permission(new PermissionId(sysPermissionDO.getId()),new PermissionName(sysPermissionDO.getPermissionName()), PermissionTypeEnum.getMenuTypeEnum(sysPermissionDO.getPermissionType()),
+                PermissionLevelEnum.getMenuLevelEnum(sysPermissionDO.getPermissionLevel()),sysPermissionDO.getMenuIcon(), toPermissionCodes(Collections.singletonList(sysPermissionDO.getPermissionCodes())),sysPermissionDO.getOrderNum(),
+                menuUrl, parent, StatusEnum.getStatusEnum(sysPermissionDO.getStatus()), subPermissions);
+        return permission;
+    }
+
+    public static Permission toPermission(SysPermissionDO sysPermissionDO) {
+        if(sysPermissionDO == null) {
+            return null;
         }
         MenuUrl menuUrl = null;
         if(sysPermissionDO.getMenuUrl() != null) {

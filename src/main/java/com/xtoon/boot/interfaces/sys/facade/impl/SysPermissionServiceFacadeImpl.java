@@ -65,8 +65,9 @@ public class SysPermissionServiceFacadeImpl implements SysPermissionServiceFacad
 
     @Override
     public void saveOrUpdate(PermissionDTO permissionDTO) {
-        Permission permission = PermissionDTOAssembler.toPermission(permissionDTO);
-        permissionService.saveOrUpdate(permission,new PermissionId(permissionDTO.getParentId()));
+        Permission parent = permissionRepository.find(new PermissionId(permissionDTO.getParentId()));
+        Permission permission = PermissionDTOAssembler.toPermission(permissionDTO,parent);
+        permissionService.saveOrUpdate(permission);
     }
 
     @Override

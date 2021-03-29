@@ -15,9 +15,9 @@ public interface PermissionService {
      * 保存
      *
      * @param permission
-     * @param parentPermissionId
+     *
      */
-    void saveOrUpdate(Permission permission, PermissionId parentPermissionId);
+    void saveOrUpdate(Permission permission);
 
     /**
      * 删除

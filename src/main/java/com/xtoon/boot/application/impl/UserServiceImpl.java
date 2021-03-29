@@ -2,7 +2,6 @@ package com.xtoon.boot.application.impl;
 
 import com.xtoon.boot.application.UserService;
 import com.xtoon.boot.domain.factory.UserFactory;
-import com.xtoon.boot.domain.model.user.Account;
 import com.xtoon.boot.domain.model.user.User;
 import com.xtoon.boot.domain.model.user.types.*;
 import com.xtoon.boot.domain.repository.AccountRepository;
@@ -50,7 +49,7 @@ public class UserServiceImpl implements UserService {
             User user = userRepository.find(userId);
             userUpdateSpecification.isSatisfiedBy(user);
         }
-        userRepository.delete(userIds);
+        userRepository.remove(userIds);
     }
 
     @Override
@@ -60,16 +59,13 @@ public class UserServiceImpl implements UserService {
         UserUpdateSpecification userUpdateSpecification = new UserUpdateSpecification(tenantRepository);
         userUpdateSpecification.isSatisfiedBy(user);
         user.disable();
-        userRepository.update(user);
+        userRepository.store(user);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void addUser(Mobile mobile, Email email, Password password, UserName userName, List<RoleId> roleIdList) {
         User user = userFactory.createUser(mobile, email, password, userName, roleIdList);
-        Account account = user.getAccount();
-        if(account.getAccountId() == null) {
-            accountRepository.store(account);
-        }
         userRepository.store(user);
     }
 }

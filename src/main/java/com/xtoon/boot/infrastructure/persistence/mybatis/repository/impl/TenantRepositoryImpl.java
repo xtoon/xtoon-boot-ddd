@@ -9,7 +9,6 @@ import com.xtoon.boot.domain.model.system.types.TenantId;
 import com.xtoon.boot.domain.model.system.types.TenantName;
 import com.xtoon.boot.domain.repository.TenantRepository;
 import com.xtoon.boot.infrastructure.persistence.mybatis.converter.TenantConverter;
-import com.xtoon.boot.infrastructure.persistence.mybatis.converter.UserConverter;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysTenantDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysUserDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysTenantMapper;
@@ -40,8 +39,8 @@ public class TenantRepositoryImpl extends ServiceImpl<SysTenantMapper, SysTenant
         if(sysTenantDO == null) {
             return null;
         }
-        Tenant tenant = TenantConverter.toTenant(sysTenantDO);
-        setCreator(tenant,sysTenantDO.getCreatorId());
+        Tenant tenant = TenantConverter.toTenant(sysTenantDO, getCreator(sysTenantDO.getCreatorId()));
+        getCreator(sysTenantDO.getCreatorId());
         return tenant;
     }
 
@@ -51,8 +50,7 @@ public class TenantRepositoryImpl extends ServiceImpl<SysTenantMapper, SysTenant
         if(sysTenantDO == null) {
             return null;
         }
-        Tenant tenant = TenantConverter.toTenant(sysTenantDO);
-        setCreator(tenant,sysTenantDO.getCreatorId());
+        Tenant tenant = TenantConverter.toTenant(sysTenantDO, getCreator(sysTenantDO.getCreatorId()));
         return tenant;
     }
 
@@ -62,33 +60,30 @@ public class TenantRepositoryImpl extends ServiceImpl<SysTenantMapper, SysTenant
         if(sysTenantDO == null) {
             return null;
         }
-        Tenant tenant = TenantConverter.toTenant(sysTenantDO);
-        setCreator(tenant,sysTenantDO.getCreatorId());
+        Tenant tenant = TenantConverter.toTenant(sysTenantDO, getCreator(sysTenantDO.getCreatorId()));
         return tenant;
     }
 
     /**
-     * 设置创建者
+     * 获取创建者
      *
-     * @param tenant
      * @param creatorId
      */
-    private void setCreator(Tenant tenant,String creatorId) {
+    private SysUserDO getCreator(String creatorId) {
+        SysUserDO sysUserDO = null;
         if(!StringUtils.isEmpty(creatorId)) {
             Map<String, Object> params = new HashMap<>();
             params.put("userId", creatorId);
-            SysUserDO sysUserDO = sysUserMapper.queryUser(params);
-            if(sysUserDO != null) {
-                tenant.setCreator(UserConverter.toUser(sysUserDO));
-            }
+            sysUserDO = sysUserMapper.queryUser(params);
         }
+        return sysUserDO;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void store(Tenant tenant) {
+    public TenantId store(Tenant tenant) {
         SysTenantDO sysTenantDO = TenantConverter.getSysTenantDO(tenant);
         this.saveOrUpdate(sysTenantDO);
-        tenant.setTenantId(new TenantId(sysTenantDO.getId()));
+        return new TenantId(sysTenantDO.getId());
     }
 }

@@ -1,23 +1,27 @@
 package com.xtoon.boot.application.impl;
 
 import com.xtoon.boot.application.TenantService;
-import com.xtoon.boot.domain.factory.TenantFactory;
 import com.xtoon.boot.domain.model.system.Tenant;
 import com.xtoon.boot.domain.model.system.types.TenantCode;
 import com.xtoon.boot.domain.model.system.types.TenantId;
 import com.xtoon.boot.domain.model.system.types.TenantName;
 import com.xtoon.boot.domain.model.user.Account;
+import com.xtoon.boot.domain.model.user.Permission;
 import com.xtoon.boot.domain.model.user.Role;
 import com.xtoon.boot.domain.model.user.User;
-import com.xtoon.boot.domain.model.user.types.UserName;
-import com.xtoon.boot.domain.repository.AccountRepository;
-import com.xtoon.boot.domain.repository.RoleRepository;
-import com.xtoon.boot.domain.repository.TenantRepository;
-import com.xtoon.boot.domain.repository.UserRepository;
+import com.xtoon.boot.domain.model.user.types.*;
+import com.xtoon.boot.domain.repository.*;
+import com.xtoon.boot.domain.shared.StatusEnum;
+import com.xtoon.boot.domain.specification.TenantCreateSpecification;
 import com.xtoon.boot.infrastructure.util.mybatis.TenantContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 租户ServiceImpl
@@ -29,13 +33,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class TenantServiceImpl implements TenantService {
 
     @Autowired
-    private TenantFactory tenantFactory;
-
-    @Autowired
     private TenantRepository tenantRepository;
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -46,16 +50,30 @@ public class TenantServiceImpl implements TenantService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void registerTenant(TenantName tenantName, TenantCode tenantCode, UserName userName, Account account) {
-        Tenant tenant = tenantFactory.createTenant(tenantName, tenantCode, userName, account);
-        tenantRepository.store(tenant);
-        TenantContext.setTenantId(tenant.getTenantId().getId());
-        User user = tenant.getCreator();
-        account = user.getAccount();
-        accountRepository.store(account);
-        Role role = user.getRoles().get(0);
-        roleRepository.store(role);
-        userRepository.store(user);
-        tenant.getCreator().setUserId(user.getUserId());
+        Tenant tenant = new Tenant(tenantCode, tenantName);
+        TenantCreateSpecification roleCreateSpecification = new TenantCreateSpecification(tenantRepository);
+        roleCreateSpecification.isSatisfiedBy(tenant);
+        // 保存租户
+        TenantId tenantId = tenantRepository.store(tenant);
+        TenantContext.setTenantId(tenantId.getId());
+        // 保存账号
+        AccountId accountId = accountRepository.store(account);
+        // 保存角色
+        Map<String ,Object> param = new HashMap<>();
+        param.put("permissionLevel", PermissionLevelEnum.TENANT.getValue());
+        List<Permission> tenantPermission =  permissionRepository.queryList(param);
+        Role adminRole = new Role(new RoleCode(RoleCode.TENANT_ADMIN), new RoleName(RoleName.TENANT_ADMIN),tenantPermission);
+        RoleId adminRoleId = roleRepository.store(adminRole);
+        // 保存用户
+        List<Role> roles = new ArrayList<>();
+        adminRole = roleRepository.find(adminRoleId);
+        roles.add(adminRole);
+        account = accountRepository.find(accountId);
+        User creator = new User(userName,account,roles);
+        UserId creatorId = userRepository.store(creator);
+        // 更新创建人
+        creator = userRepository.find(creatorId);
+        tenant = new Tenant(tenantId,tenantCode,tenantName, StatusEnum.ENABLE,creator);
         tenantRepository.store(tenant);
     }
 

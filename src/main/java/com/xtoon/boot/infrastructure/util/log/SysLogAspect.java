@@ -61,24 +61,23 @@ public class SysLogAspect {
     private void saveSysLog(ProceedingJoinPoint joinPoint, long time) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
-
-        Log log = new Log();
         SysLog syslog = method.getAnnotation(SysLog.class);
+        String operation = null;
         if(syslog != null){
             //注解上的描述
-            log.setOperation(syslog.value());
+            operation = syslog.value();
         }
 
         //请求的方法名
         String className = joinPoint.getTarget().getClass().getName();
         String methodName = signature.getName();
-        log.setMethod(className + "." + methodName + "()");
+        String methodString = className + "." + methodName + "()";
 
         //请求的参数
+        String params = null;
         Object[] args = joinPoint.getArgs();
         try{
-            String params = new Gson().toJson(args);
-            log.setParams(params);
+            params = new Gson().toJson(args);
         } catch (Exception e){
             logger.error(e.getMessage());
         }
@@ -86,20 +85,19 @@ public class SysLogAspect {
         //获取request
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         //设置IP地址
-        log.setIp(IPUtils.getIpAddr(request));
+        String ip = IPUtils.getIpAddr(request);
 
         //用户名
+        String userName = null;
         try{
-            String userName = ((User) SecurityUtils.getSubject().getPrincipal()).getUserName().getName();
-            log.setUserName(userName);
+            userName = ((User) SecurityUtils.getSubject().getPrincipal()).getUserName().getName();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
         //租户
         String tenantId = TenantContext.getTenantId();
-        log.setTenantId(tenantId);
 
-        log.setTime(time);
+        Log log = new Log(userName, operation, methodString, params, time, ip, tenantId);
         //保存系统日志
         logRepository.store(log);
     }

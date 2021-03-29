@@ -172,15 +172,4 @@ public class Permission implements Entity<Permission> {
         return subList;
     }
 
-    public void setParent(Permission parent) {
-        this.parent = parent;
-    }
-
-    public void setPermissionId(PermissionId permissionId) {
-        this.permissionId = permissionId;
-    }
-
-    public void setSubList(List<Permission> subList) {
-        this.subList = subList;
-    }
 }
