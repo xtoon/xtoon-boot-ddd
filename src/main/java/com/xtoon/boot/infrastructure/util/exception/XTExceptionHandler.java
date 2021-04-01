@@ -1,6 +1,6 @@
 package com.xtoon.boot.infrastructure.util.exception;
 
-import com.xtoon.boot.infrastructure.common.Result;
+import com.xtoon.boot.interfaces.common.Result;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

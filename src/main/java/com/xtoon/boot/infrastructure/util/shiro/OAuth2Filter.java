@@ -2,9 +2,9 @@ package com.xtoon.boot.infrastructure.util.shiro;
 
 import com.google.gson.Gson;
 import com.xtoon.boot.infrastructure.util.mybatis.TenantContext;
-import com.xtoon.boot.infrastructure.common.CommonConstant;
+import com.xtoon.boot.interfaces.common.CommonConstant;
 import com.xtoon.boot.infrastructure.util.HttpContextUtils;
-import com.xtoon.boot.infrastructure.common.Result;
+import com.xtoon.boot.interfaces.common.Result;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
