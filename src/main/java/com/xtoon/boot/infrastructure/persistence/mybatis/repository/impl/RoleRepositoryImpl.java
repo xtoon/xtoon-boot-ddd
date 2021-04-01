@@ -3,14 +3,12 @@ package com.xtoon.boot.infrastructure.persistence.mybatis.repository.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xtoon.boot.domain.model.user.Permission;
 import com.xtoon.boot.domain.model.user.Role;
 import com.xtoon.boot.domain.model.user.types.RoleCode;
 import com.xtoon.boot.domain.model.user.types.RoleId;
 import com.xtoon.boot.domain.model.user.types.RoleName;
 import com.xtoon.boot.domain.repository.RoleRepository;
 import com.xtoon.boot.domain.shared.StatusEnum;
-import com.xtoon.boot.infrastructure.persistence.mybatis.converter.PermissionConverter;
 import com.xtoon.boot.infrastructure.persistence.mybatis.converter.RoleConverter;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysPermissionDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysRoleDO;
@@ -49,8 +47,7 @@ public class RoleRepositoryImpl extends ServiceImpl<SysRoleMapper, SysRoleDO> im
         if(sysRoleDO == null) {
             return null;
         }
-        Role role = RoleConverter.toRole(sysRoleDO);
-        setRolePermission(role);
+        Role role = RoleConverter.toRole(sysRoleDO, getRolePermission(sysRoleDO.getRoleCode(), sysRoleDO.getId()));
         return role;
     }
 
@@ -60,8 +57,7 @@ public class RoleRepositoryImpl extends ServiceImpl<SysRoleMapper, SysRoleDO> im
         if(sysRoleDO == null) {
             return null;
         }
-        Role role = RoleConverter.toRole(sysRoleDO);
-        setRolePermission(role);
+        Role role = RoleConverter.toRole(sysRoleDO, getRolePermission(sysRoleDO.getRoleCode(), sysRoleDO.getId()));
         return role;
     }
 
@@ -71,29 +67,22 @@ public class RoleRepositoryImpl extends ServiceImpl<SysRoleMapper, SysRoleDO> im
         if(sysRoleDO == null) {
             return null;
         }
-        Role role = RoleConverter.toRole(sysRoleDO);
-        setRolePermission(role);
+        Role role = RoleConverter.toRole(sysRoleDO, getRolePermission(sysRoleDO.getRoleCode(), sysRoleDO.getId()));
         return role;
     }
 
-    private void setRolePermission(Role role) {
+    private List<SysPermissionDO> getRolePermission(String roleCode, String roleId) {
         List<SysPermissionDO> sysPermissionDOList;
-        if(RoleCode.SYS_ADMIN.equals(role.getRoleCode().getCode())) {
+        if(RoleCode.SYS_ADMIN.equals(roleCode)) {
             sysPermissionDOList = sysPermissionMapper.selectList(new QueryWrapper<SysPermissionDO>().eq("status", StatusEnum.ENABLE.getValue()));
         } else {
-            sysPermissionDOList = sysPermissionMapper.queryPermissionByRoleId(role.getRoleId().getId());
+            sysPermissionDOList = sysPermissionMapper.queryPermissionByRoleId(roleId);
         }
-        if(sysPermissionDOList != null && !sysPermissionDOList.isEmpty()) {
-            List<Permission> permissions = new ArrayList<>();
-            for(SysPermissionDO sysPermissionDO : sysPermissionDOList) {
-                permissions.add(PermissionConverter.toPermission(sysPermissionDO));
-            }
-            role.setPermissions(permissions);
-        }
+        return sysPermissionDOList;
     }
 
     @Override
-    public void store(Role role) {
+    public RoleId store(Role role) {
         SysRoleDO sysRoleDO = RoleConverter.fromRole(role);
         this.saveOrUpdate(sysRoleDO);
         String roleId = sysRoleDO.getId();
@@ -111,18 +100,11 @@ public class RoleRepositoryImpl extends ServiceImpl<SysRoleMapper, SysRoleDO> im
                 sysRolePermissionMapper.insert(sysRolePermissionDO);
             }
         }
-        role.setRoleId(new RoleId(sysRoleDO.getId()));
+        return new RoleId(sysRoleDO.getId());
     }
 
     @Override
-    public void update(Role role) {
-        SysRoleDO sysRoleDO = RoleConverter.fromRole(role);
-        this.saveOrUpdate(sysRoleDO);
-        role.setRoleId(new RoleId(sysRoleDO.getId()));
-    }
-
-    @Override
-    public void delete(List<RoleId> roleIds) {
+    public void remove(List<RoleId> roleIds) {
         List<String> ids = new ArrayList<>();
         roleIds.forEach(roleId -> {
             ids.add(roleId.getId());

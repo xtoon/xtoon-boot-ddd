@@ -56,11 +56,18 @@ public class Account implements Entity<Account> {
         this.password = password;
         this.token = token;
         this.users = users;
+        setLoginTenantId(users);
     }
 
     public Account(Mobile mobile, String password) {
         this.mobile = mobile;
         this.password = Password.create(password);
+    }
+
+    public Account(Mobile mobile, Email email, Password password) {
+        this.mobile = mobile;
+        this.email = email;
+        this.password = password;
     }
 
     @Override
@@ -76,6 +83,17 @@ public class Account implements Entity<Account> {
      */
     public boolean checkPassword(String passwordStr) {
         return password != null && this.password.sameValueAs(Password.create(passwordStr,password.getSalt()));
+    }
+
+    /**
+     * 设置登录租户，默认第一个租户
+     *
+     * @param users
+     */
+    private void setLoginTenantId(List<User> users) {
+        if(users != null && !users.isEmpty()) {
+            this.loginTenantId = users.get(0).getTenant().getTenantId();
+        }
     }
 
     /**
@@ -136,17 +154,5 @@ public class Account implements Entity<Account> {
 
     public List<User> getUsers() {
         return users;
-    }
-
-    public void setAccountId(AccountId accountId) {
-        this.accountId = accountId;
-    }
-
-    public void setLoginTenantId(TenantId loginTenantId) {
-        this.loginTenantId = loginTenantId;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 }

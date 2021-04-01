@@ -35,19 +35,12 @@ public interface UserRepository {
      *
      * @param user
      */
-    void store(User user);
-
-    /**
-     * 更新
-     *
-     * @param user
-     */
-    void update(User user);
+    UserId store(User user);
 
     /**
      * 删除
      *
      * @param userIds
      */
-    void delete(List<UserId> userIds);
+    void remove(List<UserId> userIds);
 }

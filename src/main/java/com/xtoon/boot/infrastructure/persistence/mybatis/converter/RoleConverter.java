@@ -1,12 +1,17 @@
 package com.xtoon.boot.infrastructure.persistence.mybatis.converter;
 
+import com.xtoon.boot.domain.model.user.Permission;
 import com.xtoon.boot.domain.model.user.Role;
 import com.xtoon.boot.domain.model.user.types.RoleCode;
 import com.xtoon.boot.domain.model.user.types.RoleId;
 import com.xtoon.boot.domain.model.user.types.RoleName;
 import com.xtoon.boot.domain.shared.StatusEnum;
+import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysPermissionDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysRoleDO;
 import com.xtoon.boot.infrastructure.util.exception.XTException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 角色Converter
@@ -16,12 +21,19 @@ import com.xtoon.boot.infrastructure.util.exception.XTException;
  **/
 public class RoleConverter {
 
-    public static Role toRole(SysRoleDO sysRoleDO) {
+    public static Role toRole(SysRoleDO sysRoleDO, List<SysPermissionDO> sysPermissionDOList) {
         if(sysRoleDO == null) {
             throw new XTException("未找到角色");
         }
+        List<Permission> permissions = null;
+        if(sysPermissionDOList != null && !sysPermissionDOList.isEmpty()) {
+            permissions = new ArrayList<>();
+            for(SysPermissionDO sysPermissionDO : sysPermissionDOList) {
+                permissions.add(PermissionConverter.toPermission(sysPermissionDO));
+            }
+        }
         Role role = new Role(new RoleId(sysRoleDO.getId()),new RoleCode(sysRoleDO.getRoleCode()),new RoleName(sysRoleDO.getRoleName()),
-                sysRoleDO.getRemarks(), StatusEnum.getStatusEnum(sysRoleDO.getStatus()),null);
+                sysRoleDO.getRemarks(), StatusEnum.getStatusEnum(sysRoleDO.getStatus()),permissions);
         return role;
     }
 

@@ -113,12 +113,4 @@ public class Role implements Entity<Role> {
     public List<Permission> getPermissions() {
         return permissions;
     }
-
-    public void setPermissions(List<Permission> permissions) {
-        this.permissions = permissions;
-    }
-
-    public void setRoleId(RoleId roleId) {
-        this.roleId = roleId;
-    }
 }

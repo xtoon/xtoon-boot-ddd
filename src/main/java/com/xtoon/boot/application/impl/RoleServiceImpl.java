@@ -40,7 +40,7 @@ public class RoleServiceImpl implements RoleService {
             Role role = roleRepository.find(roleId);
             roleUpdateSpecification.isSatisfiedBy(role);
         }
-        roleRepository.delete(roleIds);
+        roleRepository.remove(roleIds);
     }
 
     @Override
@@ -50,6 +50,6 @@ public class RoleServiceImpl implements RoleService {
         RoleUpdateSpecification roleUpdateSpecification = new RoleUpdateSpecification();
         roleUpdateSpecification.isSatisfiedBy(role);
         role.disable();
-        roleRepository.update(role);
+        roleRepository.store(role);
     }
 }

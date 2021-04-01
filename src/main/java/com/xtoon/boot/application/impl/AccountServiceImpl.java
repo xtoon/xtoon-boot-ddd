@@ -5,7 +5,6 @@ import com.xtoon.boot.domain.model.user.Account;
 import com.xtoon.boot.domain.model.user.types.AccountId;
 import com.xtoon.boot.domain.model.user.types.AccountName;
 import com.xtoon.boot.domain.model.user.types.Mobile;
-import com.xtoon.boot.domain.model.user.types.Password;
 import com.xtoon.boot.domain.repository.AccountRepository;
 import com.xtoon.boot.domain.specification.LoginByAccountSpecification;
 import com.xtoon.boot.domain.specification.LoginByMobileSpecification;

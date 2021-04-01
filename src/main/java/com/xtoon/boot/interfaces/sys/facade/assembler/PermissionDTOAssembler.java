@@ -30,7 +30,7 @@ public class PermissionDTOAssembler {
         return dto;
     }
 
-    public static Permission toPermission(final PermissionDTO permissionDTO) {
+    public static Permission toPermission(final PermissionDTO permissionDTO, Permission parent) {
         PermissionId permissionId = null;
         if(permissionDTO.getId() != null) {
             permissionId = new PermissionId(permissionDTO.getId());
@@ -58,7 +58,7 @@ public class PermissionDTOAssembler {
             menuUrl = new MenuUrl(permissionDTO.getMenuUrl());
         }
         Permission permission = new Permission(permissionId,permissionName,permissionType,permissionLevel,permissionDTO.getMenuIcon(),permissionCodes,permissionDTO.getOrderNum(),
-                menuUrl,null, null,null);
+                menuUrl,parent, null,null);
         return permission;
     }
 

@@ -40,10 +40,9 @@ public class Tenant implements Entity<Tenant> {
      */
     private User creator;
 
-    public Tenant(TenantCode tenantCode, TenantName tenantName, User creator) {
+    public Tenant(TenantCode tenantCode, TenantName tenantName) {
         this.tenantCode = tenantCode;
         this.tenantName = tenantName;
-        this.creator = creator;
         this.status = StatusEnum.ENABLE;
     }
 
@@ -97,11 +96,4 @@ public class Tenant implements Entity<Tenant> {
         return creator;
     }
 
-    public void setCreator(User creator) {
-        this.creator = creator;
-    }
-
-    public void setTenantId(TenantId tenantId) {
-        this.tenantId = tenantId;
-    }
 }

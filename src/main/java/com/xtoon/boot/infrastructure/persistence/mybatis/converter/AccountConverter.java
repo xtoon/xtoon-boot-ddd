@@ -1,9 +1,15 @@
 package com.xtoon.boot.infrastructure.persistence.mybatis.converter;
 
+import com.xtoon.boot.domain.model.system.types.TenantId;
 import com.xtoon.boot.domain.model.user.Account;
+import com.xtoon.boot.domain.model.user.User;
 import com.xtoon.boot.domain.model.user.types.*;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysAccountDO;
+import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysUserDO;
 import com.xtoon.boot.infrastructure.util.exception.XTException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 账号转换类
@@ -29,7 +35,7 @@ public class AccountConverter {
     }
 
 
-    public static Account toAccount(SysAccountDO sysAccountDO) {
+    public static Account toAccount(SysAccountDO sysAccountDO, List<SysUserDO> sysUserDOList) {
         if(sysAccountDO == null) {
             return null;
         }
@@ -49,7 +55,18 @@ public class AccountConverter {
         if(sysAccountDO.getToken() != null) {
             token = new Token(sysAccountDO.getToken(),sysAccountDO.getExpireTime());
         }
-        Account account = new Account(new AccountId(sysAccountDO.getId()),mobile,email,password,token,null);
+        List<User> users = null;
+        TenantId loginTenantId = null;
+        if(sysUserDOList != null && !sysUserDOList.isEmpty()) {
+            users = new ArrayList<>();
+            for (SysUserDO sysUserDO:sysUserDOList) {
+                users.add(UserConverter.toUser(sysUserDO,null,null));
+            }
+            if(!users.isEmpty()) {
+                loginTenantId = users.get(0).getTenant().getTenantId();
+            }
+        }
+        Account account = new Account(new AccountId(sysAccountDO.getId()),mobile,email,password,token,users);
         return account;
     }
 }

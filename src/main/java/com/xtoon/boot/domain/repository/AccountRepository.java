@@ -42,5 +42,5 @@ public interface AccountRepository {
      *
      * @param account
      */
-    void store(Account account);
+    AccountId store(Account account);
 }

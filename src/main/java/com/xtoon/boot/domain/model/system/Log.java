@@ -10,7 +10,6 @@ import org.apache.commons.lang.StringUtils;
  * @author haoxin
  * @date 2021-02-02
  **/
-@Data
 public class Log implements Entity<Log> {
 
     /**
@@ -53,9 +52,50 @@ public class Log implements Entity<Log> {
      */
     private String tenantId;
 
+    public Log(String userName, String operation, String method, String params, Long time, String ip, String tenantId) {
+        this.userName = userName;
+        this.operation = operation;
+        this.method = method;
+        this.params = params;
+        this.time = time;
+        this.ip = ip;
+        this.tenantId = tenantId;
+    }
 
     @Override
     public boolean sameIdentityAs(Log other) {
         return other != null && StringUtils.isNotBlank(this.id) && StringUtils.isNotBlank(other.id) && this.id.equals(other.id);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public String getParams() {
+        return params;
+    }
+
+    public Long getTime() {
+        return time;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public String getTenantId() {
+        return tenantId;
     }
 }

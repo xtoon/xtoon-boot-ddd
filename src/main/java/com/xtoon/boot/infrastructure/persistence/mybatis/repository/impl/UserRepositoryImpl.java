@@ -19,6 +19,7 @@ import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysUserRoleDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysRoleMapper;
 import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysUserMapper;
 import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysUserRoleMapper;
+import com.xtoon.boot.infrastructure.util.mybatis.TenantContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -56,9 +57,7 @@ public class UserRepositoryImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
         if(sysUserDO == null) {
             return null;
         }
-        User user = UserConverter.toUser(sysUserDO);
-        addUserAccount(user, sysUserDO.getAccountId());
-        addUserRoles(user);
+        User user = UserConverter.toUser(sysUserDO, getUserAccount(sysUserDO.getAccountId()), getUserRoles(sysUserDO.getId()));
         return user;
     }
 
@@ -70,14 +69,12 @@ public class UserRepositoryImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
         if(sysUserDO == null) {
             return null;
         }
-        User user = UserConverter.toUser(sysUserDO);
-        addUserAccount(user, sysUserDO.getAccountId());
-        addUserRoles(user);
+        User user = UserConverter.toUser(sysUserDO, getUserAccount(sysUserDO.getAccountId()), getUserRoles(sysUserDO.getId()));
         return user;
     }
 
     @Override
-    public void store(User user) {
+    public UserId store(User user) {
         SysUserDO sysUserDO = UserConverter.fromUser(user);
         this.saveOrUpdate(sysUserDO);
         String userId = sysUserDO.getId();
@@ -95,18 +92,11 @@ public class UserRepositoryImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
                 sysUserRoleMapper.insert(sysUserRoleDO);
             }
         }
-        user.setUserId(new UserId(sysUserDO.getId()));
+        return new UserId(sysUserDO.getId());
     }
 
     @Override
-    public void update(User user) {
-        SysUserDO sysUserDO = UserConverter.fromUser(user);
-        this.saveOrUpdate(sysUserDO);
-        user.setUserId(new UserId(sysUserDO.getId()));
-    }
-
-    @Override
-    public void delete(List<UserId> userIds) {
+    public void remove(List<UserId> userIds) {
         List<String> ids = new ArrayList<>();
         userIds.forEach(userId -> {
             ids.add(userId.getId());
@@ -118,29 +108,29 @@ public class UserRepositoryImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
     /**
      * 添加账号
      *
-     * @param user
      * @param accountId
      */
-    private void addUserAccount(User user,String accountId) {
+    private Account getUserAccount(String accountId) {
         Account account = accountRepository.find(new AccountId(accountId));
-        user.setAccount(account);
+        return account;
     }
 
     /**
-     * 添加角色
+     * 获取角色
      *
-     * @param user
+     * @param userId
      */
-    private void addUserRoles(User user) {
+    private List<Role> getUserRoles(String userId) {
+        List<Role> roleList = null;
         // 如果是超级管理员
-        List<SysRoleDO> sysRoleDOList = sysRoleMapper.queryUserRole(user.getUserId().getId());
+        List<SysRoleDO> sysRoleDOList = sysRoleMapper.queryUserRole(userId);
         if(sysRoleDOList != null && !sysRoleDOList.isEmpty()) {
-            List<Role> roleList = new ArrayList<>();
+            roleList = new ArrayList<>();
             for (SysRoleDO sysRoleDO : sysRoleDOList) {
                 roleList.add(roleRepository.find(new RoleId(sysRoleDO.getId())));
             }
-            user.setRoles(roleList);
         }
+        return roleList;
     }
 
 }

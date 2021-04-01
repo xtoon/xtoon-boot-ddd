@@ -50,11 +50,12 @@ public class User implements Entity<User> {
     private List<Role> roles;
 
 
-    public User(UserId userId, UserName userName, StatusEnum status,Tenant tenant, List<Role> roles) {
+    public User(UserId userId, UserName userName, StatusEnum status,Tenant tenant, Account account, List<Role> roles) {
         this.userId = userId;
         this.userName = userName;
         this.status = status;
         this.tenant = tenant;
+        this.account = account;
         this.roles = roles;
     }
 
@@ -180,19 +181,4 @@ public class User implements Entity<User> {
         return roles;
     }
 
-    public void setTenant(Tenant tenant) {
-        this.tenant = tenant;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
-
-    public void setUserId(UserId userId) {
-        this.userId = userId;
-    }
 }

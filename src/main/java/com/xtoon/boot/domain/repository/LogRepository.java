@@ -1,9 +1,6 @@
 package com.xtoon.boot.domain.repository;
 
 import com.xtoon.boot.domain.model.system.Log;
-import com.xtoon.boot.domain.shared.Page;
-
-import java.util.Map;
 
 /**
  * 日志-Repository接口
@@ -18,5 +15,5 @@ public interface LogRepository {
      *
      * @param log
      */
-    Log store(Log log);
+    void store(Log log);
 }

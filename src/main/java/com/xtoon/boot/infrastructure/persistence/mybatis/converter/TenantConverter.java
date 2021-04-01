@@ -6,6 +6,7 @@ import com.xtoon.boot.domain.model.system.types.TenantId;
 import com.xtoon.boot.domain.model.system.types.TenantName;
 import com.xtoon.boot.domain.shared.StatusEnum;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysTenantDO;
+import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysUserDO;
 
 /**
  * 租户Converter
@@ -15,7 +16,7 @@ import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysTenantDO;
  **/
 public class TenantConverter {
 
-    public static Tenant toTenant(SysTenantDO sysTenantDO) {
+    public static Tenant toTenant(SysTenantDO sysTenantDO, SysUserDO sysUserDO) {
         if(sysTenantDO == null) {
             return null;
         }
@@ -23,7 +24,7 @@ public class TenantConverter {
         if(sysTenantDO.getId() != null) {
             tenantId = new TenantId(sysTenantDO.getId());
         }
-        Tenant tenant = new Tenant(tenantId, new TenantCode(sysTenantDO.getTenantCode()), new TenantName(sysTenantDO.getTenantName()), StatusEnum.getStatusEnum(sysTenantDO.getStatus()),null);
+        Tenant tenant = new Tenant(tenantId, new TenantCode(sysTenantDO.getTenantCode()), new TenantName(sysTenantDO.getTenantName()), StatusEnum.getStatusEnum(sysTenantDO.getStatus()),UserConverter.toUser(sysUserDO,null,null));
         return tenant;
     }
 

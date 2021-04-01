@@ -4,14 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xtoon.boot.domain.model.user.Account;
-import com.xtoon.boot.domain.model.user.User;
 import com.xtoon.boot.domain.model.user.types.AccountId;
 import com.xtoon.boot.domain.model.user.types.AccountName;
 import com.xtoon.boot.domain.model.user.types.Mobile;
 import com.xtoon.boot.domain.repository.AccountRepository;
-import com.xtoon.boot.domain.shared.StatusEnum;
 import com.xtoon.boot.infrastructure.persistence.mybatis.converter.AccountConverter;
-import com.xtoon.boot.infrastructure.persistence.mybatis.converter.UserConverter;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysAccountDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysUserDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysAccountMapper;
@@ -19,7 +16,6 @@ import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +38,7 @@ public class AccountRepositoryImpl extends ServiceImpl<SysAccountMapper, SysAcco
         if(sysAccountDO == null) {
             return null;
         }
-        Account account = AccountConverter.toAccount(sysAccountDO);
-        setUsers(account);
+        Account account = AccountConverter.toAccount(sysAccountDO, getUsers(sysAccountDO.getId()));
         return account;
     }
 
@@ -53,8 +48,7 @@ public class AccountRepositoryImpl extends ServiceImpl<SysAccountMapper, SysAcco
         if(sysAccountDO == null) {
             return null;
         }
-        Account account = AccountConverter.toAccount(sysAccountDO);
-        setUsers(account);
+        Account account = AccountConverter.toAccount(sysAccountDO, getUsers(sysAccountDO.getId()));
         return account;
     }
 
@@ -64,32 +58,21 @@ public class AccountRepositoryImpl extends ServiceImpl<SysAccountMapper, SysAcco
         if(sysAccountDO == null) {
             return null;
         }
-        Account account = AccountConverter.toAccount(sysAccountDO);
-        setUsers(account);
+        Account account = AccountConverter.toAccount(sysAccountDO, getUsers(sysAccountDO.getId()));
         return account;
     }
 
-    private void setUsers(Account account) {
+    private List<SysUserDO> getUsers(String accountId) {
         Map<String, Object> params = new HashMap<>();
-        params.put("accountId",account.getAccountId().getId());
+        params.put("accountId",accountId);
         List<SysUserDO> sysUserDOList =  sysUserMapper.queryUserNoTenant(params);
-        if(sysUserDOList != null && !sysUserDOList.isEmpty()) {
-            List<User> userList = new ArrayList<>();
-            for (SysUserDO sysUserDO:sysUserDOList) {
-                userList.add(UserConverter.toUser(sysUserDO));
-            }
-            if(!userList.isEmpty()) {
-                account.setUsers(userList);
-                account.setLoginTenantId(userList.get(0).getTenant().getTenantId());
-            }
-        }
-
+        return sysUserDOList;
     }
 
     @Override
-    public void store(Account account) {
-        SysAccountDO sysPermissionDO = AccountConverter.fromAccount(account);
-        this.saveOrUpdate(sysPermissionDO);
-        account.setAccountId(new AccountId(sysPermissionDO.getId()));
+    public AccountId store(Account account) {
+        SysAccountDO sysAccountDO = AccountConverter.fromAccount(account);
+        this.saveOrUpdate(sysAccountDO);
+        return new AccountId(sysAccountDO.getId());
     }
 }
