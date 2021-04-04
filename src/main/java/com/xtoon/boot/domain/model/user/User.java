@@ -93,10 +93,6 @@ public class User implements Aggregate<User> {
         account.changePassword(oldPasswordStr, newPasswordStr);
     }
 
-    public void change() {
-        account.updateToken();
-    }
-
     public UserId getUserId() {
         return userId;
     }
