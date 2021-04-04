@@ -25,6 +25,7 @@
 
   [官网](http://xtoon-boot.xiangtoon.com/) |
   [在线体验](http://xtoon-boot.demo.xiangtoon.com/) |
+  [Swagger](http://106.12.78.187:8080/xtoon-boot/swagger-ui/index.html) |
   [前端开源框架](https://gitee.com/xtoon/xtoon-boot-element) |
 </div>
 
@@ -40,6 +41,7 @@
 Eric Evans的DDD（Domain-Driven Design 领域驱动设计）正是为了解决复杂业务而提出。
 我们1.0版本终于上线了，这套框架开源出来想跟大家探讨并一起维护，希望今后有更多的项目和产品能使用这套框架。
 
+## 为何开源
 
 ## 技术选型
 

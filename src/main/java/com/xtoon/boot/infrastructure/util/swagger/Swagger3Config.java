@@ -44,11 +44,11 @@ public class Swagger3Config implements WebMvcConfigurer {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("xtoon脚手架")
-                .description("基于DDD模型的开发框架")
+                .title("xtoon-boot")
+                .description("xtoon-boot是一款基于DDD领域模型并支持SaaS的企业级脚手架")
                 .termsOfServiceUrl("http://www.xiangtoon.com")
-                .contact(new Contact("haoxin", "https://blog.csdn.net/haoxin963", "525899665@qq.com"))
-                .version("v1.0.0")
+                .contact(new Contact("享同科技", "https://blog.csdn.net/haoxin963", "525899665@qq.com"))
+                .version("v1.1.0")
                 .build();
     }
 
