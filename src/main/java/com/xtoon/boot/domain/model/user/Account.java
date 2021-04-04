@@ -1,10 +1,7 @@
 package com.xtoon.boot.domain.model.user;
 
-import com.xtoon.boot.domain.model.system.types.TenantId;
-import com.xtoon.boot.domain.model.user.types.*;
+import com.xtoon.boot.domain.model.types.*;
 import com.xtoon.boot.domain.shared.Entity;
-
-import java.util.List;
 
 /**
  * 账号
@@ -39,24 +36,13 @@ public class Account implements Entity<Account> {
      */
     private Token token;
 
-    /**
-     * 登录的租户
-     */
-    private TenantId loginTenantId;
 
-    /**
-     * 关联用户
-     */
-    private List<User> users;
-
-    public Account(AccountId accountId, Mobile mobile, Email email, Password password, Token token, List<User> users) {
+    public Account(AccountId accountId, Mobile mobile, Email email, Password password, Token token) {
         this.accountId = accountId;
         this.mobile = mobile;
         this.email = email;
         this.password = password;
         this.token = token;
-        this.users = users;
-        setLoginTenantId(users);
     }
 
     public Account(Mobile mobile, String password) {
@@ -86,29 +72,17 @@ public class Account implements Entity<Account> {
     }
 
     /**
-     * 设置登录租户，默认第一个租户
-     *
-     * @param users
-     */
-    private void setLoginTenantId(List<User> users) {
-        if(users != null && !users.isEmpty()) {
-            this.loginTenantId = users.get(0).getTenant().getTenantId();
-        }
-    }
-
-    /**
      * 修改密码
      *
      * @param oldPasswordStr
      * @param newPasswordStr
      * @return
      */
-    public Account changePassword(String oldPasswordStr,String newPasswordStr) {
+    public void changePassword(String oldPasswordStr,String newPasswordStr) {
         if(!checkPassword(oldPasswordStr)) {
             throw new RuntimeException("原密码不正确");
         }
         this.password = Password.create(newPasswordStr,password.getSalt());
-        return this;
     }
 
     /**
@@ -146,13 +120,5 @@ public class Account implements Entity<Account> {
 
     public Token getToken() {
         return token;
-    }
-
-    public TenantId getLoginTenantId() {
-        return loginTenantId;
-    }
-
-    public List<User> getUsers() {
-        return users;
     }
 }

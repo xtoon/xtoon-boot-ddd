@@ -2,12 +2,12 @@ package com.xtoon.boot.interfaces.facade.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xtoon.boot.domain.shared.Page;
-import com.xtoon.boot.infrastructure.persistence.mybatis.converter.PageConverter;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysLogDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysLogMapper;
 import com.xtoon.boot.infrastructure.util.mybatis.Query;
+import com.xtoon.boot.interfaces.common.Page;
 import com.xtoon.boot.interfaces.facade.SysLogServiceFacade;
+import com.xtoon.boot.interfaces.facade.assembler.PageAssembler;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,6 +33,6 @@ public class SysLogServiceFacadeImpl implements SysLogServiceFacade {
                 new Query<SysLogDO>().getPage(params),
                 new QueryWrapper<SysLogDO>().like(StringUtils.isNotBlank(key),"username", key)
         );
-        return PageConverter.toPage(page);
+        return PageAssembler.toPage(page);
     }
 }

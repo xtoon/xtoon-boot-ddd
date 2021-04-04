@@ -2,20 +2,19 @@ package com.xtoon.boot.infrastructure.persistence.mybatis.repository.impl;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xtoon.boot.domain.model.types.Mobile;
+import com.xtoon.boot.domain.model.types.RoleId;
+import com.xtoon.boot.domain.model.types.Token;
+import com.xtoon.boot.domain.model.types.UserId;
 import com.xtoon.boot.domain.model.user.Account;
-import com.xtoon.boot.domain.model.user.Role;
 import com.xtoon.boot.domain.model.user.User;
-import com.xtoon.boot.domain.model.user.types.AccountId;
-import com.xtoon.boot.domain.model.user.types.RoleId;
-import com.xtoon.boot.domain.model.user.types.Token;
-import com.xtoon.boot.domain.model.user.types.UserId;
-import com.xtoon.boot.domain.repository.AccountRepository;
-import com.xtoon.boot.domain.repository.RoleRepository;
 import com.xtoon.boot.domain.repository.UserRepository;
 import com.xtoon.boot.infrastructure.persistence.mybatis.converter.UserConverter;
+import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysAccountDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysRoleDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysUserDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysUserRoleDO;
+import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysAccountMapper;
 import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysRoleMapper;
 import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysUserMapper;
 import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysUserRoleMapper;
@@ -44,10 +43,8 @@ public class UserRepositoryImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
     private SysRoleMapper sysRoleMapper;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private SysAccountMapper sysAccountMapper;
 
-    @Autowired
-    private RoleRepository roleRepository;
 
     @Override
     public User find(UserId userId) {
@@ -57,7 +54,7 @@ public class UserRepositoryImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
         if(sysUserDO == null) {
             return null;
         }
-        User user = UserConverter.toUser(sysUserDO, getUserAccount(sysUserDO.getAccountId()), getUserRoles(sysUserDO.getId()));
+        User user = UserConverter.toUser(sysUserDO, getUserAccount(sysUserDO.getAccountId()), getUserRoleIds(sysUserDO.getId()));
         return user;
     }
 
@@ -69,30 +66,60 @@ public class UserRepositoryImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
         if(sysUserDO == null) {
             return null;
         }
-        User user = UserConverter.toUser(sysUserDO, getUserAccount(sysUserDO.getAccountId()), getUserRoles(sysUserDO.getId()));
+        User user = UserConverter.toUser(sysUserDO, getUserAccount(sysUserDO.getAccountId()), getUserRoleIds(sysUserDO.getId()));
         return user;
     }
 
     @Override
-    public UserId store(User user) {
-        SysUserDO sysUserDO = UserConverter.fromUser(user);
-        this.saveOrUpdate(sysUserDO);
-        String userId = sysUserDO.getId();
-        //先删除用户与角色关系
-        List<String> userIds = new ArrayList<>();
-        userIds.add(userId);
-        sysUserRoleMapper.deleteByUserIds(userIds);
-        List<String> roleIds = user.getUserRoleIds();
-        if(roleIds !=null && !roleIds.isEmpty()) {
-            //保存角色与菜单关系
-            for(String roleId : roleIds){
-                SysUserRoleDO sysUserRoleDO = new SysUserRoleDO();
-                sysUserRoleDO.setUserId(userId);
-                sysUserRoleDO.setRoleId(roleId);
-                sysUserRoleMapper.insert(sysUserRoleDO);
-            }
+    public List<User> find(Mobile mobile) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("mobile",mobile.getMobile());
+        List<SysUserDO> sysUserDOList =  baseMapper.queryUserNoTenant(params);
+        if(sysUserDOList == null || sysUserDOList.isEmpty()) {
+            return null;
         }
-        return new UserId(sysUserDO.getId());
+        List<User> users = new ArrayList<>();
+        for(SysUserDO sysUserDO : sysUserDOList) {
+            User user = UserConverter.toUser(sysUserDO, getUserAccount(sysUserDO.getAccountId()), getUserRoleIds(sysUserDO.getId()));
+            users.add(user);
+        }
+        return users;
+    }
+
+    @Override
+    public UserId store(User user) {
+        SysAccountDO sysAccountDO = UserConverter.getSysAccountDO(user);
+        String accountId = null;
+        if(sysAccountDO != null) {
+            if(sysAccountDO.getId() != null) {
+                sysAccountMapper.updateById(sysAccountDO);
+            } else {
+                sysAccountMapper.insert(sysAccountDO);
+            }
+            accountId = sysAccountDO.getId();
+        }
+        if(TenantContext.getTenantId() != null) {
+            SysUserDO sysUserDO = UserConverter.fromUser(user,accountId);
+            this.saveOrUpdate(sysUserDO);
+            String userId = sysUserDO.getId();
+            //先删除用户与角色关系
+            List<String> userIds = new ArrayList<>();
+            userIds.add(userId);
+            sysUserRoleMapper.deleteByUserIds(userIds);
+            List<RoleId> roleIds = user.getRoleIds();
+            if(roleIds !=null && !roleIds.isEmpty()) {
+                //保存角色与菜单关系
+                for(RoleId roleId : roleIds){
+                    SysUserRoleDO sysUserRoleDO = new SysUserRoleDO();
+                    sysUserRoleDO.setUserId(userId);
+                    sysUserRoleDO.setRoleId(roleId.getId());
+                    sysUserRoleMapper.insert(sysUserRoleDO);
+                }
+            }
+            return new UserId(sysUserDO.getId());
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -111,26 +138,30 @@ public class UserRepositoryImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
      * @param accountId
      */
     private Account getUserAccount(String accountId) {
-        Account account = accountRepository.find(new AccountId(accountId));
+        SysAccountDO sysAccountDO = sysAccountMapper.selectById(accountId);
+        if(sysAccountDO == null) {
+            return null;
+        }
+        Account account = UserConverter.toAccount(sysAccountDO);
         return account;
     }
 
     /**
-     * 获取角色
+     * 获取管理角色Id
      *
      * @param userId
      */
-    private List<Role> getUserRoles(String userId) {
-        List<Role> roleList = null;
+    private List<RoleId> getUserRoleIds(String userId) {
+        List<RoleId> roleIdList = null;
         // 如果是超级管理员
         List<SysRoleDO> sysRoleDOList = sysRoleMapper.queryUserRole(userId);
         if(sysRoleDOList != null && !sysRoleDOList.isEmpty()) {
-            roleList = new ArrayList<>();
+            roleIdList = new ArrayList<>();
             for (SysRoleDO sysRoleDO : sysRoleDOList) {
-                roleList.add(roleRepository.find(new RoleId(sysRoleDO.getId())));
+                roleIdList.add(new RoleId(sysRoleDO.getId()));
             }
         }
-        return roleList;
+        return roleIdList;
     }
 
 }

@@ -1,17 +1,13 @@
 package com.xtoon.boot.interfaces.web;
 
 import com.xtoon.boot.infrastructure.util.log.SysLog;
-import com.xtoon.boot.infrastructure.util.redis.RedisUtils;
 import com.xtoon.boot.infrastructure.util.validator.ValidatorUtils;
 import com.xtoon.boot.infrastructure.util.validator.group.AddGroup;
 import com.xtoon.boot.interfaces.common.AbstractController;
-import com.xtoon.boot.interfaces.common.CommonConstant;
 import com.xtoon.boot.interfaces.common.Result;
 import com.xtoon.boot.interfaces.facade.SysCaptchaServiceFacade;
 import com.xtoon.boot.interfaces.facade.SysTenantServiceFacade;
-import com.xtoon.boot.interfaces.facade.SysUserServiceFacade;
 import com.xtoon.boot.interfaces.web.command.RegisterTenantCommand;
-import com.xtoon.boot.interfaces.web.command.RegisterUserCommand;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +31,6 @@ public class SysRegisterController extends AbstractController {
     @Autowired
     private SysCaptchaServiceFacade sysCaptchaServiceFacade;
 
-    @Autowired
-    private SysUserServiceFacade sysUserServiceFacade;
-
-    @Autowired
-    private RedisUtils redisUtils;
-
     /**
      * 注册租户
      */
@@ -55,23 +45,6 @@ public class SysRegisterController extends AbstractController {
         }
         sysTenantServiceFacade.registerTenant(registerTenantCommand.getTenantName(),registerTenantCommand.getTenantCode(),registerTenantCommand.getUserName(),
                 registerTenantCommand.getMobile(),registerTenantCommand.getPassword());
-        return Result.ok();
-    }
-
-
-    /**
-     * 注册用户
-     */
-    @ApiOperation("注册用户")
-    @SysLog("注册用户")
-    @PostMapping("/sys/registerUser")
-    public Result registerUser(@RequestBody RegisterUserCommand registerUserCommand) {
-        ValidatorUtils.validateEntity(registerUserCommand);
-        String verificationCodeRedis = redisUtils.get(CommonConstant.REDIS_PHONE_CODE + registerUserCommand.getMobile());
-        if (!registerUserCommand.getVerificationCode().equals(verificationCodeRedis)) {
-            return Result.error("验证码不正确");
-        }
-        sysUserServiceFacade.registerUser(registerUserCommand.getTenantId(),registerUserCommand.getRoleId(),registerUserCommand.getMobile(),registerUserCommand.getUserName());
         return Result.ok();
     }
 }

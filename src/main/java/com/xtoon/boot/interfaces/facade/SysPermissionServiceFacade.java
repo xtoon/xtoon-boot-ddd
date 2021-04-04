@@ -1,7 +1,7 @@
 package com.xtoon.boot.interfaces.facade;
 
-import com.xtoon.boot.domain.model.user.User;
 import com.xtoon.boot.interfaces.facade.dto.PermissionDTO;
+import com.xtoon.boot.interfaces.facade.dto.UserDTO;
 
 import java.util.List;
 
@@ -62,5 +62,5 @@ public interface SysPermissionServiceFacade {
      * @param user
      * @return
      */
-    List<PermissionDTO> getUserMenuTree(User user);
+    List<PermissionDTO> getUserMenuTree(UserDTO user);
 }

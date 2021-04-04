@@ -1,10 +1,7 @@
 package com.xtoon.boot.infrastructure.util.shiro;
 
-import com.xtoon.boot.domain.model.user.User;
-import com.xtoon.boot.domain.model.user.types.Token;
-import com.xtoon.boot.domain.repository.PermissionRepository;
-import com.xtoon.boot.domain.repository.UserRepository;
-import com.xtoon.boot.domain.specification.LoginByTokenSpecification;
+import com.xtoon.boot.interfaces.facade.SysUserServiceFacade;
+import com.xtoon.boot.interfaces.facade.dto.UserDTO;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -26,10 +23,7 @@ import org.springframework.stereotype.Component;
 public class OAuth2Realm extends AuthorizingRealm {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PermissionRepository permissionRepository;
+    private SysUserServiceFacade sysUserServiceFacade;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -41,9 +35,9 @@ public class OAuth2Realm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        User user = (User)principals.getPrimaryPrincipal();
+        UserDTO user = (UserDTO)principals.getPrimaryPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.setStringPermissions(user.getUserPermissionCodes());
+        info.setStringPermissions(user.getPermissionCodes());
         return info;
     }
 
@@ -53,11 +47,10 @@ public class OAuth2Realm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String accessToken = (String) token.getPrincipal();
-        Token accountToken = new Token(accessToken,null);
-        //根据accessToken，查询用户信息
-        User user = userRepository.find(accountToken);
-        LoginByTokenSpecification loginByTokenSpecification = new LoginByTokenSpecification();
-        loginByTokenSpecification.isSatisfiedBy(user);
+        if(accessToken == null) {
+            return null;
+        }
+        UserDTO user = sysUserServiceFacade.queryByToken(accessToken);
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, accessToken, getName());
         return info;
     }

@@ -1,7 +1,6 @@
 package com.xtoon.boot.interfaces.facade;
 
-import com.xtoon.boot.domain.model.user.Account;
-import com.xtoon.boot.domain.shared.Page;
+import com.xtoon.boot.interfaces.common.Page;
 
 import java.util.Map;
 
@@ -20,15 +19,6 @@ public interface SysTenantServiceFacade {
      * @return
      */
     Page queryPage(Map<String, Object> params);
-
-    /**
-     * 注册租户
-     *
-     * @param tenantName
-     * @param tenantCode
-     * @param account
-     */
-    void registerTenant(String tenantName, String tenantCode, String userName, Account account);
 
     /**
      * 注册租户

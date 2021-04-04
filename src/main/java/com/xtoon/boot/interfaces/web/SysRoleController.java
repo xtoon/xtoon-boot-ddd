@@ -1,10 +1,11 @@
 package com.xtoon.boot.interfaces.web;
 
-import com.xtoon.boot.domain.shared.Page;
-import com.xtoon.boot.interfaces.common.Result;
+import com.xtoon.boot.interfaces.common.Page;
 import com.xtoon.boot.infrastructure.util.log.SysLog;
 import com.xtoon.boot.infrastructure.util.validator.ValidatorUtils;
 import com.xtoon.boot.interfaces.common.AbstractController;
+import com.xtoon.boot.interfaces.common.CommonConstant;
+import com.xtoon.boot.interfaces.common.Result;
 import com.xtoon.boot.interfaces.facade.SysRoleServiceFacade;
 import com.xtoon.boot.interfaces.facade.dto.RoleDTO;
 import com.xtoon.boot.interfaces.web.command.RoleCommand;
@@ -40,7 +41,7 @@ public class SysRoleController extends AbstractController {
     @RequiresPermissions("sys:role:list")
     public Result list(@RequestParam Map<String, Object> params){
         Page page = sysRoleServiceFacade.queryPage(params);
-        return Result.ok().put(RESULT_PAGE, page);
+        return Result.ok().put(CommonConstant.PAGE, page);
     }
 
     /**

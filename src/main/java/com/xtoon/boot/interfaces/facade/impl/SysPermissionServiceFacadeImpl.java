@@ -1,24 +1,21 @@
 package com.xtoon.boot.interfaces.facade.impl;
 
 import com.xtoon.boot.application.PermissionApplicationService;
-import com.xtoon.boot.domain.model.system.types.TenantId;
-import com.xtoon.boot.domain.model.user.Permission;
-import com.xtoon.boot.domain.model.user.User;
-import com.xtoon.boot.domain.model.user.types.PermissionId;
-import com.xtoon.boot.domain.model.user.types.PermissionTypeEnum;
-import com.xtoon.boot.domain.model.user.types.RoleCode;
+import com.xtoon.boot.domain.model.Permission;
+import com.xtoon.boot.domain.model.types.PermissionId;
+import com.xtoon.boot.domain.model.types.PermissionTypeEnum;
+import com.xtoon.boot.domain.model.types.RoleCode;
+import com.xtoon.boot.domain.model.types.TenantId;
 import com.xtoon.boot.domain.repository.PermissionRepository;
 import com.xtoon.boot.infrastructure.util.mybatis.TenantContext;
 import com.xtoon.boot.interfaces.facade.SysPermissionServiceFacade;
 import com.xtoon.boot.interfaces.facade.assembler.PermissionDTOAssembler;
 import com.xtoon.boot.interfaces.facade.dto.PermissionDTO;
+import com.xtoon.boot.interfaces.facade.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 权限FacadeImpl
@@ -81,8 +78,8 @@ public class SysPermissionServiceFacadeImpl implements SysPermissionServiceFacad
     }
 
     @Override
-    public List<PermissionDTO> getUserMenuTree(User user) {
-        List<String> menuIdList = user.getUserPermissionIds();
+    public List<PermissionDTO> getUserMenuTree(UserDTO user) {
+        Set<String> menuIdList = user.getPermissionIds();
         if(menuIdList == null) {
             return null;
         }
@@ -92,7 +89,7 @@ public class SysPermissionServiceFacadeImpl implements SysPermissionServiceFacad
     /**
      * 获取所有菜单列表
      */
-    private List<PermissionDTO> getAllMenuList(List<String> menuIdList){
+    private List<PermissionDTO> getAllMenuList(Set<String> menuIdList){
         //查询根菜单列表
         List<PermissionDTO> menuList = queryListParentId(Permission.ROOT_ID, menuIdList);
         //递归获取子菜单
@@ -107,7 +104,7 @@ public class SysPermissionServiceFacadeImpl implements SysPermissionServiceFacad
      * @param menuIdList
      * @return
      */
-    private List<PermissionDTO> queryListParentId(String parentId, List<String> menuIdList) {
+    private List<PermissionDTO> queryListParentId(String parentId, Set<String> menuIdList) {
         Map<String, Object> params = new HashMap<>();
         params.put("parentId",parentId);
         List<PermissionDTO> menuList = PermissionDTOAssembler.getPermissionList(permissionRepository.queryList(params));
@@ -126,7 +123,7 @@ public class SysPermissionServiceFacadeImpl implements SysPermissionServiceFacad
     /**
      * 递归
      */
-    private List<PermissionDTO> getMenuTreeList(List<PermissionDTO> menuList, List<String> menuIdList){
+    private List<PermissionDTO> getMenuTreeList(List<PermissionDTO> menuList, Set<String> menuIdList){
         List<PermissionDTO> subMenuList = new ArrayList<>();
         for(PermissionDTO entity : menuList){
             //目录

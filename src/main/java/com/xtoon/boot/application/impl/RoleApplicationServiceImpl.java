@@ -1,8 +1,8 @@
 package com.xtoon.boot.application.impl;
 
 import com.xtoon.boot.application.RoleApplicationService;
-import com.xtoon.boot.domain.model.user.Role;
-import com.xtoon.boot.domain.model.user.types.RoleId;
+import com.xtoon.boot.domain.model.Role;
+import com.xtoon.boot.domain.model.types.RoleId;
 import com.xtoon.boot.domain.repository.RoleRepository;
 import com.xtoon.boot.domain.specification.RoleCreateSpecification;
 import com.xtoon.boot.domain.specification.RoleUpdateSpecification;

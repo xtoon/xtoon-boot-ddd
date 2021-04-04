@@ -1,11 +1,6 @@
 package com.xtoon.boot.application;
 
-import com.xtoon.boot.domain.model.system.types.TenantCode;
-import com.xtoon.boot.domain.model.system.types.TenantId;
-import com.xtoon.boot.domain.model.system.types.TenantName;
-import com.xtoon.boot.domain.model.user.Account;
-import com.xtoon.boot.domain.model.user.User;
-import com.xtoon.boot.domain.model.user.types.UserName;
+import com.xtoon.boot.domain.model.types.*;
 
 /**
  * 租户Service
@@ -20,10 +15,11 @@ public interface TenantApplicationService {
      *
      * @param tenantName
      * @param tenantCode
+     * @param mobile
+     * @param password
      * @param userName
-     * @param account
      */
-    void registerTenant(TenantName tenantName, TenantCode tenantCode, UserName userName, Account account);
+    void registerTenant(TenantName tenantName, TenantCode tenantCode, Mobile mobile, Password password, UserName userName);
 
     /**
      * 禁用

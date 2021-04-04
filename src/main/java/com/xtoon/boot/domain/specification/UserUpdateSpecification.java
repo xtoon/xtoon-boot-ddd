@@ -1,6 +1,6 @@
 package com.xtoon.boot.domain.specification;
 
-import com.xtoon.boot.domain.model.system.Tenant;
+import com.xtoon.boot.domain.model.Tenant;
 import com.xtoon.boot.domain.model.user.User;
 import com.xtoon.boot.domain.repository.TenantRepository;
 import com.xtoon.boot.domain.shared.AbstractSpecification;
@@ -21,8 +21,8 @@ public class UserUpdateSpecification extends AbstractSpecification<User> {
 
     @Override
     public boolean isSatisfiedBy(User user) {
-        Tenant tenant = tenantRepository.find(user.getTenant().getTenantId());
-        if(tenant.getCreator().sameIdentityAs(user)) {
+        Tenant tenant = tenantRepository.find(user.getTenantId());
+        if(tenant.getCreatorId().sameValueAs(user.getUserId())) {
             throw new RuntimeException("租户创建者无法修改");
         }
         return false;

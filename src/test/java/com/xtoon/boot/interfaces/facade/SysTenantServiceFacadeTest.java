@@ -24,8 +24,4 @@ class SysTenantServiceFacadeTest {
         sysTenantServiceFacade.registerTenant("京东","JD","","18888888888","2222222222");
     }
 
-    @Test
-    void registerTenant1() {
-        sysTenantServiceFacade.registerTenant("苹果","APPLE","",null);
-    }
 }

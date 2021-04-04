@@ -1,12 +1,13 @@
 package com.xtoon.boot.interfaces.web;
 
-import com.xtoon.boot.domain.shared.Page;
-import com.xtoon.boot.interfaces.common.Result;
+import com.xtoon.boot.interfaces.common.Page;
 import com.xtoon.boot.infrastructure.util.log.SysLog;
 import com.xtoon.boot.infrastructure.util.validator.ValidatorUtils;
 import com.xtoon.boot.infrastructure.util.validator.group.AddGroup;
 import com.xtoon.boot.infrastructure.util.validator.group.UpdateGroup;
 import com.xtoon.boot.interfaces.common.AbstractController;
+import com.xtoon.boot.interfaces.common.CommonConstant;
+import com.xtoon.boot.interfaces.common.Result;
 import com.xtoon.boot.interfaces.facade.SysUserServiceFacade;
 import com.xtoon.boot.interfaces.facade.dto.UserDTO;
 import com.xtoon.boot.interfaces.web.command.PasswordCommand;
@@ -42,7 +43,7 @@ public class SysUserController extends AbstractController {
     @RequiresPermissions("sys:user:list")
     public Result list(@RequestParam Map<String, Object> params){
         Page page = sysUserServiceFacade.queryPage(params);
-        return Result.ok().put(RESULT_PAGE, page);
+        return Result.ok().put(CommonConstant.PAGE, page);
     }
 
     /**
@@ -62,7 +63,7 @@ public class SysUserController extends AbstractController {
     @PostMapping("/password")
     public Result changePassword(@RequestBody PasswordCommand passwordCommand){
         ValidatorUtils.validateEntity(passwordCommand);
-        sysUserServiceFacade.changePassword(getUser().getAccount(),passwordCommand.getPassword(),passwordCommand.getNewPassword());
+        sysUserServiceFacade.changePassword(getUser().getId(),passwordCommand.getPassword(),passwordCommand.getNewPassword());
         return Result.ok();
     }
 

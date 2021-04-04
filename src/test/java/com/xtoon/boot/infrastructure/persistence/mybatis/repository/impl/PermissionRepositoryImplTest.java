@@ -1,7 +1,7 @@
 package com.xtoon.boot.infrastructure.persistence.mybatis.repository.impl;
 
-import com.xtoon.boot.domain.model.user.Permission;
-import com.xtoon.boot.domain.model.user.types.*;
+import com.xtoon.boot.domain.model.Permission;
+import com.xtoon.boot.domain.model.types.*;
 import com.xtoon.boot.domain.repository.PermissionRepository;
 import com.xtoon.boot.domain.shared.StatusEnum;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * 权限RepositoryImpl测试类

@@ -2,15 +2,15 @@ package com.xtoon.boot.interfaces.facade.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xtoon.boot.application.RoleApplicationService;
-import com.xtoon.boot.domain.model.user.types.RoleId;
+import com.xtoon.boot.domain.model.types.RoleId;
 import com.xtoon.boot.domain.repository.RoleRepository;
-import com.xtoon.boot.domain.shared.Page;
 import com.xtoon.boot.domain.shared.StatusEnum;
-import com.xtoon.boot.infrastructure.persistence.mybatis.converter.PageConverter;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysRoleDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysRoleMapper;
 import com.xtoon.boot.infrastructure.util.mybatis.Query;
+import com.xtoon.boot.interfaces.common.Page;
 import com.xtoon.boot.interfaces.facade.SysRoleServiceFacade;
+import com.xtoon.boot.interfaces.facade.assembler.PageAssembler;
 import com.xtoon.boot.interfaces.facade.assembler.RoleDTOAssembler;
 import com.xtoon.boot.interfaces.facade.dto.RoleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class SysRoleServiceFacadeImpl implements SysRoleServiceFacade {
     @Override
     public Page queryPage(Map<String, Object> params) {
         IPage<SysRoleDO> page = sysRoleMapper.queryList(new Query().getPage(params),params);
-        return PageConverter.toPage(page);
+        return PageAssembler.toPage(page);
     }
 
     @Override

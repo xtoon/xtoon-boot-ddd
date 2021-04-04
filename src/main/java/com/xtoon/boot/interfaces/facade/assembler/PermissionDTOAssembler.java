@@ -1,7 +1,7 @@
 package com.xtoon.boot.interfaces.facade.assembler;
 
-import com.xtoon.boot.domain.model.user.Permission;
-import com.xtoon.boot.domain.model.user.types.*;
+import com.xtoon.boot.domain.model.Permission;
+import com.xtoon.boot.domain.model.types.*;
 import com.xtoon.boot.interfaces.facade.dto.PermissionDTO;
 import org.apache.commons.lang3.StringUtils;
 

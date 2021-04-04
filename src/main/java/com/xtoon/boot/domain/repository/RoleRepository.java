@@ -1,9 +1,9 @@
 package com.xtoon.boot.domain.repository;
 
-import com.xtoon.boot.domain.model.user.Role;
-import com.xtoon.boot.domain.model.user.types.RoleCode;
-import com.xtoon.boot.domain.model.user.types.RoleId;
-import com.xtoon.boot.domain.model.user.types.RoleName;
+import com.xtoon.boot.domain.model.Role;
+import com.xtoon.boot.domain.model.types.RoleCode;
+import com.xtoon.boot.domain.model.types.RoleId;
+import com.xtoon.boot.domain.model.types.RoleName;
 
 import java.util.List;
 

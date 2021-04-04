@@ -1,6 +1,6 @@
 package com.xtoon.boot.domain.repository;
 
-import com.xtoon.boot.domain.model.system.Log;
+import com.xtoon.boot.domain.model.Log;
 
 /**
  * 日志-Repository接口

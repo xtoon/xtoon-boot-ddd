@@ -1,29 +1,33 @@
 package com.xtoon.boot.interfaces.facade.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xtoon.boot.application.AccountApplicationService;
 import com.xtoon.boot.application.UserApplicationService;
-import com.xtoon.boot.domain.model.system.Tenant;
-import com.xtoon.boot.domain.model.system.types.TenantId;
-import com.xtoon.boot.domain.model.user.Account;
-import com.xtoon.boot.domain.model.user.types.*;
-import com.xtoon.boot.domain.repository.TenantRepository;
+import com.xtoon.boot.domain.model.types.*;
+import com.xtoon.boot.domain.model.user.User;
 import com.xtoon.boot.domain.repository.UserRepository;
-import com.xtoon.boot.domain.shared.Page;
-import com.xtoon.boot.infrastructure.persistence.mybatis.converter.PageConverter;
+import com.xtoon.boot.domain.shared.StatusEnum;
+import com.xtoon.boot.domain.specification.LoginByTokenSpecification;
+import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysPermissionDO;
+import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysTenantDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysUserDO;
+import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysPermissionMapper;
+import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysTenantMapper;
 import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysUserMapper;
 import com.xtoon.boot.infrastructure.util.mybatis.Query;
 import com.xtoon.boot.infrastructure.util.mybatis.TenantContext;
+import com.xtoon.boot.interfaces.common.Page;
 import com.xtoon.boot.interfaces.facade.SysUserServiceFacade;
+import com.xtoon.boot.interfaces.facade.assembler.LoginSuccessDTOAssembler;
+import com.xtoon.boot.interfaces.facade.assembler.PageAssembler;
 import com.xtoon.boot.interfaces.facade.assembler.UserDTOAssembler;
+import com.xtoon.boot.interfaces.facade.dto.LoginSuccessDTO;
+import com.xtoon.boot.interfaces.facade.dto.TenantDTO;
 import com.xtoon.boot.interfaces.facade.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 用户FacadeImpl
@@ -41,29 +45,47 @@ public class SysUserServiceFacadeImpl implements SysUserServiceFacade {
     private SysUserMapper sysUserMapper;
 
     @Autowired
+    private SysPermissionMapper sysPermissionMapper;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private AccountApplicationService accountApplicationService;
-
-    @Autowired
-    private TenantRepository tenantRepository;
+    private SysTenantMapper sysTenantMapper;
 
     @Override
     public Page queryPage(Map<String, Object> params) {
         IPage<SysUserDO> page = sysUserMapper.queryPage(new Query().getPage(params),params);
-        return PageConverter.toPage(page);
+        return PageAssembler.toPage(page);
     }
 
     @Override
-    public void changePassword(Account account, String oldPasswordStr, String newPasswordStr) {
-        accountApplicationService.changePassword(account,oldPasswordStr,newPasswordStr);
+    public LoginSuccessDTO loginByAccount(String accountName, String password) {
+        User user = userApplicationService.login(new Mobile(accountName), password);
+        return LoginSuccessDTOAssembler.toDTO(user);
+    }
+
+    @Override
+    public LoginSuccessDTO loginByMobile(String mobile) {
+        User user = userApplicationService.login(new Mobile(mobile));
+        return LoginSuccessDTOAssembler.toDTO(user);
+    }
+
+    @Override
+    public void logout(String userId) {
+        userApplicationService.logout(new UserId(userId));
+    }
+
+    @Override
+    public void changePassword(String userId, String oldPasswordStr, String newPasswordStr) {
+        userApplicationService.changePassword(new UserId(userId),oldPasswordStr,newPasswordStr);
     }
 
     @Override
     public UserDTO find(String userId) {
         return UserDTOAssembler.fromUser(userRepository.find(new UserId(userId)));
     }
+
 
     @Override
     public void save(UserDTO userDTO) {
@@ -74,7 +96,7 @@ public class SysUserServiceFacadeImpl implements SysUserServiceFacade {
             });
         }
         userApplicationService.addUser(new Mobile(userDTO.getMobile()), new Email(userDTO.getEmail()), Password.create(Password.DEFAULT),
-                new UserName(userDTO.getUserName()), roleIdList );
+                new UserName(userDTO.getUserName()), roleIdList,new TenantId(TenantContext.getTenantId()));
     }
 
     @Override
@@ -97,14 +119,43 @@ public class SysUserServiceFacadeImpl implements SysUserServiceFacade {
     }
 
     @Override
-    public void registerUser(String tenantId, String roleId, String mobile, String userName) {
-        Tenant tenant = tenantRepository.find(new TenantId(tenantId));
-        if(tenant == null) {
-            throw new RuntimeException("租户不存在");
+    public UserDTO queryByToken(String token) {
+        Token accountToken = new Token(token,null);
+        User user = userRepository.find(accountToken);
+        LoginByTokenSpecification loginByTokenSpecification = new LoginByTokenSpecification();
+        loginByTokenSpecification.isSatisfiedBy(user);
+        UserDTO userDTO = UserDTOAssembler.fromUser(user);
+        SysTenantDO tenantDO = sysTenantMapper.selectById(user.getTenantId());
+        userDTO.setTenantName(tenantDO.getTenantName());
+        List<SysPermissionDO> sysPermissionDOList;
+        if(user.getUserId().isSysAdmin()) {
+            sysPermissionDOList = sysPermissionMapper.selectList(new QueryWrapper<SysPermissionDO>().eq("status", StatusEnum.ENABLE.getValue()));
+        } else {
+            sysPermissionDOList = sysPermissionMapper.queryPermissionByUserId(user.getUserId().getId());
         }
-        TenantContext.setTenantId(tenantId);
-        List<RoleId> roleIdList = new ArrayList<>();
-        roleIdList.add(new RoleId(roleId));
-        userApplicationService.addUser(new Mobile(mobile), null, Password.create(Password.DEFAULT), new UserName(userName), roleIdList );
+        Set<String> permissionIds = new HashSet<>();
+        Set<String> permsSet = new HashSet<>();
+        for(SysPermissionDO sysPermissionDO : sysPermissionDOList){
+            permissionIds.add(sysPermissionDO.getId());
+            if(sysPermissionDO.getPermissionCodes() != null){
+                permsSet.addAll(Arrays.asList(sysPermissionDO.getPermissionCodes().trim().split(",")));
+            }
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put("token",token);
+        List<SysUserDO> sysUserDOList =  sysUserMapper.queryUserNoTenant(params);
+        List<TenantDTO> tenants = new ArrayList<>();
+        for(SysUserDO sysUserDO : sysUserDOList) {
+            TenantDTO tenantDTO = new TenantDTO();
+            tenantDTO.setTenantId(sysUserDO.getTenantId());
+            tenantDTO.setTenantCode(sysUserDO.getTenantCode());
+            tenantDTO.setTenantName(sysUserDO.getTenantName());
+            tenants.add(tenantDTO);
+        }
+        userDTO.setPermissionCodes(permsSet);
+        userDTO.setPermissionIds(permissionIds);
+        userDTO.setTenants(tenants);
+        return userDTO;
     }
+
 }

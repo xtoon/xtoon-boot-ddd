@@ -7,8 +7,8 @@ import com.xtoon.boot.infrastructure.util.validator.ValidatorUtils;
 import com.xtoon.boot.interfaces.common.AbstractController;
 import com.xtoon.boot.interfaces.common.CommonConstant;
 import com.xtoon.boot.interfaces.common.Result;
-import com.xtoon.boot.interfaces.facade.SysAccountServiceFacade;
 import com.xtoon.boot.interfaces.facade.SysCaptchaServiceFacade;
+import com.xtoon.boot.interfaces.facade.SysUserServiceFacade;
 import com.xtoon.boot.interfaces.facade.dto.LoginSuccessDTO;
 import com.xtoon.boot.interfaces.web.command.AccountLoginCommand;
 import com.xtoon.boot.interfaces.web.command.MobileLoginCommand;
@@ -41,7 +41,7 @@ public class SysLoginController extends AbstractController {
     private SysCaptchaServiceFacade sysCaptchaServiceFacade;
 
     @Autowired
-    private SysAccountServiceFacade sysAccountServiceFacade;
+    private SysUserServiceFacade sysUserServiceFacade;
 
     @Autowired
     private RedisUtils redisUtils;
@@ -76,7 +76,7 @@ public class SysLoginController extends AbstractController {
         if(!captcha){
             return Result.error("验证码不正确");
         }
-        LoginSuccessDTO loginSuccessDTO = sysAccountServiceFacade.loginByAccount(accountLoginCommand.getAccountName(), accountLoginCommand.getPassword());
+        LoginSuccessDTO loginSuccessDTO = sysUserServiceFacade.loginByAccount(accountLoginCommand.getAccountName(), accountLoginCommand.getPassword());
         return Result.ok(loginSuccessDTO);
     }
 
@@ -94,7 +94,7 @@ public class SysLoginController extends AbstractController {
             return Result.error("验证码不正确");
         }
         try{
-            LoginSuccessDTO loginSuccessDTO = sysAccountServiceFacade.loginByMobile(mobileLoginCommand.getMobile());
+            LoginSuccessDTO loginSuccessDTO = sysUserServiceFacade.loginByMobile(mobileLoginCommand.getMobile());
             return Result.ok(loginSuccessDTO);
         } catch (NoRegisterException noRegisterException) {
             return Result.error(NO_REGISTER,"手机号未注册");
@@ -108,7 +108,7 @@ public class SysLoginController extends AbstractController {
     @SysLog("退出")
     @PostMapping("/sys/logout")
     public Result logout() {
-        sysAccountServiceFacade.logout(getUser().getAccount().getAccountId().getId());
+        sysUserServiceFacade.logout(getUser().getId());
         return Result.ok();
     }
 

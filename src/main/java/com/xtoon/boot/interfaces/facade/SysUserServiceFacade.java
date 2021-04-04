@@ -1,7 +1,7 @@
 package com.xtoon.boot.interfaces.facade;
 
-import com.xtoon.boot.domain.model.user.Account;
-import com.xtoon.boot.domain.shared.Page;
+import com.xtoon.boot.interfaces.common.Page;
+import com.xtoon.boot.interfaces.facade.dto.LoginSuccessDTO;
 import com.xtoon.boot.interfaces.facade.dto.UserDTO;
 
 import java.util.List;
@@ -24,13 +24,37 @@ public interface SysUserServiceFacade {
     Page queryPage(Map<String, Object> params);
 
     /**
+     * 账号登录
+     *
+     * @param accountName
+     * @param password
+     * @return
+     */
+    LoginSuccessDTO loginByAccount(String accountName, String password);
+
+    /**
+     * 手机号登录
+     *
+     * @param mobile
+     * @return
+     */
+    LoginSuccessDTO loginByMobile(String mobile);
+
+    /**
+     * 登出
+     *
+     * @param userId
+     */
+    void logout(String userId);
+
+    /**
      * 修改密码
      *
-     * @param account
+     * @param userId
      * @param oldPasswordStr
      * @param newPasswordStr
      */
-    void changePassword(Account account, String oldPasswordStr, String newPasswordStr);
+    void changePassword(String userId, String oldPasswordStr, String newPasswordStr);
 
     /**
      * 通过用户ID获取用户
@@ -69,12 +93,11 @@ public interface SysUserServiceFacade {
     void disable(String id);
 
     /**
-     * 注册用户
+     * 通过token获取用户
      *
-     * @param tenantId
-     * @param roleId
-     * @param mobile
-     * @param userName
+     * @param token
+     * @return
      */
-    void registerUser(String tenantId, String roleId, String mobile, String userName);
+    UserDTO queryByToken(String token);
+
 }

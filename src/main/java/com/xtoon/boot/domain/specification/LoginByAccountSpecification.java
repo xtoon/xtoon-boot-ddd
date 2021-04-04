@@ -1,6 +1,6 @@
 package com.xtoon.boot.domain.specification;
 
-import com.xtoon.boot.domain.model.user.Account;
+import com.xtoon.boot.domain.model.user.User;
 import com.xtoon.boot.domain.shared.AbstractSpecification;
 
 /**
@@ -9,7 +9,7 @@ import com.xtoon.boot.domain.shared.AbstractSpecification;
  * @author haoxin
  * @date 2021-02-20
  **/
-public class LoginByAccountSpecification extends AbstractSpecification<Account> {
+public class LoginByAccountSpecification extends AbstractSpecification<User> {
 
     private String password;
 
@@ -19,15 +19,9 @@ public class LoginByAccountSpecification extends AbstractSpecification<Account> 
 
 
     @Override
-    public boolean isSatisfiedBy(Account account) {
-        if(account == null) {
+    public boolean isSatisfiedBy(User user) {
+        if(!user.getAccount().checkPassword(password)) {
             throw new IllegalArgumentException("用户或密码不正确");
-        }
-        if(!account.checkPassword(password)) {
-            throw new IllegalArgumentException("用户或密码不正确");
-        }
-        if(account.getLoginTenantId() == null) {
-            throw new IllegalArgumentException("尚未绑定租户,请联系管理员");
         }
         return true;
     }

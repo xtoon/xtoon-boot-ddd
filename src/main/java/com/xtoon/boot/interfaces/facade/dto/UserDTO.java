@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 用户DTO
@@ -40,9 +41,29 @@ public class UserDTO implements Serializable {
     private String status;
 
     /**
+     * 当前租户
+     */
+    private String tenantName;
+
+    /**
      * 角色列表
      */
     private List<String> roleIdList;
+
+    /**
+     * 权限编码
+     */
+    private Set<String> permissionCodes;
+
+    /**
+     * 权限id
+     */
+    private Set<String> permissionIds;
+
+    /**
+     * 所有租户列表
+     */
+    private List<TenantDTO> tenants;
 
     public UserDTO() {
     }

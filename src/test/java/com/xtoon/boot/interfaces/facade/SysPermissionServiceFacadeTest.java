@@ -1,7 +1,7 @@
 package com.xtoon.boot.interfaces.facade;
 
 import com.xtoon.boot.domain.model.user.User;
-import com.xtoon.boot.domain.model.user.types.UserId;
+import com.xtoon.boot.domain.model.types.UserId;
 import com.xtoon.boot.domain.repository.UserRepository;
 import com.xtoon.boot.interfaces.facade.dto.PermissionDTO;
 import org.junit.jupiter.api.Test;
@@ -52,10 +52,4 @@ class SysPermissionServiceFacadeTest {
     void delete() {
     }
 
-    @Test
-    void getUserMenuTree() {
-        User user = userRepository.find(new UserId("1"));
-        List<PermissionDTO> list = sysPermissionServiceFacade.getUserMenuTree(user);
-        logger.info("list="+list);
-    }
 }

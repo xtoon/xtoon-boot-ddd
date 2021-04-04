@@ -1,7 +1,7 @@
 package com.xtoon.boot.application;
 
-import com.xtoon.boot.domain.model.user.Permission;
-import com.xtoon.boot.domain.model.user.types.PermissionId;
+import com.xtoon.boot.domain.model.Permission;
+import com.xtoon.boot.domain.model.types.PermissionId;
 
 /**
  * 权限Service

@@ -1,7 +1,7 @@
 package com.xtoon.boot.application;
 
-import com.xtoon.boot.domain.model.user.Role;
-import com.xtoon.boot.domain.model.user.types.RoleId;
+import com.xtoon.boot.domain.model.Role;
+import com.xtoon.boot.domain.model.types.RoleId;
 
 import java.util.List;
 

@@ -40,4 +40,12 @@ public interface SysPermissionMapper extends BaseMapper<SysPermissionDO> {
      */
     List<SysPermissionDO> queryPermissionByRoleCode(String roleCode);
 
+    /**
+     * 查询用户权限
+     *
+     * @param userId
+     * @return
+     */
+    List<SysPermissionDO> queryPermissionByUserId(String userId);
+
 }

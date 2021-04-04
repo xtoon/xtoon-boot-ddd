@@ -1,6 +1,6 @@
 package com.xtoon.boot.infrastructure.persistence.mybatis.converter;
 
-import com.xtoon.boot.domain.model.system.Log;
+import com.xtoon.boot.domain.model.Log;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysLogDO;
 import org.springframework.beans.BeanUtils;
 
@@ -14,7 +14,11 @@ public class LogConverter {
 
     public static SysLogDO fromLog(Log log) {
         SysLogDO sysLogDO = new SysLogDO();
-        BeanUtils.copyProperties(log, sysLogDO);
+        sysLogDO.setUserName(log.getUserName()==null?null:log.getUserName().getName());
+        sysLogDO.setIp(log.getIp());
+        sysLogDO.setMethod(log.getMethod());
+        sysLogDO.setOperation(log.getOperation());
+        sysLogDO.setTime(log.getTime());
         return sysLogDO;
     }
 }

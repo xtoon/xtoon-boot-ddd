@@ -1,9 +1,10 @@
 package com.xtoon.boot.interfaces.web;
 
-import com.xtoon.boot.domain.shared.Page;
-import com.xtoon.boot.interfaces.common.Result;
+import com.xtoon.boot.interfaces.common.Page;
 import com.xtoon.boot.infrastructure.util.log.SysLog;
 import com.xtoon.boot.interfaces.common.AbstractController;
+import com.xtoon.boot.interfaces.common.CommonConstant;
+import com.xtoon.boot.interfaces.common.Result;
 import com.xtoon.boot.interfaces.facade.SysTenantServiceFacade;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +36,7 @@ public class SysTenantController extends AbstractController {
     @RequiresPermissions("sys:tenant:list")
     public Result list(@RequestParam Map<String, Object> params){
         Page page = sysTenantServiceFacade.queryPage(params);
-        return Result.ok().put(RESULT_PAGE, page);
+        return Result.ok().put(CommonConstant.PAGE, page);
     }
 
     /**

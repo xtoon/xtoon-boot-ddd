@@ -1,6 +1,6 @@
 package com.xtoon.boot.interfaces.facade.assembler;
 
-import com.xtoon.boot.domain.model.user.Account;
+import com.xtoon.boot.domain.model.user.User;
 import com.xtoon.boot.interfaces.facade.dto.LoginSuccessDTO;
 
 /**
@@ -11,11 +11,11 @@ import com.xtoon.boot.interfaces.facade.dto.LoginSuccessDTO;
  **/
 public class LoginSuccessDTOAssembler {
 
-    public static LoginSuccessDTO toDTO(final Account account) {
+    public static LoginSuccessDTO toDTO(final User user) {
         final LoginSuccessDTO dto = new LoginSuccessDTO(
-                account.getToken().getToken(),
-                String.valueOf(account.getToken().getExpirePeriod()),
-                account.getLoginTenantId().getId());
+                user.getAccount().getToken().getToken(),
+                String.valueOf(user.getAccount().getToken().getExpirePeriod()),
+                user.getTenantId().getId());
         return dto;
     }
 }

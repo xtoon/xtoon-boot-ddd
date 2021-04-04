@@ -1,6 +1,6 @@
 package com.xtoon.boot.interfaces.facade;
 
-import com.xtoon.boot.domain.shared.Page;
+import com.xtoon.boot.interfaces.common.Page;
 
 import java.util.Map;
 

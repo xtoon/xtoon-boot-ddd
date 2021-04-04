@@ -2,11 +2,11 @@ package com.xtoon.boot.application.impl;
 
 import com.xtoon.boot.application.UserApplicationService;
 import com.xtoon.boot.domain.factory.UserFactory;
+import com.xtoon.boot.domain.model.types.*;
 import com.xtoon.boot.domain.model.user.User;
-import com.xtoon.boot.domain.model.user.types.*;
-import com.xtoon.boot.domain.repository.AccountRepository;
 import com.xtoon.boot.domain.repository.TenantRepository;
 import com.xtoon.boot.domain.repository.UserRepository;
+import com.xtoon.boot.domain.specification.LoginByAccountSpecification;
 import com.xtoon.boot.domain.specification.UserUpdateSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,13 +27,54 @@ public class UserApplicationServiceImpl implements UserApplicationService {
     private UserRepository userRepository;
 
     @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
     private UserFactory userFactory;
 
     @Autowired
     private TenantRepository tenantRepository;
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public User login(Mobile mobile, String password) {
+        List<User> users = userRepository.find(mobile);
+        if(users == null || users.isEmpty()) {
+            throw new RuntimeException("用户或密码不正确");
+        }
+        User user = users.get(0);
+        LoginByAccountSpecification loginByUserNameSpecification = new LoginByAccountSpecification(password);
+        loginByUserNameSpecification.isSatisfiedBy(user);
+        user.refreshToken();
+        userRepository.store(user);
+        return user;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public User login(Mobile mobile) {
+        List<User> users = userRepository.find(mobile);
+        if(users == null || users.isEmpty()) {
+            throw new RuntimeException("用户不存在");
+        }
+        User user = users.get(0);
+        user.refreshToken();
+        userRepository.store(user);
+        return user;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void logout(UserId userId) {
+        User user = userRepository.find(userId);
+        user.refreshToken();
+        userRepository.store(user);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void changePassword(UserId userId, String oldPasswordStr, String newPasswordStr) {
+        User user = userRepository.find(userId);
+        user.changePassword(oldPasswordStr, newPasswordStr);
+        userRepository.store(user);
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -64,8 +105,8 @@ public class UserApplicationServiceImpl implements UserApplicationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addUser(Mobile mobile, Email email, Password password, UserName userName, List<RoleId> roleIdList) {
-        User user = userFactory.createUser(mobile, email, password, userName, roleIdList);
+    public void addUser(Mobile mobile, Email email, Password password, UserName userName, List<RoleId> roleIdList, TenantId tenantId) {
+        User user = userFactory.createUser(mobile, email, password, userName, roleIdList, tenantId);
         userRepository.store(user);
     }
 }

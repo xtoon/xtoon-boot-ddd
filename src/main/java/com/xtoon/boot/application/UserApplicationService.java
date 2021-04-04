@@ -1,7 +1,7 @@
 package com.xtoon.boot.application;
 
+import com.xtoon.boot.domain.model.types.*;
 import com.xtoon.boot.domain.model.user.User;
-import com.xtoon.boot.domain.model.user.types.*;
 
 import java.util.List;
 
@@ -12,6 +12,39 @@ import java.util.List;
  * @date 2021-02-09
  **/
 public interface UserApplicationService {
+
+    /**
+     * 通过账号密码
+     *
+     * @param mobile
+     * @param password
+     * @return
+     */
+    User login(Mobile mobile, String password);
+
+    /**
+     * 通过手机号登录
+     *
+     * @param mobile
+     * @return
+     */
+    User login(Mobile mobile);
+
+    /**
+     * 登出
+     *
+     * @param userId
+     */
+    void logout(UserId userId);
+
+    /**
+     * 修改密码
+     *
+     * @param userId
+     * @param oldPasswordStr
+     * @param newPasswordStr
+     */
+    void changePassword(UserId userId, String oldPasswordStr, String newPasswordStr);
 
     /**
      * 更新用户
@@ -43,6 +76,6 @@ public interface UserApplicationService {
      * @param userName
      * @param roleIdList
      */
-    void addUser(Mobile mobile, Email email, Password password, UserName userName, List<RoleId> roleIdList);
+    void addUser(Mobile mobile, Email email, Password password, UserName userName, List<RoleId> roleIdList, TenantId tenantId);
 
 }

@@ -1,7 +1,7 @@
 package com.xtoon.boot.domain.specification;
 
-import com.xtoon.boot.domain.model.user.Permission;
-import com.xtoon.boot.domain.model.user.types.PermissionTypeEnum;
+import com.xtoon.boot.domain.model.Permission;
+import com.xtoon.boot.domain.model.types.PermissionTypeEnum;
 import com.xtoon.boot.domain.repository.PermissionRepository;
 import com.xtoon.boot.domain.shared.AbstractSpecification;
 import org.apache.commons.lang.StringUtils;

@@ -1,11 +1,10 @@
 package com.xtoon.boot.interfaces.facade.assembler;
 
-import com.xtoon.boot.domain.model.user.Permission;
-import com.xtoon.boot.domain.model.user.Role;
-import com.xtoon.boot.domain.model.user.types.PermissionId;
-import com.xtoon.boot.domain.model.user.types.RoleCode;
-import com.xtoon.boot.domain.model.user.types.RoleId;
-import com.xtoon.boot.domain.model.user.types.RoleName;
+import com.xtoon.boot.domain.model.Role;
+import com.xtoon.boot.domain.model.types.PermissionId;
+import com.xtoon.boot.domain.model.types.RoleCode;
+import com.xtoon.boot.domain.model.types.RoleId;
+import com.xtoon.boot.domain.model.types.RoleName;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysRoleDO;
 import com.xtoon.boot.interfaces.facade.dto.RoleDTO;
 import org.springframework.beans.BeanUtils;
@@ -27,7 +26,13 @@ public class RoleDTOAssembler {
         dto.setRoleCode(role.getRoleCode()==null?null:role.getRoleCode().getCode());
         dto.setRoleName(role.getRoleName()==null?null:role.getRoleName().getName());
         dto.setRemarks(role.getRemarks());
-        dto.setPermissionIdList(role.getPermissionIds());
+        if(role.getPermissionIds() != null) {
+            List<String> permissionIdList = new ArrayList<>();
+            role.getPermissionIds().forEach(permissionId -> {
+                permissionIdList.add(permissionId.getId());
+            });
+            dto.setPermissionIdList(permissionIdList);
+        }
         dto.setStatus(role.getStatus()==null?null:role.getStatus().getValue());
         return dto;
     }
@@ -45,14 +50,14 @@ public class RoleDTOAssembler {
         if(roleDTO.getRoleName() != null) {
             roleName = new RoleName(roleDTO.getRoleName());
         }
-        List<Permission> permissionList = null;
+        List<PermissionId> permissionIdList = null;
         if(roleDTO.getPermissionIdList() != null) {
-            permissionList = new ArrayList<>();
+            permissionIdList = new ArrayList<>();
             for(String permissionId:roleDTO.getPermissionIdList()) {
-                permissionList.add(new Permission(new PermissionId(permissionId)));
+                permissionIdList.add(new PermissionId(permissionId));
             }
         }
-        Role Role = new Role(roleId,roleCode,roleName,roleDTO.getRemarks(),null,permissionList);
+        Role Role = new Role(roleId,roleCode,roleName,roleDTO.getRemarks(),null,permissionIdList);
         return Role;
     }
 

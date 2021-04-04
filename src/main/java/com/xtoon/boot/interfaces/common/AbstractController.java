@@ -1,6 +1,6 @@
 package com.xtoon.boot.interfaces.common;
 
-import com.xtoon.boot.domain.model.user.User;
+import com.xtoon.boot.interfaces.facade.dto.UserDTO;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,15 +13,13 @@ import org.slf4j.LoggerFactory;
  **/
 public abstract class AbstractController {
 
-    public static final String RESULT_PAGE = "page";
-
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    protected User getUser() {
-        return (User) SecurityUtils.getSubject().getPrincipal();
+    protected UserDTO getUser() {
+        return (UserDTO) SecurityUtils.getSubject().getPrincipal();
     }
 
     protected String getUserId() {
-        return getUser().getUserId().getId();
+        return getUser().getId();
     }
 }

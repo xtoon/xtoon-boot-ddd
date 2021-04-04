@@ -1,11 +1,11 @@
 package com.xtoon.boot.interfaces.web;
 
-import com.xtoon.boot.interfaces.common.Result;
 import com.xtoon.boot.infrastructure.util.log.SysLog;
 import com.xtoon.boot.infrastructure.util.validator.ValidatorUtils;
 import com.xtoon.boot.infrastructure.util.validator.group.AddGroup;
 import com.xtoon.boot.infrastructure.util.validator.group.UpdateGroup;
 import com.xtoon.boot.interfaces.common.AbstractController;
+import com.xtoon.boot.interfaces.common.Result;
 import com.xtoon.boot.interfaces.facade.SysPermissionServiceFacade;
 import com.xtoon.boot.interfaces.facade.dto.PermissionDTO;
 import com.xtoon.boot.interfaces.web.command.PermissionCommand;
@@ -39,7 +39,7 @@ public class SysPermissionController extends AbstractController {
     @GetMapping("/nav")
     public Result nav(){
         List<PermissionDTO> menuList = sysPermissionServiceFacade.getUserMenuTree(getUser());
-        Set<String> permissions = getUser().getUserPermissionCodes();
+        Set<String> permissions = getUser().getPermissionCodes();
         return Result.ok().put("menuList", menuList).put("permissions", permissions);
     }
 

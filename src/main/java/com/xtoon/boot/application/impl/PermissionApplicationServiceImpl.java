@@ -1,8 +1,8 @@
 package com.xtoon.boot.application.impl;
 
 import com.xtoon.boot.application.PermissionApplicationService;
-import com.xtoon.boot.domain.model.user.Permission;
-import com.xtoon.boot.domain.model.user.types.PermissionId;
+import com.xtoon.boot.domain.model.Permission;
+import com.xtoon.boot.domain.model.types.PermissionId;
 import com.xtoon.boot.domain.repository.PermissionRepository;
 import com.xtoon.boot.domain.specification.PermissionCreateSpecification;
 import com.xtoon.boot.domain.specification.PermissionDeleteSpecification;

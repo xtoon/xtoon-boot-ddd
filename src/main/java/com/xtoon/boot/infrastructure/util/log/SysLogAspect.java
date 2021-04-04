@@ -1,12 +1,12 @@
 package com.xtoon.boot.infrastructure.util.log;
 
 import com.google.gson.Gson;
-import com.xtoon.boot.domain.model.system.Log;
-import com.xtoon.boot.domain.model.user.User;
+import com.xtoon.boot.domain.model.Log;
+import com.xtoon.boot.domain.model.types.UserName;
 import com.xtoon.boot.domain.repository.LogRepository;
 import com.xtoon.boot.infrastructure.util.HttpContextUtils;
 import com.xtoon.boot.infrastructure.util.IPUtils;
-import com.xtoon.boot.infrastructure.util.mybatis.TenantContext;
+import com.xtoon.boot.interfaces.facade.dto.UserDTO;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -88,16 +88,14 @@ public class SysLogAspect {
         String ip = IPUtils.getIpAddr(request);
 
         //用户名
-        String userName = null;
+        UserName userName = null;
         try{
-            userName = ((User) SecurityUtils.getSubject().getPrincipal()).getUserName().getName();
+            String userNameStr = ((UserDTO) SecurityUtils.getSubject().getPrincipal()).getUserName();
+            userName = new UserName(userNameStr);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        //租户
-        String tenantId = TenantContext.getTenantId();
-
-        Log log = new Log(userName, operation, methodString, params, time, ip, tenantId);
+        Log log = new Log(null,userName, operation, methodString, params, time, ip);
         //保存系统日志
         logRepository.store(log);
     }

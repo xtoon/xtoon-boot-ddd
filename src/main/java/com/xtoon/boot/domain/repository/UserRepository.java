@@ -1,8 +1,9 @@
 package com.xtoon.boot.domain.repository;
 
+import com.xtoon.boot.domain.model.types.Mobile;
+import com.xtoon.boot.domain.model.types.Token;
+import com.xtoon.boot.domain.model.types.UserId;
 import com.xtoon.boot.domain.model.user.User;
-import com.xtoon.boot.domain.model.user.types.Token;
-import com.xtoon.boot.domain.model.user.types.UserId;
 
 import java.util.List;
 
@@ -29,6 +30,14 @@ public interface UserRepository {
      * @return
      */
     User find(Token token);
+
+    /**
+     * 根据手机号获取账号
+     *
+     * @param mobile
+     * @return
+     */
+    List<User> find(Mobile mobile);
 
     /**
      * 保存
