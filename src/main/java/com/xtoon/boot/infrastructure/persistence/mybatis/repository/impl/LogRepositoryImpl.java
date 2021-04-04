@@ -2,7 +2,7 @@ package com.xtoon.boot.infrastructure.persistence.mybatis.repository.impl;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xtoon.boot.domain.model.system.Log;
+import com.xtoon.boot.domain.model.Log;
 import com.xtoon.boot.domain.repository.LogRepository;
 import com.xtoon.boot.infrastructure.persistence.mybatis.converter.LogConverter;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysLogDO;

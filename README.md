@@ -46,6 +46,8 @@ Eric Evans的DDD（Domain-Driven Design 领域驱动设计）正是为了解决�
 -  Springboot
 -  Apache Shiro
 -  Mybatis-plus
+-  Swagger
+-  Hibernate-validator
 -  Alibaba Druid
 -  Element-ui
 
@@ -72,20 +74,18 @@ xtoon-boot
 │    │    │    ├─exception      自定义异常
 │    │    │    ├─factory        工厂
 │    │    │    ├─model          领域模型
-│    │    │    ├─service        领域服务
 │    │    │    ├─Repository     资源接口
+│    │    │    ├─service        领域服务
 │    │    │    ├─shared         共享类
 │    │    │    ├─specification  规格校验
 │    │    │    └─util           工具包
 │    │    ├─infrastructure 基础设施层
-│    │    │    ├─common         通用类
 │    │    │    ├─persistence.mybatis           mybatis持久化类（应该都熟悉就不展开了）
 │    │    │    └─util           工具包
 │    │    └─interfaces 接口层
 │    │         ├─common         通用类
-│    │         └─sys            系统管理
-│    │             ├─facede     门面类
-│    │             └─web        Controller类
+│    │         ├─facede         门面类
+│    │         └─web            controller类
 │    └─resources 
 │        ├─static.swagger       swagger文件
 │        ├─application.yml      全局配置文件

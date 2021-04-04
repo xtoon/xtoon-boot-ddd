@@ -1,9 +1,9 @@
 package com.xtoon.boot.domain.repository;
 
-import com.xtoon.boot.domain.model.user.Permission;
-import com.xtoon.boot.domain.model.user.types.PermissionId;
-import com.xtoon.boot.domain.model.user.types.PermissionName;
-import com.xtoon.boot.domain.model.user.types.RoleCode;
+import com.xtoon.boot.domain.model.Permission;
+import com.xtoon.boot.domain.model.types.PermissionId;
+import com.xtoon.boot.domain.model.types.PermissionName;
+import com.xtoon.boot.domain.model.types.RoleCode;
 
 import java.util.List;
 import java.util.Map;

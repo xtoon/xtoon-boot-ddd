@@ -1,7 +1,6 @@
 package com.xtoon.boot.infrastructure.persistence.mybatis.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.xtoon.boot.infrastructure.common.BaseDO;
 import lombok.Data;
 
 import java.util.Date;

@@ -1,6 +1,6 @@
 package com.xtoon.boot.infrastructure.util.mybatis;
 
-import com.xtoon.boot.domain.model.user.User;
+import com.xtoon.boot.interfaces.facade.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.executor.Executor;
@@ -37,7 +37,7 @@ public class MybatisInterceptor implements Interceptor {
             return invocation.proceed();
         }
         if (SqlCommandType.INSERT == sqlCommandType) {
-            User user = this.getLoginUser();
+            UserDTO user = this.getLoginUser();
             Field[] fields = getAllFields(parameter);
             for (Field field : fields) {
 //                log.debug("------field.name------" + field.getName());
@@ -50,7 +50,7 @@ public class MybatisInterceptor implements Interceptor {
                             if (user != null) {
                                 // 登录人账号
                                 field.setAccessible(true);
-                                field.set(parameter, user.getUserName().getName());
+                                field.set(parameter, user.getUserName());
                                 field.setAccessible(false);
                             }
                         }
@@ -71,7 +71,7 @@ public class MybatisInterceptor implements Interceptor {
             }
         }
         if (SqlCommandType.UPDATE == sqlCommandType) {
-            User user = this.getLoginUser();
+            UserDTO user = this.getLoginUser();
             Field[] fields = null;
             if (parameter instanceof MapperMethod.ParamMap) {
                 MapperMethod.ParamMap<?> p = (MapperMethod.ParamMap<?>) parameter;
@@ -102,7 +102,7 @@ public class MybatisInterceptor implements Interceptor {
                         if (user != null) {
                             // 登录账号
                             field.setAccessible(true);
-                            field.set(parameter, user.getUserName().getName());
+                            field.set(parameter, user.getUserName());
                             field.setAccessible(false);
                         }
                     }
@@ -129,10 +129,10 @@ public class MybatisInterceptor implements Interceptor {
         // TODO Auto-generated method stub
     }
 
-    private User getLoginUser() {
-        User user = null;
+    private UserDTO getLoginUser() {
+        UserDTO user = null;
         try {
-            user = SecurityUtils.getSubject().getPrincipal() != null ? (User) SecurityUtils.getSubject().getPrincipal() : null;
+            user = SecurityUtils.getSubject().getPrincipal() != null ? (UserDTO) SecurityUtils.getSubject().getPrincipal() : null;
         } catch (Exception e) {
             //e.printStackTrace();
             user = null;

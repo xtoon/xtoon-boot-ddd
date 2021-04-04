@@ -3,12 +3,12 @@ package com.xtoon.boot.infrastructure.persistence.mybatis.repository.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xtoon.boot.domain.model.user.Role;
-import com.xtoon.boot.domain.model.user.types.RoleCode;
-import com.xtoon.boot.domain.model.user.types.RoleId;
-import com.xtoon.boot.domain.model.user.types.RoleName;
+import com.xtoon.boot.domain.model.Role;
+import com.xtoon.boot.domain.model.types.PermissionId;
+import com.xtoon.boot.domain.model.types.RoleCode;
+import com.xtoon.boot.domain.model.types.RoleId;
+import com.xtoon.boot.domain.model.types.RoleName;
 import com.xtoon.boot.domain.repository.RoleRepository;
-import com.xtoon.boot.domain.shared.StatusEnum;
 import com.xtoon.boot.infrastructure.persistence.mybatis.converter.RoleConverter;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysPermissionDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysRoleDO;
@@ -73,11 +73,7 @@ public class RoleRepositoryImpl extends ServiceImpl<SysRoleMapper, SysRoleDO> im
 
     private List<SysPermissionDO> getRolePermission(String roleCode, String roleId) {
         List<SysPermissionDO> sysPermissionDOList;
-        if(RoleCode.SYS_ADMIN.equals(roleCode)) {
-            sysPermissionDOList = sysPermissionMapper.selectList(new QueryWrapper<SysPermissionDO>().eq("status", StatusEnum.ENABLE.getValue()));
-        } else {
-            sysPermissionDOList = sysPermissionMapper.queryPermissionByRoleId(roleId);
-        }
+        sysPermissionDOList = sysPermissionMapper.queryPermissionByRoleId(roleId);
         return sysPermissionDOList;
     }
 
@@ -90,12 +86,12 @@ public class RoleRepositoryImpl extends ServiceImpl<SysRoleMapper, SysRoleDO> im
         List<String> roleIds = new ArrayList<>();
         roleIds.add(roleId);
         sysRolePermissionMapper.deleteByRoleIds(roleIds);
-        List<String> permissionIds = role.getPermissionIds();
+        List<PermissionId> permissionIds = role.getPermissionIds();
         if(permissionIds != null && !permissionIds.isEmpty()) {
             //保存角色与菜单关系
-            for(String permissionId : permissionIds){
+            for(PermissionId permissionId : permissionIds){
                 SysRolePermissionDO sysRolePermissionDO = new SysRolePermissionDO();
-                sysRolePermissionDO.setPermissionId(permissionId);
+                sysRolePermissionDO.setPermissionId(permissionId.getId());
                 sysRolePermissionDO.setRoleId(roleId);
                 sysRolePermissionMapper.insert(sysRolePermissionDO);
             }

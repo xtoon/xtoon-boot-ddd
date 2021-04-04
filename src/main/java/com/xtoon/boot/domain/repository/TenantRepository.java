@@ -1,9 +1,9 @@
 package com.xtoon.boot.domain.repository;
 
-import com.xtoon.boot.domain.model.system.Tenant;
-import com.xtoon.boot.domain.model.system.types.TenantCode;
-import com.xtoon.boot.domain.model.system.types.TenantId;
-import com.xtoon.boot.domain.model.system.types.TenantName;
+import com.xtoon.boot.domain.model.Tenant;
+import com.xtoon.boot.domain.model.types.TenantCode;
+import com.xtoon.boot.domain.model.types.TenantId;
+import com.xtoon.boot.domain.model.types.TenantName;
 
 /**
  * 租户-Repository接口

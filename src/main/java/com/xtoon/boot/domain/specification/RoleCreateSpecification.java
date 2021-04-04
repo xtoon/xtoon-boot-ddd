@@ -1,7 +1,6 @@
 package com.xtoon.boot.domain.specification;
 
-import com.xtoon.boot.domain.model.user.Role;
-import com.xtoon.boot.domain.model.user.types.RoleCode;
+import com.xtoon.boot.domain.model.Role;
 import com.xtoon.boot.domain.repository.RoleRepository;
 import com.xtoon.boot.domain.shared.AbstractSpecification;
 
@@ -33,7 +32,7 @@ public class RoleCreateSpecification extends AbstractSpecification<Role> {
                 throw new IllegalArgumentException("角色名称已存在");
             }
         }
-        if(RoleCode.SYS_ADMIN.equals(role.getRoleCode().getCode()) || RoleCode.TENANT_ADMIN.equals(role.getRoleCode().getCode())) {
+        if(role.getRoleCode().isTenantAdmin()) {
             throw new IllegalArgumentException("管理角色无法更新");
         }
         return true;

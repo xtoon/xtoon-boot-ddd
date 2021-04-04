@@ -1,16 +1,12 @@
 package com.xtoon.boot.domain.factory;
 
+import com.xtoon.boot.domain.model.types.*;
 import com.xtoon.boot.domain.model.user.Account;
-import com.xtoon.boot.domain.model.user.Role;
 import com.xtoon.boot.domain.model.user.User;
-import com.xtoon.boot.domain.model.user.types.*;
-import com.xtoon.boot.domain.repository.AccountRepository;
-import com.xtoon.boot.domain.repository.RoleRepository;
-import com.xtoon.boot.infrastructure.util.mybatis.TenantContext;
+import com.xtoon.boot.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,37 +19,25 @@ import java.util.List;
 public class UserFactory {
 
     @Autowired
-    private RoleRepository roleRepository;
+    private UserRepository userRepository;
 
-    @Autowired
-    private AccountRepository accountRepository;
-
-    public User createUser(Mobile mobile, Email email, Password password, UserName userName, List<RoleId> roleIdList) {
-        Account account = accountRepository.find(mobile);
-        if(account != null) {
-            String currentTenantId = TenantContext.getTenantId();
-            for(User user : account.getUsers()) {
-                if(user.getTenant() != null && user.getTenant().getTenantId() != null &&
-                        user.getTenant().getTenantId().getId().equals(currentTenantId)) {
+    public User createUser(Mobile mobile, Email email, Password password, UserName userName, List<RoleId> roleIdList,TenantId currentTenantId) {
+        List<User> users = userRepository.find(mobile);
+        Account account;
+        if(users != null && !users.isEmpty()) {
+            for(User user : users) {
+                if(user.getTenantId().sameValueAs(currentTenantId)) {
                     throw new RuntimeException("租户内账号已存在");
                 }
             }
-        }
-        if(account == null) {
-            AccountId accountId = accountRepository.store(new Account(mobile, email, password));
-            account = accountRepository.find(accountId);
+            account = users.get(0).getAccount();
+        } else {
+            account = new Account(mobile, email, password);
         }
         if(roleIdList == null || roleIdList.isEmpty()) {
             throw new RuntimeException("角色未分配");
         }
-        List<Role> roles = new ArrayList<>();
-        for(RoleId roleId:roleIdList) {
-            Role role = roleRepository.find(roleId);
-            if(role != null) {
-                roles.add(role);
-            }
-        }
-        return new User(userName,account,roles);
+        return new User(userName,account,roleIdList);
     }
 
 }

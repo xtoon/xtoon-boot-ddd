@@ -1,7 +1,7 @@
 package com.xtoon.boot.infrastructure.persistence.mybatis.converter;
 
-import com.xtoon.boot.domain.model.user.Permission;
-import com.xtoon.boot.domain.model.user.types.*;
+import com.xtoon.boot.domain.model.Permission;
+import com.xtoon.boot.domain.model.types.*;
 import com.xtoon.boot.domain.shared.StatusEnum;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysPermissionDO;
 import com.xtoon.boot.infrastructure.util.exception.XTException;

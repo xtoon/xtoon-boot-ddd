@@ -1,12 +1,12 @@
 package com.xtoon.boot.infrastructure.persistence.mybatis.converter;
 
-import com.xtoon.boot.domain.model.system.Tenant;
-import com.xtoon.boot.domain.model.system.types.TenantCode;
-import com.xtoon.boot.domain.model.system.types.TenantId;
-import com.xtoon.boot.domain.model.system.types.TenantName;
+import com.xtoon.boot.domain.model.Tenant;
+import com.xtoon.boot.domain.model.types.TenantCode;
+import com.xtoon.boot.domain.model.types.TenantId;
+import com.xtoon.boot.domain.model.types.TenantName;
+import com.xtoon.boot.domain.model.types.UserId;
 import com.xtoon.boot.domain.shared.StatusEnum;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysTenantDO;
-import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysUserDO;
 
 /**
  * 租户Converter
@@ -16,7 +16,7 @@ import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysUserDO;
  **/
 public class TenantConverter {
 
-    public static Tenant toTenant(SysTenantDO sysTenantDO, SysUserDO sysUserDO) {
+    public static Tenant toTenant(SysTenantDO sysTenantDO) {
         if(sysTenantDO == null) {
             return null;
         }
@@ -24,7 +24,11 @@ public class TenantConverter {
         if(sysTenantDO.getId() != null) {
             tenantId = new TenantId(sysTenantDO.getId());
         }
-        Tenant tenant = new Tenant(tenantId, new TenantCode(sysTenantDO.getTenantCode()), new TenantName(sysTenantDO.getTenantName()), StatusEnum.getStatusEnum(sysTenantDO.getStatus()),UserConverter.toUser(sysUserDO,null,null));
+        UserId creatorId = null;
+        if(sysTenantDO.getCreatorId() != null) {
+            creatorId = new UserId(sysTenantDO.getCreatorId());
+        }
+        Tenant tenant = new Tenant(tenantId, new TenantCode(sysTenantDO.getTenantCode()), new TenantName(sysTenantDO.getTenantName()), StatusEnum.getStatusEnum(sysTenantDO.getStatus()),creatorId);
         return tenant;
     }
 
@@ -37,7 +41,7 @@ public class TenantConverter {
         sysTenantDO.setTenantCode(tenant.getTenantCode()==null?null:tenant.getTenantCode().getCode());
         sysTenantDO.setTenantName(tenant.getTenantName()==null?null:tenant.getTenantName().getName());
         sysTenantDO.setStatus(tenant.getStatus()==null?null:tenant.getStatus().getValue());
-        sysTenantDO.setCreatorId(tenant.getCreator() == null || tenant.getCreator().getUserId() == null?null:tenant.getCreator().getUserId().getId());
+        sysTenantDO.setCreatorId(tenant.getCreatorId() == null ?null:tenant.getCreatorId().getId());
         return sysTenantDO;
     }
 }

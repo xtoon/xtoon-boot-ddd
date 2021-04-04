@@ -1,15 +1,13 @@
 package com.xtoon.boot.domain.model.user;
 
-import com.xtoon.boot.domain.model.system.Tenant;
-import com.xtoon.boot.domain.model.user.types.UserId;
-import com.xtoon.boot.domain.model.user.types.UserName;
-import com.xtoon.boot.domain.shared.Entity;
+import com.xtoon.boot.domain.model.types.RoleId;
+import com.xtoon.boot.domain.model.types.TenantId;
+import com.xtoon.boot.domain.model.types.UserId;
+import com.xtoon.boot.domain.model.types.UserName;
+import com.xtoon.boot.domain.shared.Aggregate;
 import com.xtoon.boot.domain.shared.StatusEnum;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 用户
@@ -17,7 +15,7 @@ import java.util.Set;
  * @author haoxin
  * @date 2021-02-02
  **/
-public class User implements Entity<User> {
+public class User implements Aggregate<User> {
 
     /**
      * UserId
@@ -35,34 +33,34 @@ public class User implements Entity<User> {
     private StatusEnum status;
 
     /**
-     * 当前租户
-     */
-    private Tenant tenant;
-
-    /**
      * 账号
      */
     private Account account;
 
     /**
-     * 角色列表
+     * 当前租户
      */
-    private List<Role> roles;
+    private TenantId tenantId;
+
+    /**
+     * 角色Id列表
+     */
+    private List<RoleId> roleIds;
 
 
-    public User(UserId userId, UserName userName, StatusEnum status,Tenant tenant, Account account, List<Role> roles) {
+    public User(UserId userId, UserName userName, StatusEnum status, Account account, TenantId tenantId, List<RoleId> roleIds) {
         this.userId = userId;
         this.userName = userName;
         this.status = status;
-        this.tenant = tenant;
         this.account = account;
-        this.roles = roles;
+        this.tenantId = tenantId;
+        this.roleIds = roleIds;
     }
 
-    public User(UserName userName, Account account, List<Role> roles) {
+    public User(UserName userName, Account account, List<RoleId> roleIds) {
         this.userName = userName;
         this.account = account;
-        this.roles = roles;
+        this.roleIds = roleIds;
         this.status = StatusEnum.ENABLE;
     }
 
@@ -80,81 +78,23 @@ public class User implements Entity<User> {
     }
 
     /**
-     * 获取用户权限编码
-     *
-     * @return
-     */
-    public Set<String> getUserPermissionCodes() {
-        List<Permission> permissions = getUserPermissions();
-        if(permissions == null) {
-            return null;
-        }
-        Set<String> permsSet = new HashSet<>();
-        for(Permission permission : permissions){
-            if(permission.getPermissionCodes() != null){
-                permsSet.addAll(permission.getPermissionCodes().getCodes());
-            }
-        }
-        return permsSet;
-    }
-
-    /**
-     * 获取用户权限ID
-     *
-     * @return
-     */
-    public List<String> getUserPermissionIds() {
-        List<Permission> permissions = getUserPermissions();
-        if(permissions == null) {
-            return null;
-        }
-        List<String> ids = new ArrayList<>();
-        for(Permission permission : permissions){
-            ids.add(permission.getPermissionId().getId());
-        }
-        return ids;
-    }
-
-    /**
-     * 获取权限
-     *
-     * @return
-     */
-    private List<Permission> getUserPermissions() {
-        if(roles == null) {
-            return null;
-        }
-        List<Permission> permissions = new ArrayList<>();
-        for(Role role : roles) {
-            if(role.getPermissions() !=null && !role.getPermissions().isEmpty()) {
-                permissions.addAll(role.getPermissions());
-            }
-        }
-        return permissions;
-    }
-
-    /**
-     * 获取用户角色ID
-     *
-     * @return
-     */
-    public List<String> getUserRoleIds() {
-        if(roles == null) {
-            return null;
-        }
-        List<String> ids = new ArrayList<>();
-        for(Role role : roles){
-            ids.add(role.getRoleId().getId());
-        }
-        return ids;
-    }
-
-    /**
      * 禁用
      */
     public void disable() {
         StatusEnum status = this.status == StatusEnum.DISABLE?StatusEnum.ENABLE:StatusEnum.DISABLE;
         this.status = status;
+    }
+
+    public void refreshToken() {
+        account.updateToken();
+    }
+
+    public void changePassword(String oldPasswordStr,String newPasswordStr) {
+        account.changePassword(oldPasswordStr, newPasswordStr);
+    }
+
+    public void change() {
+        account.updateToken();
     }
 
     public UserId getUserId() {
@@ -169,16 +109,15 @@ public class User implements Entity<User> {
         return status;
     }
 
-    public Tenant getTenant() {
-        return tenant;
-    }
-
     public Account getAccount() {
         return account;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public TenantId getTenantId() {
+        return tenantId;
     }
 
+    public List<RoleId> getRoleIds() {
+        return roleIds;
+    }
 }

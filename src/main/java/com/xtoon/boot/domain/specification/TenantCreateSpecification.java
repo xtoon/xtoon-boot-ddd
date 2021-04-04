@@ -1,6 +1,6 @@
 package com.xtoon.boot.domain.specification;
 
-import com.xtoon.boot.domain.model.system.Tenant;
+import com.xtoon.boot.domain.model.Tenant;
 import com.xtoon.boot.domain.repository.TenantRepository;
 import com.xtoon.boot.domain.shared.AbstractSpecification;
 
@@ -20,7 +20,6 @@ public class TenantCreateSpecification extends AbstractSpecification<Tenant> {
 
     @Override
     public boolean isSatisfiedBy(Tenant tenant) {
-
         if(tenantRepository.find(tenant.getTenantName()) != null) {
             throw new IllegalArgumentException("租户名称已存在");
         }
