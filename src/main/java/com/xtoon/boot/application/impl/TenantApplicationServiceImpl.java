@@ -11,9 +11,9 @@ import com.xtoon.boot.domain.repository.PermissionRepository;
 import com.xtoon.boot.domain.repository.RoleRepository;
 import com.xtoon.boot.domain.repository.TenantRepository;
 import com.xtoon.boot.domain.repository.UserRepository;
+import com.xtoon.boot.domain.service.TenantDisableService;
 import com.xtoon.boot.domain.shared.StatusEnum;
 import com.xtoon.boot.domain.specification.TenantCreateSpecification;
-import com.xtoon.boot.infrastructure.util.mybatis.TenantContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,8 +80,11 @@ public class TenantApplicationServiceImpl implements TenantApplicationService {
             throw new RuntimeException("平台租户无法删除");
         }
         Tenant tenant = tenantRepository.find(tenantId);
-        tenant.disable();
+        User user = userRepository.find(tenant.getCreatorId());
+        TenantDisableService tenantDisableService = new TenantDisableService();
+        tenantDisableService.disable(tenant,user);
         tenantRepository.store(tenant);
+        userRepository.store(user);
     }
 
 }
