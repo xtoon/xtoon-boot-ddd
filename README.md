@@ -8,16 +8,16 @@
 
 <div align="center">
 
-基于DDD领域模型并支持SaaS平台的企业级开发脚手架.
+基于DDD领域模型设计并支持SaaS平台的企业级开发脚手架.
 
 </div>
 
 <div align="center">
 
 ![](https://img.shields.io/badge/language-java-red.svg)
-[![ApiAdmin](https://img.shields.io/hexpm/l/plug.svg)](http://www.apiadmin.org/)
-[![ApiAdmin](https://img.shields.io/badge/release-1.0.0-blue.svg)](http://www.apiadmin.org/)
-[![ApiAdmin](https://img.shields.io/badge/build-passing-brightgreen.svg)](http://www.apiadmin.org/)
+[![ApiAdmin](https://img.shields.io/hexpm/l/plug.svg)](http://xtoon-boot.xiangtoon.com/)
+[![ApiAdmin](https://img.shields.io/badge/release-1.1.0-blue.svg)](http://xtoon-boot.xiangtoon.com/)
+[![ApiAdmin](https://img.shields.io/badge/build-passing-brightgreen.svg)](http://xtoon-boot.xiangtoon.com/)
 
 </div>
 
@@ -36,12 +36,11 @@
 - 可以快速开发，框架提供了系统管理和组织架构等核心模块；
 - 支持多租户的SaaS平台；
 
-## 为何开源
-工作中一直有个困恼：为什么身边很多项目后期维护时业务逻辑变的混乱不堪，service层代码变的庞大难以修改，维护成本也越来越高，有没有好的解决方式的？<br>
-Eric Evans的DDD（Domain-Driven Design 领域驱动设计）正是为了解决复杂业务而提出。
-我们1.0版本终于上线了，这套框架开源出来想跟大家探讨并一起维护，希望今后有更多的项目和产品能使用这套框架。
+## 技术交流
+如果有什么问题或建议可以 [提ISSUE](https://gitee.com/xtoon/xtoon-boot/issues) 或 加群（QQ：130950009），交流技术，分享经验。 <br >
+如果你解决了某些bug，或者新增了一些功能，欢迎 [贡献代码](https://gitee.com/xtoon/xtoon-boot/pulls)，感激不尽~ <br >
+大家多点 ⭐Star 支持下。
 
-## 为何开源
 
 ## 技术选型
 
@@ -127,14 +126,14 @@ Alistair Cockburn提出了六边形架构，又被称为端口和适配器架构
 - 基础设施层  
 为上面各层提供通用的技术能力:为应用层传递消息，为领域层提供持久化机制， 为用户界面层绘制屏幕组件，等等。基础设施层还能够通过架构框架来支持4个层次 间的交互模式
 
+## 为何开源
+工作中一直有个困恼：为什么身边很多项目后期维护时业务逻辑变的混乱不堪，service层代码变的庞大难以变更，维护成本居高不下，有没有好的解决方式的？<br>
+Eric Evans的DDD（Domain-Driven Design 领域驱动设计）正是为了解决复杂业务而提出。
+我们1.1版本终于上线了，框架开源出来是想跟大家探讨并一起维护，希望今后有更多的项目和产品能使用基于框架开发。
+
 ## 相关文档
 - [CSDN博客-DDD系列](https://blog.csdn.net/haoxin963/category_10708582.html)持续更新中，欢迎关注！
 
-
-## 技术交流
-如果有什么问题或建议可以 [提ISSUE](https://gitee.com/xtoon/xtoon-boot/issues) 或 加群（QQ：130950009），交流技术，分享经验。 <br >
-如果你解决了某些bug，或者新增了一些功能，欢迎 [贡献代码](https://gitee.com/xtoon/xtoon-boot/pulls)，感激不尽~ <br >
-大家多点 ⭐Star 支持下。
 
 ## 维护者
 
