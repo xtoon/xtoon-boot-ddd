@@ -6,6 +6,7 @@ import com.xtoon.boot.domain.model.types.*;
 import com.xtoon.boot.infrastructure.persistence.mybatis.entity.SysTenantDO;
 import com.xtoon.boot.infrastructure.persistence.mybatis.mapper.SysTenantMapper;
 import com.xtoon.boot.infrastructure.util.mybatis.Query;
+import com.xtoon.boot.infrastructure.util.mybatis.TenantContext;
 import com.xtoon.boot.interfaces.common.Page;
 import com.xtoon.boot.interfaces.facade.SysTenantServiceFacade;
 import com.xtoon.boot.interfaces.facade.assembler.PageAssembler;
@@ -42,6 +43,7 @@ public class SysTenantServiceFacadeImpl implements SysTenantServiceFacade {
 
     @Override
     public void disable(String id) {
+        TenantContext.setTenantId(id);
         tenantApplicationService.disable(new TenantId(id));
     }
 }

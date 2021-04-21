@@ -1,6 +1,5 @@
 package com.xtoon.boot.interfaces.web;
 
-import com.xtoon.boot.domain.exception.NoRegisterException;
 import com.xtoon.boot.infrastructure.util.log.SysLog;
 import com.xtoon.boot.infrastructure.util.redis.RedisUtils;
 import com.xtoon.boot.infrastructure.util.validator.ValidatorUtils;
@@ -93,12 +92,8 @@ public class SysLoginController extends AbstractController {
         if (!mobileLoginCommand.getVerificationCode().equals(verificationCodeRedis)) {
             return Result.error("验证码不正确");
         }
-        try{
-            LoginSuccessDTO loginSuccessDTO = sysUserServiceFacade.loginByMobile(mobileLoginCommand.getMobile());
-            return Result.ok(loginSuccessDTO);
-        } catch (NoRegisterException noRegisterException) {
-            return Result.error(NO_REGISTER,"手机号未注册");
-        }
+        LoginSuccessDTO loginSuccessDTO = sysUserServiceFacade.loginByMobile(mobileLoginCommand.getMobile());
+        return Result.ok(loginSuccessDTO);
     }
 
     /**
