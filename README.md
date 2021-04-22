@@ -8,7 +8,7 @@
 
 <div align="center">
 
-基于DDD领域模型设计并支持SaaS平台的企业级开发脚手架.
+基于DDD领域模型设计并支持SaaS平台的单体应用开发脚手架.
 
 </div>
 
