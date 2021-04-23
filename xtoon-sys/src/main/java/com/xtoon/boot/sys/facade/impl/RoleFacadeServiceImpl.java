@@ -5,7 +5,7 @@ import com.xtoon.boot.common.util.Page;
 import com.xtoon.boot.common.domain.StatusEnum;
 import com.xtoon.boot.common.util.mybatis.Query;
 import com.xtoon.boot.sys.application.RoleApplicationService;
-import com.xtoon.boot.sys.facade.SysRoleServiceFacade;
+import com.xtoon.boot.sys.facade.RoleFacadeService;
 import com.xtoon.boot.sys.facade.assembler.PageAssembler;
 import com.xtoon.boot.sys.facade.assembler.RoleDTOAssembler;
 import com.xtoon.boot.sys.facade.dto.RoleDTO;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @date 2021-02-18
  **/
 @Component
-public class SysRoleServiceFacadeImpl implements SysRoleServiceFacade {
+public class RoleFacadeServiceImpl implements RoleFacadeService {
 
     @Autowired
     private RoleRepository roleRepository;

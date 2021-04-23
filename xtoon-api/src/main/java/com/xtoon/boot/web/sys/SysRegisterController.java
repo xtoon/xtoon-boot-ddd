@@ -3,10 +3,10 @@ package com.xtoon.boot.web.sys;
 import com.xtoon.boot.common.AbstractController;
 import com.xtoon.boot.common.Result;
 import com.xtoon.boot.common.util.log.SysLog;
+import com.xtoon.boot.sys.facade.CaptchaFacadeService;
+import com.xtoon.boot.sys.facade.TenantFacadeService;
 import com.xtoon.boot.util.validator.ValidatorUtils;
 import com.xtoon.boot.util.validator.group.AddGroup;
-import com.xtoon.boot.sys.facade.SysCaptchaServiceFacade;
-import com.xtoon.boot.sys.facade.SysTenantServiceFacade;
 import com.xtoon.boot.web.sys.command.RegisterTenantCommand;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,10 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class SysRegisterController extends AbstractController {
 
     @Autowired
-    private SysTenantServiceFacade sysTenantServiceFacade;
+    private TenantFacadeService tenantFacadeService;
 
     @Autowired
-    private SysCaptchaServiceFacade sysCaptchaServiceFacade;
+    private CaptchaFacadeService captchaFacadeService;
 
     /**
      * 注册租户
@@ -39,11 +39,11 @@ public class SysRegisterController extends AbstractController {
     @PostMapping("/sys/registerTenant")
     public Result registerTenantAndUser(@RequestBody RegisterTenantCommand registerTenantCommand) {
         ValidatorUtils.validateEntity(registerTenantCommand, AddGroup.class);
-        boolean captcha = sysCaptchaServiceFacade.validate(registerTenantCommand.getUuid(), registerTenantCommand.getCaptcha());
+        boolean captcha = captchaFacadeService.validate(registerTenantCommand.getUuid(), registerTenantCommand.getCaptcha());
         if(!captcha){
             return Result.error("验证码不正确");
         }
-        sysTenantServiceFacade.registerTenant(registerTenantCommand.getTenantName(),registerTenantCommand.getTenantCode(),registerTenantCommand.getUserName(),
+        tenantFacadeService.registerTenant(registerTenantCommand.getTenantName(),registerTenantCommand.getTenantCode(),registerTenantCommand.getUserName(),
                 registerTenantCommand.getMobile(),registerTenantCommand.getPassword());
         return Result.ok();
     }

@@ -1,8 +1,7 @@
-package com.xtoon.boot.sys.interfaces.facade;
+package com.xtoon.boot.sys.facade;
 
 import com.xtoon.boot.common.util.Page;
 import com.xtoon.boot.common.util.TenantContext;
-import com.xtoon.boot.sys.facade.SysLogServiceFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -24,19 +23,19 @@ import static org.assertj.core.api.Assertions.assertThat;
  **/
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class SysLogServiceFacadeTest {
+class LogFacadeServiceTest {
 
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private SysLogServiceFacade sysLogServiceFacade;
+    private LogFacadeService logFacadeService;
 
     @Test
     void queryPage() {
         TenantContext.setTenantId("3");
         Map<String, Object> params = new HashMap<>();
-        Page page = sysLogServiceFacade.queryPage(params);
+        Page page = logFacadeService.queryPage(params);
         logger.info(page.toString());
         assertThat(page).isNotNull();
         assertThat(page.getList()).hasSizeGreaterThan(1);

@@ -1,4 +1,4 @@
-package com.xtoon.boot.sys.interfaces.web;
+package com.xtoon.boot.web.sys;
 
 import com.xtoon.boot.common.util.TenantContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,4 +57,5 @@ class SysLogControllerTest {
         assertThat(status).isEqualTo(200);
         logger.info(mvcResult.getResponse().getContentAsString());
     }
+
 }

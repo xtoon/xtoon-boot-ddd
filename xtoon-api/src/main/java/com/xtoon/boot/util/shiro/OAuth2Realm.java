@@ -2,7 +2,7 @@ package com.xtoon.boot.util.shiro;
 
 import com.xtoon.boot.common.util.UserContext;
 import com.xtoon.boot.sys.facade.dto.UserDTO;
-import com.xtoon.boot.sys.facade.SysUserServiceFacade;
+import com.xtoon.boot.sys.facade.UserFacadeService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -14,9 +14,6 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 认证
  *
@@ -27,7 +24,7 @@ import java.util.Map;
 public class OAuth2Realm extends AuthorizingRealm {
 
     @Autowired
-    private SysUserServiceFacade sysUserServiceFacade;
+    private UserFacadeService sysUserServiceFacade;
 
     @Override
     public boolean supports(AuthenticationToken token) {

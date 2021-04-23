@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.code.kaptcha.Producer;
 import com.xtoon.boot.common.util.DateUtils;
 import com.xtoon.boot.common.util.exception.XTException;
-import com.xtoon.boot.sys.facade.SysCaptchaServiceFacade;
+import com.xtoon.boot.sys.facade.CaptchaFacadeService;
 import com.xtoon.boot.sys.infrastructure.repository.entity.SysCaptchaDO;
 import com.xtoon.boot.sys.infrastructure.repository.mapper.SysCaptchaMapper;
 import org.apache.commons.lang.StringUtils;
@@ -21,7 +21,7 @@ import java.util.Date;
  * @date 2021-02-08
  **/
 @Component
-public class SysCaptchaServiceFacadeImpl implements SysCaptchaServiceFacade {
+public class CaptchaFacadeServiceImpl implements CaptchaFacadeService {
 
     @Autowired
     private Producer producer;
