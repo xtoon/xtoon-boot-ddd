@@ -1,6 +1,7 @@
 package com.xtoon.boot.sys.interfaces.facade;
 
 import com.xtoon.boot.sys.domain.repository.UserRepository;
+import com.xtoon.boot.sys.facade.SysPermissionServiceFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;

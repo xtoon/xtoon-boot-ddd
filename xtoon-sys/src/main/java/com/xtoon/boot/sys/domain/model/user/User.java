@@ -85,8 +85,8 @@ public class User implements Aggregate<User> {
         this.status = status;
     }
 
-    public void refreshToken() {
-        account.updateToken();
+    public void refreshToken(String tokenStr) {
+        account.updateToken(tokenStr);
     }
 
     public void changePassword(String oldPasswordStr,String newPasswordStr) {

@@ -1,7 +1,6 @@
 package com.xtoon.boot.sys.domain.model.types;
 
 import com.xtoon.boot.common.domain.ValueObject;
-import com.xtoon.boot.sys.domain.util.TokenGenerator;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
@@ -51,16 +50,14 @@ public final class Token implements ValueObject<Token> {
     /**
      * 创建Token
      */
-    public static Token create() {
+    public static Token create(String tokenStr) {
         //12小时后过期
         int expirePeriod = 3600 * 12;
-        //生成一个token
-        String token = TokenGenerator.generateValue();
         //当前时间
         Date now = new Date();
         //过期时间
         Date expireTime = new Date(now.getTime() + expirePeriod * 1000);
-        return new Token(token,expireTime, expirePeriod);
+        return new Token(tokenStr,expireTime, expirePeriod);
     }
 
     public String getToken() {

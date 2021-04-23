@@ -1,5 +1,6 @@
 package com.xtoon.boot.sys.interfaces.facade;
 
+import com.xtoon.boot.sys.facade.SysUserServiceFacade;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

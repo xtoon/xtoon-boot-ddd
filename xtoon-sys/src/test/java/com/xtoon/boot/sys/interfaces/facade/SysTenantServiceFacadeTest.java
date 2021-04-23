@@ -1,5 +1,6 @@
 package com.xtoon.boot.sys.interfaces.facade;
 
+import com.xtoon.boot.sys.facade.SysTenantServiceFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

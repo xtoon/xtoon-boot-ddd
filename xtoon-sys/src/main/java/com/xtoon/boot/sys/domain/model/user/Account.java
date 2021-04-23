@@ -97,8 +97,8 @@ public class Account implements Entity<Account> {
     /**
      * 更新Token
      */
-    public Account updateToken() {
-        this.token = Token.create();
+    public Account updateToken(String tokenStr) {
+        this.token = Token.create(tokenStr);
         return this;
     }
 

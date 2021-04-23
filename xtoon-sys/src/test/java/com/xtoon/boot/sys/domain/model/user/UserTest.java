@@ -1,11 +1,13 @@
 package com.xtoon.boot.sys.domain.model.user;
 
 import com.xtoon.boot.common.domain.StatusEnum;
+import com.xtoon.boot.sys.domain.external.TokenGeneratorExternalService;
 import com.xtoon.boot.sys.domain.model.types.*;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  **/
 @Slf4j
 class UserTest {
+
+    @Autowired
+    private TokenGeneratorExternalService tokenGeneratorExternalService;
 
     User user;
 
@@ -52,7 +57,7 @@ class UserTest {
 
     @Test
     void refreshToken() {
-        user.refreshToken();
+        user.refreshToken(tokenGeneratorExternalService.generateValue());
         Assertions.assertThat(user.getAccount().getToken()).isNotNull();
     }
 
