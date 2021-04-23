@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
  * @author haoxin
  * @date 2021-02-08
  **/
-public interface SysCaptchaServiceFacade {
+public interface CaptchaFacadeService {
 
     /**
      * 获取图片验证码

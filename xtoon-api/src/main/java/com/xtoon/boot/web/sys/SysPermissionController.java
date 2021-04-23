@@ -3,11 +3,11 @@ package com.xtoon.boot.web.sys;
 import com.xtoon.boot.common.AbstractController;
 import com.xtoon.boot.common.Result;
 import com.xtoon.boot.common.util.log.SysLog;
+import com.xtoon.boot.sys.facade.PermissionFacadeService;
+import com.xtoon.boot.sys.facade.dto.PermissionDTO;
 import com.xtoon.boot.util.validator.ValidatorUtils;
 import com.xtoon.boot.util.validator.group.AddGroup;
 import com.xtoon.boot.util.validator.group.UpdateGroup;
-import com.xtoon.boot.sys.facade.SysPermissionServiceFacade;
-import com.xtoon.boot.sys.facade.dto.PermissionDTO;
 import com.xtoon.boot.web.sys.command.PermissionCommand;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +30,7 @@ import java.util.Set;
 public class SysPermissionController extends AbstractController {
 
     @Autowired
-    private SysPermissionServiceFacade sysPermissionServiceFacade;
+    private PermissionFacadeService permissionFacadeService;
 
     /**
      * 导航菜单
@@ -38,7 +38,7 @@ public class SysPermissionController extends AbstractController {
     @ApiOperation("导航菜单")
     @GetMapping("/nav")
     public Result nav(){
-        List<PermissionDTO> menuList = sysPermissionServiceFacade.getUserMenuTree(getUser());
+        List<PermissionDTO> menuList = permissionFacadeService.getUserMenuTree(getUser());
         Set<String> permissions = getUser().getPermissionCodes();
         return Result.ok().put("menuList", menuList).put("permissions", permissions);
     }
@@ -49,7 +49,7 @@ public class SysPermissionController extends AbstractController {
     @ApiOperation("所有权限列表")
     @GetMapping("/list")
     public Result list(){
-        List<PermissionDTO> permissionList = sysPermissionServiceFacade.listAllPermission();
+        List<PermissionDTO> permissionList = permissionFacadeService.listAllPermission();
         return Result.ok().put("permissionList", permissionList);
     }
 
@@ -59,7 +59,7 @@ public class SysPermissionController extends AbstractController {
     @ApiOperation("选择菜单")
     @GetMapping("/selectMenu")
     public Result selectMenu(){
-        List<PermissionDTO> menuList = sysPermissionServiceFacade.listAllMenu();
+        List<PermissionDTO> menuList = permissionFacadeService.listAllMenu();
         return Result.ok().put("menuList", menuList);
     }
 
@@ -70,7 +70,7 @@ public class SysPermissionController extends AbstractController {
     @GetMapping("/info/{id}")
     @RequiresPermissions("sys:permission:info")
     public Result info(@PathVariable("id") String id){
-        PermissionDTO permission = sysPermissionServiceFacade.getById(id);
+        PermissionDTO permission = permissionFacadeService.getById(id);
         return Result.ok().put("permission", permission);
     }
 
@@ -86,7 +86,7 @@ public class SysPermissionController extends AbstractController {
         PermissionDTO permissionDTO = new PermissionDTO(permissionCommand.getId(),permissionCommand.getParentId(),permissionCommand.getPermissionName(),
                 permissionCommand.getPermissionType(),permissionCommand.getPermissionLevel(),permissionCommand.getPermissionCodes(),
                 permissionCommand.getMenuIcon(),permissionCommand.getOrderNum(),permissionCommand.getMenuUrl());
-        sysPermissionServiceFacade.saveOrUpdate(permissionDTO);
+        permissionFacadeService.saveOrUpdate(permissionDTO);
         return Result.ok();
     }
 
@@ -102,7 +102,7 @@ public class SysPermissionController extends AbstractController {
         PermissionDTO permissionDTO = new PermissionDTO(permissionCommand.getId(),permissionCommand.getParentId(),permissionCommand.getPermissionName(),
                 permissionCommand.getPermissionType(),permissionCommand.getPermissionLevel(),permissionCommand.getPermissionCodes(),
                 permissionCommand.getMenuIcon(),permissionCommand.getOrderNum(),permissionCommand.getMenuUrl());
-        sysPermissionServiceFacade.saveOrUpdate(permissionDTO);
+        permissionFacadeService.saveOrUpdate(permissionDTO);
         return Result.ok();
     }
 
@@ -114,7 +114,7 @@ public class SysPermissionController extends AbstractController {
     @PostMapping("/delete/{id}")
     @RequiresPermissions("sys:permission:delete")
     public Result delete(@PathVariable("id") String id){
-        sysPermissionServiceFacade.delete(id);
+        permissionFacadeService.delete(id);
         return Result.ok();
     }
 
@@ -126,7 +126,7 @@ public class SysPermissionController extends AbstractController {
     @PostMapping("/disable/{id}")
     @RequiresPermissions("sys:permission:disable")
     public Result disable(@PathVariable("id") String id){
-        sysPermissionServiceFacade.disable(id);
+        permissionFacadeService.disable(id);
         return Result.ok();
     }
 

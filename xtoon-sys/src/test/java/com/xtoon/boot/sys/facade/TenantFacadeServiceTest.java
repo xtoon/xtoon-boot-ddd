@@ -1,6 +1,5 @@
-package com.xtoon.boot.sys.interfaces.facade;
+package com.xtoon.boot.sys.facade;
 
-import com.xtoon.boot.sys.facade.SysTenantServiceFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +14,14 @@ import org.springframework.test.context.junit4.SpringRunner;
  **/
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class SysTenantServiceFacadeTest {
+class TenantFacadeServiceTest {
 
     @Autowired
-    private SysTenantServiceFacade sysTenantServiceFacade;
+    private TenantFacadeService tenantFacadeService;
 
     @Test
     void registerTenant() {
-        sysTenantServiceFacade.registerTenant("京东","JD","","18888888888","2222222222");
+        tenantFacadeService.registerTenant("京东","JD","","18888888888","2222222222");
     }
 
 }

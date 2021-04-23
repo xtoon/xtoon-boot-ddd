@@ -1,4 +1,4 @@
-package com.xtoon.boot.sys.infrastructure.persistence.mybatis.repository.impl;
+package com.xtoon.boot.sys.infrastructure.repository.impl;
 
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

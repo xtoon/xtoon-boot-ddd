@@ -1,7 +1,6 @@
-package com.xtoon.boot.sys.interfaces.facade;
+package com.xtoon.boot.sys.facade;
 
 import com.xtoon.boot.sys.domain.repository.UserRepository;
-import com.xtoon.boot.sys.facade.SysPermissionServiceFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -18,12 +17,12 @@ import org.springframework.test.context.junit4.SpringRunner;
  **/
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class SysPermissionServiceFacadeTest {
+class PermissionFacadeServiceTest {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private SysPermissionServiceFacade sysPermissionServiceFacade;
+    private PermissionFacadeService permissionFacadeService;
 
     @Autowired
     private UserRepository userRepository;

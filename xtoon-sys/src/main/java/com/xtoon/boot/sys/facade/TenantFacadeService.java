@@ -10,7 +10,7 @@ import java.util.Map;
  * @author haoxin
  * @date 2021-02-14
  **/
-public interface SysTenantServiceFacade {
+public interface TenantFacadeService {
 
     /**
      * 分页查询

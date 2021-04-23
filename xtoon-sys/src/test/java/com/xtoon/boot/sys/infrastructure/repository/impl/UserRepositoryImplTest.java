@@ -1,4 +1,4 @@
-package com.xtoon.boot.sys.infrastructure.persistence.mybatis.repository.impl;
+package com.xtoon.boot.sys.infrastructure.repository.impl;
 
 import com.xtoon.boot.sys.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;

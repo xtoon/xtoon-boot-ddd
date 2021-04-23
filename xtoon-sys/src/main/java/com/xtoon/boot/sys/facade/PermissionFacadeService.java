@@ -11,7 +11,7 @@ import java.util.List;
  * @author haoxin
  * @date 2021-02-17
  **/
-public interface SysPermissionServiceFacade {
+public interface PermissionFacadeService {
 
     /**
      * 所有权限

@@ -3,7 +3,7 @@ package com.xtoon.boot.sys.facade.impl;
 import com.xtoon.boot.sys.facade.dto.UserDTO;
 import com.xtoon.boot.common.util.TenantContext;
 import com.xtoon.boot.sys.application.PermissionApplicationService;
-import com.xtoon.boot.sys.facade.SysPermissionServiceFacade;
+import com.xtoon.boot.sys.facade.PermissionFacadeService;
 import com.xtoon.boot.sys.facade.assembler.PermissionDTOAssembler;
 import com.xtoon.boot.sys.facade.dto.PermissionDTO;
 import com.xtoon.boot.sys.domain.model.Permission;
@@ -24,7 +24,7 @@ import java.util.*;
  * @date 2021-02-17
  **/
 @Component
-public class SysPermissionServiceFacadeImpl implements SysPermissionServiceFacade {
+public class PermissionFacadeServiceImpl implements PermissionFacadeService {
 
     @Autowired
     private PermissionRepository permissionRepository;

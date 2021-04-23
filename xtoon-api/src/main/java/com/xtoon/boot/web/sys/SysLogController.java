@@ -1,10 +1,10 @@
 package com.xtoon.boot.web.sys;
 
 import com.xtoon.boot.common.AbstractController;
+import com.xtoon.boot.common.Result;
 import com.xtoon.boot.common.util.CommonConstant;
 import com.xtoon.boot.common.util.Page;
-import com.xtoon.boot.common.Result;
-import com.xtoon.boot.sys.facade.SysLogServiceFacade;
+import com.xtoon.boot.sys.facade.LogFacadeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -28,7 +28,7 @@ import java.util.Map;
 public class SysLogController extends AbstractController {
 
     @Autowired
-    private SysLogServiceFacade sysLogServiceFacade;
+    private LogFacadeService logFacadeService;
 
     /**
      * 列表
@@ -37,7 +37,7 @@ public class SysLogController extends AbstractController {
     @GetMapping("/list")
     @RequiresPermissions("sys:log:list")
     public Result list(@RequestParam Map<String, Object> params){
-        Page page = sysLogServiceFacade.queryPage(params);
+        Page page = logFacadeService.queryPage(params);
         return Result.ok().put(CommonConstant.PAGE, page);
     }
 }

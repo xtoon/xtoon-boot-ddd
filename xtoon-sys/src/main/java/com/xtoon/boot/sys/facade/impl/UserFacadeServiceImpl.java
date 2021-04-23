@@ -10,7 +10,7 @@ import com.xtoon.boot.common.util.mybatis.Query;
 import com.xtoon.boot.common.util.TenantContext;
 import com.xtoon.boot.sys.application.UserApplicationService;
 import com.xtoon.boot.sys.domain.model.types.*;
-import com.xtoon.boot.sys.facade.SysUserServiceFacade;
+import com.xtoon.boot.sys.facade.UserFacadeService;
 import com.xtoon.boot.sys.facade.assembler.PageAssembler;
 import com.xtoon.boot.sys.facade.assembler.UserDTOAssembler;
 import com.xtoon.boot.sys.facade.dto.LoginSuccessDTO;
@@ -36,7 +36,7 @@ import java.util.*;
  * @date 2021-02-08
  **/
 @Component
-public class SysUserServiceFacadeImpl implements SysUserServiceFacade {
+public class UserFacadeServiceImpl implements UserFacadeService {
 
     @Autowired
     private UserApplicationService userApplicationService;

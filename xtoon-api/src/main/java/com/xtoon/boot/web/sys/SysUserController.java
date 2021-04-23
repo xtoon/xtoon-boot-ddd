@@ -1,15 +1,15 @@
 package com.xtoon.boot.web.sys;
 
 import com.xtoon.boot.common.AbstractController;
+import com.xtoon.boot.common.Result;
 import com.xtoon.boot.common.util.CommonConstant;
 import com.xtoon.boot.common.util.Page;
-import com.xtoon.boot.common.Result;
 import com.xtoon.boot.common.util.log.SysLog;
+import com.xtoon.boot.sys.facade.UserFacadeService;
+import com.xtoon.boot.sys.facade.dto.UserDTO;
 import com.xtoon.boot.util.validator.ValidatorUtils;
 import com.xtoon.boot.util.validator.group.AddGroup;
 import com.xtoon.boot.util.validator.group.UpdateGroup;
-import com.xtoon.boot.sys.facade.SysUserServiceFacade;
-import com.xtoon.boot.sys.facade.dto.UserDTO;
 import com.xtoon.boot.web.sys.command.PasswordCommand;
 import com.xtoon.boot.web.sys.command.UserCommand;
 import io.swagger.annotations.Api;
@@ -33,7 +33,7 @@ import java.util.Map;
 public class SysUserController extends AbstractController {
 
     @Autowired
-    private SysUserServiceFacade sysUserServiceFacade;
+    private UserFacadeService userFacadeService;
 
     /**
      * 用户分页查询
@@ -42,7 +42,7 @@ public class SysUserController extends AbstractController {
     @GetMapping("/list")
     @RequiresPermissions("sys:user:list")
     public Result list(@RequestParam Map<String, Object> params){
-        Page page = sysUserServiceFacade.queryPage(params);
+        Page page = userFacadeService.queryPage(params);
         return Result.ok().put(CommonConstant.PAGE, page);
     }
 
@@ -63,7 +63,7 @@ public class SysUserController extends AbstractController {
     @PostMapping("/password")
     public Result changePassword(@RequestBody PasswordCommand passwordCommand){
         ValidatorUtils.validateEntity(passwordCommand);
-        sysUserServiceFacade.changePassword(getUser().getId(),passwordCommand.getPassword(),passwordCommand.getNewPassword());
+        userFacadeService.changePassword(getUser().getId(),passwordCommand.getPassword(),passwordCommand.getNewPassword());
         return Result.ok();
     }
 
@@ -74,7 +74,7 @@ public class SysUserController extends AbstractController {
     @GetMapping("/info/{id}")
     @RequiresPermissions("sys:user:info")
     public Result info(@PathVariable("id") String id){
-        return Result.ok().put("user", sysUserServiceFacade.find(id));
+        return Result.ok().put("user", userFacadeService.find(id));
     }
 
     /**
@@ -86,7 +86,7 @@ public class SysUserController extends AbstractController {
     @RequiresPermissions("sys:user:save")
     public Result save(@RequestBody UserCommand userCommand){
         ValidatorUtils.validateEntity(userCommand, AddGroup.class);
-        sysUserServiceFacade.save(new UserDTO(userCommand.getId(),userCommand.getUserName(),userCommand.getEmail(),userCommand.getMobile(),
+        userFacadeService.save(new UserDTO(userCommand.getId(),userCommand.getUserName(),userCommand.getEmail(),userCommand.getMobile(),
                 null,userCommand.getRoleIdList()));
         return Result.ok();
     }
@@ -100,7 +100,7 @@ public class SysUserController extends AbstractController {
     @RequiresPermissions("sys:user:update")
     public Result update(@RequestBody UserCommand userCommand){
         ValidatorUtils.validateEntity(userCommand, UpdateGroup.class);
-        sysUserServiceFacade.update(new UserDTO(userCommand.getId(),userCommand.getUserName(),userCommand.getEmail(),userCommand.getMobile(),
+        userFacadeService.update(new UserDTO(userCommand.getId(),userCommand.getUserName(),userCommand.getEmail(),userCommand.getMobile(),
                 null,userCommand.getRoleIdList()));
         return Result.ok();
     }
@@ -113,7 +113,7 @@ public class SysUserController extends AbstractController {
     @PostMapping("/delete")
     @RequiresPermissions("sys:user:delete")
     public Result delete(@RequestBody String[] userIds){
-        sysUserServiceFacade.deleteBatch(Arrays.asList(userIds));
+        userFacadeService.deleteBatch(Arrays.asList(userIds));
         return Result.ok();
     }
 
@@ -125,7 +125,7 @@ public class SysUserController extends AbstractController {
     @PostMapping("/disable/{id}")
     @RequiresPermissions("sys:user:disable")
     public Result disable(@PathVariable("id") String id){
-        sysUserServiceFacade.disable(id);
+        userFacadeService.disable(id);
         return Result.ok();
     }
 }

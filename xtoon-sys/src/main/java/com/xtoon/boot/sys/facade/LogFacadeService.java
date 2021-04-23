@@ -10,7 +10,7 @@ import java.util.Map;
  * @author haoxin
  * @date 2021-02-04
  **/
-public interface SysLogServiceFacade {
+public interface LogFacadeService {
 
     /**
      * 分页查询

@@ -6,7 +6,7 @@ import com.xtoon.boot.common.util.mybatis.Query;
 import com.xtoon.boot.common.util.TenantContext;
 import com.xtoon.boot.sys.application.TenantApplicationService;
 import com.xtoon.boot.sys.domain.model.types.*;
-import com.xtoon.boot.sys.facade.SysTenantServiceFacade;
+import com.xtoon.boot.sys.facade.TenantFacadeService;
 import com.xtoon.boot.sys.facade.assembler.PageAssembler;
 import com.xtoon.boot.sys.infrastructure.repository.entity.SysTenantDO;
 import com.xtoon.boot.sys.infrastructure.repository.mapper.SysTenantMapper;
@@ -22,7 +22,7 @@ import java.util.Map;
  * @date 2021-02-14
  **/
 @Component
-public class SysTenantServiceFacadeImpl implements SysTenantServiceFacade {
+public class TenantFacadeServiceImpl implements TenantFacadeService {
 
     @Autowired
     private TenantApplicationService tenantApplicationService;

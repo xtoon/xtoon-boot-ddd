@@ -1,11 +1,11 @@
 package com.xtoon.boot.web.sys;
 
 import com.xtoon.boot.common.AbstractController;
+import com.xtoon.boot.common.Result;
 import com.xtoon.boot.common.util.CommonConstant;
 import com.xtoon.boot.common.util.Page;
-import com.xtoon.boot.common.Result;
 import com.xtoon.boot.common.util.log.SysLog;
-import com.xtoon.boot.sys.facade.SysTenantServiceFacade;
+import com.xtoon.boot.sys.facade.TenantFacadeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class SysTenantController extends AbstractController {
 
     @Autowired
-    private SysTenantServiceFacade sysTenantServiceFacade;
+    private TenantFacadeService tenantFacadeService;
 
     /**
      * 用户分页查询
@@ -35,7 +35,7 @@ public class SysTenantController extends AbstractController {
     @GetMapping("/list")
     @RequiresPermissions("sys:tenant:list")
     public Result list(@RequestParam Map<String, Object> params){
-        Page page = sysTenantServiceFacade.queryPage(params);
+        Page page = tenantFacadeService.queryPage(params);
         return Result.ok().put(CommonConstant.PAGE, page);
     }
 
@@ -47,7 +47,7 @@ public class SysTenantController extends AbstractController {
     @PostMapping("/disable/{id}")
     @RequiresPermissions("sys:tenant:disable")
     public Result disable(@PathVariable("id") String id){
-        sysTenantServiceFacade.disable(id);
+        tenantFacadeService.disable(id);
         return Result.ok();
     }
 }

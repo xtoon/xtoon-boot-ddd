@@ -13,7 +13,7 @@ import java.util.Map;
  * @author haoxin
  * @date 2021-02-08
  **/
-public interface SysUserServiceFacade {
+public interface UserFacadeService {
 
     /**
      * 分页查询
