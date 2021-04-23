@@ -1,7 +1,8 @@
 package com.xtoon.boot.sys.interfaces.facade;
 
-import com.xtoon.boot.common.web.Page;
+import com.xtoon.boot.common.util.Page;
 import com.xtoon.boot.common.util.TenantContext;
+import com.xtoon.boot.sys.facade.SysLogServiceFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;

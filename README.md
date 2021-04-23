@@ -64,43 +64,46 @@
 ## 项目结构 
 ```
 xtoon-boot
-├─db     数据库SQL脚本
+├─db                            数据库SQL脚本
 │ 
-├─xtoon-common      通用模块
+├─xtoon-common                  公共模块
 │    │ 
 │    └─java 
-│         ├─domain 领域通用类
-│         ├─util 工具类
-│         └─web  web通用类
+│         ├─domain              领域通用类
+│         └─util                工具类
 │   
-├─xtoon-start      启动模块
+├─xtoon-api                     接口模块
 │    │ 
-│    ├─java  启动类
+│    ├─java        
+│    │    ├─common              接口通用类
+│    │    ├─util                接口工具类
+│    │    └─web                 controller类
 │    └─resources 
 │        ├─static.swagger       swagger文件
 │        ├─application.yml      全局配置文件
 │        └─logback-spring.xml   日志配置文件
 │ 
-├─xtoon-sys      系统子域
+├─xtoon-sys                     系统子域模块
 │    │ 
 │    └─java 
-│         ├─application 应用层
-│         │    └─impl      应用接口实现
-│         ├─domain 领域层（核心）
+│         ├─application         应用层
+│         │    └─impl           应用接口实现
+│         ├─domain              领域层（核心）
 │         │    ├─factory        工厂
 │         │    ├─model          领域模型
 │         │    ├─repository     资源接口
 │         │    ├─service        领域服务
 │         │    ├─specification  规格校验
-│         │    └─util           工具包
-│         ├─infrastructure 基础设施层
-│         │    ├─persistence.mybatis           mybatis持久化类（应该都熟悉就不展开了）
-│         │    └─util           工具包
-│         └─interfaces 接口层
-│              ├─facede         门面类
-│              └─web            controller类
+│         │    └─external       外部接口（防腐层）
+│         ├─infrastructure      基础设施层
+│         │    ├─repository     mybatis持久化类（应该都熟悉就不展开了）
+│         │    └─external       外部服务类
+│         └─facede              门面类层
+│              ├─assembler      DTO转换类
+│              ├─dto            DTO
+│              └─impl           门面类
 │   
-├─xtoon-org      组织架构子域（开发中）
+├─xtoon-org                     组织架构子域模块
 │       
 
 ```

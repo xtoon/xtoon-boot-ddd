@@ -16,7 +16,7 @@ class TokenTest {
 
     @Test
     void create() {
-        Token token = Token.create();
+        Token token = Token.create("11");
         assertThat(token).isNotNull();
         log.info(token.toString());
     }

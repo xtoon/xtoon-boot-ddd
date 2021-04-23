@@ -11,8 +11,8 @@
 		<module>xtoon-common</module>
 		<module>xtoon-sys</module>
 		<module>xtoon-org</module>
-		<module>xtoon-start</module>
-	</modules>
+        <module>xtoon-api</module>
+    </modules>
 	<name>xtoon-boot</name>
 	<description>xtoon-boot是一款基于DDD的单体应用脚手架</description>
 

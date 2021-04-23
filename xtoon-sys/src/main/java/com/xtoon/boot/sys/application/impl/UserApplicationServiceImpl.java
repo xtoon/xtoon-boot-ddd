@@ -1,6 +1,7 @@
 package com.xtoon.boot.sys.application.impl;
 
 import com.xtoon.boot.sys.application.UserApplicationService;
+import com.xtoon.boot.sys.domain.external.TokenGeneratorExternalService;
 import com.xtoon.boot.sys.domain.factory.UserFactory;
 import com.xtoon.boot.sys.domain.model.types.*;
 import com.xtoon.boot.sys.domain.model.user.User;
@@ -24,6 +25,9 @@ import java.util.List;
 public class UserApplicationServiceImpl implements UserApplicationService {
 
     @Autowired
+    private TokenGeneratorExternalService tokenGeneratorExternalService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -42,7 +46,7 @@ public class UserApplicationServiceImpl implements UserApplicationService {
         User user = users.get(0);
         LoginByAccountSpecification loginByUserNameSpecification = new LoginByAccountSpecification(password);
         loginByUserNameSpecification.isSatisfiedBy(user);
-        user.refreshToken();
+        user.refreshToken(tokenGeneratorExternalService.generateValue());
         userRepository.store(user);
         return user;
     }
@@ -55,7 +59,7 @@ public class UserApplicationServiceImpl implements UserApplicationService {
             throw new RuntimeException("用户不存在");
         }
         User user = users.get(0);
-        user.refreshToken();
+        user.refreshToken(tokenGeneratorExternalService.generateValue());
         userRepository.store(user);
         return user;
     }
@@ -64,7 +68,7 @@ public class UserApplicationServiceImpl implements UserApplicationService {
     @Transactional(rollbackFor = Exception.class)
     public void logout(UserId userId) {
         User user = userRepository.find(userId);
-        user.refreshToken();
+        user.refreshToken(tokenGeneratorExternalService.generateValue());
         userRepository.store(user);
     }
 

@@ -3,7 +3,7 @@ package com.xtoon.boot.common.util.mybatis;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xtoon.boot.common.web.CommonConstant;
+import com.xtoon.boot.common.util.CommonConstant;
 import com.xtoon.boot.common.util.xss.SQLFilter;
 import org.apache.commons.lang.StringUtils;
 
