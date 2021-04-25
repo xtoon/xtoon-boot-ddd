@@ -1,5 +1,6 @@
 package com.xtoon.boot.sys.infrastructure.repository.impl;
 
+import com.xtoon.boot.sys.ApplicationTest;
 import com.xtoon.boot.sys.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @date 2021-02-13
  **/
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes= ApplicationTest.class)
 class UserRepositoryImplTest {
 
     private Logger logger = LoggerFactory.getLogger(getClass());

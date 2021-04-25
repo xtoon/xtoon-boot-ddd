@@ -1,6 +1,7 @@
 package com.xtoon.boot.sys.infrastructure.repository.impl;
 
 import com.xtoon.boot.common.domain.StatusEnum;
+import com.xtoon.boot.sys.ApplicationTest;
 import com.xtoon.boot.sys.domain.model.Permission;
 import com.xtoon.boot.sys.domain.model.types.*;
 import com.xtoon.boot.sys.domain.repository.PermissionRepository;
@@ -23,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @date 2021-02-17
  **/
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes= ApplicationTest.class)
 class PermissionRepositoryImplTest {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
