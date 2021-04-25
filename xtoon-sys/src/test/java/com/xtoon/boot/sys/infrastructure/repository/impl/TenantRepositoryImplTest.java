@@ -1,5 +1,6 @@
 package com.xtoon.boot.sys.infrastructure.repository.impl;
 
+import com.xtoon.boot.sys.ApplicationTest;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -11,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @date 2021-02-15
  **/
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes= ApplicationTest.class)
 class TenantRepositoryImplTest {
 
 }

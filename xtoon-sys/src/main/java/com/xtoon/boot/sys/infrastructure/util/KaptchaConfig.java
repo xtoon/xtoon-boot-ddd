@@ -1,5 +1,5 @@
 
-package com.xtoon.boot.common.util;
+package com.xtoon.boot.sys.infrastructure.util;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
