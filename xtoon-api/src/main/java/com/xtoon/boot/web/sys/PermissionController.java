@@ -27,7 +27,7 @@ import java.util.Set;
 @Api(tags = "权限管理")
 @RestController
 @RequestMapping("/sys/permission")
-public class SysPermissionController extends AbstractController {
+public class PermissionController extends AbstractController {
 
     @Autowired
     private PermissionFacadeService permissionFacadeService;

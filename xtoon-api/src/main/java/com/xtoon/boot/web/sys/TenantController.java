@@ -23,7 +23,7 @@ import java.util.Map;
 @Api(tags = "租户管理")
 @RestController
 @RequestMapping("/sys/tenant")
-public class SysTenantController extends AbstractController {
+public class TenantController extends AbstractController {
 
     @Autowired
     private TenantFacadeService tenantFacadeService;

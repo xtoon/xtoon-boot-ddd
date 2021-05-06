@@ -28,7 +28,7 @@ import java.util.Map;
 @Api(tags = "角色管理")
 @RestController
 @RequestMapping("/sys/role")
-public class SysRoleController extends AbstractController {
+public class RoleController extends AbstractController {
 
     @Autowired
     private RoleFacadeService roleFacadeService;

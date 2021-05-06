@@ -25,7 +25,7 @@ import java.util.Map;
 @Api(tags = "日志管理")
 @RestController
 @RequestMapping("/sys/log")
-public class SysLogController extends AbstractController {
+public class LogController extends AbstractController {
 
     @Autowired
     private LogFacadeService logFacadeService;

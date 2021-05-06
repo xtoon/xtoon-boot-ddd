@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @Api(tags = "注册")
 @RestController
-public class SysRegisterController extends AbstractController {
+public class RegisterController extends AbstractController {
 
     @Autowired
     private TenantFacadeService tenantFacadeService;

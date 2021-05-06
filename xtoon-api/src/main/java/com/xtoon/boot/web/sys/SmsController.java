@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "短信")
 @RestController
 @RequestMapping("/sys/sms")
-public class SysSmsController {
+public class SmsController {
 
     public static final long PHONE_CODE_TIME = 5 * 60;
 

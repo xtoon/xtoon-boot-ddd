@@ -34,7 +34,7 @@ import java.io.IOException;
  **/
 @Api(tags = "登录")
 @RestController
-public class SysLoginController extends AbstractController {
+public class LoginController extends AbstractController {
 
     @Autowired
     private CaptchaFacadeService captchaFacadeService;

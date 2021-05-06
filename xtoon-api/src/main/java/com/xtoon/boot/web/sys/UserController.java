@@ -30,7 +30,7 @@ import java.util.Map;
 @Api(tags = "用户管理")
 @RestController
 @RequestMapping("/sys/user")
-public class SysUserController extends AbstractController {
+public class UserController extends AbstractController {
 
     @Autowired
     private UserFacadeService userFacadeService;

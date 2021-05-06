@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @WebAppConfiguration
-class SysLogControllerTest {
+class LogControllerTest {
 
     @Autowired
     private WebApplicationContext context;
