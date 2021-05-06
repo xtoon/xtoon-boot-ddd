@@ -248,4 +248,104 @@ BEGIN;
 INSERT INTO `sys_user_role`(`id`, `user_id`, `role_id`, `remarks`, `tenant_id`, `del_flag`, `created_by`, `created_time`, `updated_by`, `updated_time`) VALUES ('1', '1', '1', NULL, '1', '0', '超级管理员', '2021-02-26 17:11:29', NULL, NULL);
 COMMIT;
 
+-- ----------------------------
+-- Table structure for org_employee
+-- ----------------------------
+DROP TABLE IF EXISTS `org_employee`;
+CREATE TABLE `org_employee` (
+  `id` varchar(32) COLLATE utf8mb4_bin NOT NULL COMMENT '主键',
+  `emp_no` varchar(128) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '员工工号',
+  `emp_name` varchar(128) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '员工姓名',
+  `emp_sex` char(1) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '员工性别',
+  `user_id` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '用户ID',
+  `status` char(1) COLLATE utf8mb4_bin DEFAULT '0' COMMENT '状态 0启用，1禁用',
+  `remarks` varchar(512) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '备注',
+  `tenant_id` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '所属租户',
+  `del_flag` char(1) COLLATE utf8mb4_bin DEFAULT '0' COMMENT '删除标识 0未删除，1已删除',
+  `created_by` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '创建人',
+  `created_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `updated_by` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '更新人',
+  `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='员工 ';
+
+-- ----------------------------
+-- Table structure for org_employee_office
+-- ----------------------------
+DROP TABLE IF EXISTS `org_employee_office`;
+CREATE TABLE `org_employee_office` (
+  `id` varchar(32) COLLATE utf8mb4_bin NOT NULL COMMENT '主键',
+  `emp_id` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '员工id',
+  `officce_id` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '机构id',
+  `remarks` varchar(512) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '备注',
+  `tenant_id` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '所属租户',
+  `del_flag` char(1) COLLATE utf8mb4_bin DEFAULT '0' COMMENT '删除标识 0未删除，1已删除',
+  `created_by` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '创建人',
+  `created_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `updated_by` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '更新人',
+  `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='员工附属机构关系 ';
+
+-- ----------------------------
+-- Table structure for org_employee_post
+-- ----------------------------
+DROP TABLE IF EXISTS `org_employee_post`;
+CREATE TABLE `org_employee_post` (
+  `id` varchar(32) COLLATE utf8mb4_bin NOT NULL COMMENT '主键',
+  `emp_id` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '员工id',
+  `post_id` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '岗位id',
+  `remarks` varchar(512) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '备注',
+  `tenant_id` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '所属租户',
+  `del_flag` char(1) COLLATE utf8mb4_bin DEFAULT '0' COMMENT '删除标识 0未删除，1已删除',
+  `created_by` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '创建人',
+  `created_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `updated_by` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '更新人',
+  `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='员工与岗位关系 ';
+
+-- ----------------------------
+-- Table structure for org_office
+-- ----------------------------
+DROP TABLE IF EXISTS `org_office`;
+CREATE TABLE `org_office` (
+  `id` varchar(32) COLLATE utf8mb4_bin NOT NULL COMMENT '主键',
+  `office_name` varchar(128) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '机构名称',
+  `office_code` varchar(64) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '机构编码',
+  `office_type` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '机构分类',
+  `parent_id` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '父级ID',
+  `order_num` int(11) DEFAULT NULL COMMENT '排序',
+  `status` char(1) COLLATE utf8mb4_bin DEFAULT '0' COMMENT '状态 0启用，1禁用',
+  `remarks` varchar(512) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '备注',
+  `tenant_id` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '所属租户',
+  `del_flag` char(1) COLLATE utf8mb4_bin DEFAULT '0' COMMENT '删除标识 0未删除，1已删除',
+  `created_by` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '创建人',
+  `created_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `updated_by` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '更新人',
+  `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='组织机构 ';
+
+-- ----------------------------
+-- Table structure for org_post
+-- ----------------------------
+DROP TABLE IF EXISTS `org_post`;
+CREATE TABLE `org_post` (
+  `id` varchar(32) COLLATE utf8mb4_bin NOT NULL COMMENT '主键',
+  `post_code` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '岗位编码',
+  `post_name` varchar(128) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '岗位名称',
+  `post_type` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '岗位类型',
+  `order_num` int(11) DEFAULT NULL COMMENT '排序',
+  `status` char(1) COLLATE utf8mb4_bin DEFAULT '0' COMMENT '状态 0启用，1禁用',
+  `remarks` varchar(512) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '备注',
+  `tenant_id` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '所属租户',
+  `del_flag` char(1) COLLATE utf8mb4_bin DEFAULT '0' COMMENT '删除标识 0未删除，1已删除',
+  `created_by` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '创建人',
+  `created_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `updated_by` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '更新人',
+  `updated_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='岗位 ';
+
 SET FOREIGN_KEY_CHECKS = 1;
