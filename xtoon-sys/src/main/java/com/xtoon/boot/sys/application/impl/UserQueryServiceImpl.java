@@ -38,7 +38,6 @@ public class UserQueryServiceImpl implements UserQueryService {
     @Autowired
     private SysUserMapper sysUserMapper;
 
-
     @Autowired
     private UserRepository userRepository;
 

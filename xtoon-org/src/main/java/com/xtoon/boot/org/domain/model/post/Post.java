@@ -60,4 +60,32 @@ public class Post implements Entity<Post> {
     public boolean sameIdentityAs(Post other) {
         return other != null && postId.sameValueAs(other.postId);
     }
+
+    public PostId getPostId() {
+        return postId;
+    }
+
+    public PostName getPostName() {
+        return postName;
+    }
+
+    public PostCode getPostCode() {
+        return postCode;
+    }
+
+    public String getPostType() {
+        return postType;
+    }
+
+    public int getOrderNum() {
+        return orderNum;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public StatusEnum getStatus() {
+        return status;
+    }
 }

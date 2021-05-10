@@ -76,4 +76,40 @@ public class Employee implements Entity<Employee> {
     public boolean sameIdentityAs(Employee other) {
         return other != null && employeeId.sameValueAs(other.employeeId);
     }
+
+    public EmployeeId getEmployeeId() {
+        return employeeId;
+    }
+
+    public EmployeeName getEmployeeName() {
+        return employeeName;
+    }
+
+    public EmployeeNo getEmployeeNo() {
+        return employeeNo;
+    }
+
+    public SexEnum getEmployeeSex() {
+        return employeeSex;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public List<PostId> getPostIds() {
+        return postIds;
+    }
+
+    public OfficeId getOfficeId() {
+        return officeId;
+    }
+
+    public StatusEnum getStatus() {
+        return status;
+    }
 }

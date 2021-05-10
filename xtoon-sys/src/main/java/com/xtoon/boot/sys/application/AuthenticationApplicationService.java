@@ -14,6 +14,8 @@ public interface AuthenticationApplicationService {
 
     /**
      * 获取图片验证码
+     * @param uuid
+     * @return
      */
     BufferedImage getCaptcha(String uuid);
 
