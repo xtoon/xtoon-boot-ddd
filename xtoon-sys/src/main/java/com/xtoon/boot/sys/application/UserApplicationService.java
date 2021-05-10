@@ -1,12 +1,11 @@
 package com.xtoon.boot.sys.application;
 
-import com.xtoon.boot.sys.domain.model.types.*;
-import com.xtoon.boot.sys.domain.model.user.User;
+import com.xtoon.boot.sys.application.dto.UserDTO;
 
 import java.util.List;
 
 /**
- * 用户Service
+ * 用户应用服务接口
  *
  * @author haoxin
  * @date 2021-02-09
@@ -14,28 +13,32 @@ import java.util.List;
 public interface UserApplicationService {
 
     /**
-     * 通过账号密码
+     * 保存用户
      *
-     * @param mobile
-     * @param password
-     * @return
+     * @param userDTO
      */
-    User login(Mobile mobile, String password);
+    void save(UserDTO userDTO);
 
     /**
-     * 通过手机号登录
+     * 更新用户
      *
-     * @param mobile
-     * @return
+     * @param userDTO
      */
-    User login(Mobile mobile);
+    void update(UserDTO userDTO);
 
     /**
-     * 登出
+     * 批量删除
      *
-     * @param userId
+     * @param ids
      */
-    void logout(UserId userId);
+    void deleteBatch(List<String> ids);
+
+    /**
+     * 禁用
+     *
+     * @param id
+     */
+    void disable(String id);
 
     /**
      * 修改密码
@@ -44,38 +47,5 @@ public interface UserApplicationService {
      * @param oldPasswordStr
      * @param newPasswordStr
      */
-    void changePassword(UserId userId, String oldPasswordStr, String newPasswordStr);
-
-    /**
-     * 更新用户
-     *
-     * @param user
-     */
-    void update(User user);
-
-    /**
-     * 删除用户
-     *
-     * @param userIds
-     */
-    void delete(List<UserId> userIds);
-
-    /**
-     * 禁用用户
-     *
-     * @param userId
-     */
-    void disable(UserId userId);
-
-    /**
-     * 添加用户
-     *
-     * @param mobile
-     * @param email
-     * @param password
-     * @param userName
-     * @param roleIdList
-     */
-    void addUser(Mobile mobile, Email email, Password password, UserName userName, List<RoleId> roleIdList, TenantId tenantId);
-
+    void changePassword(String userId, String oldPasswordStr, String newPasswordStr);
 }

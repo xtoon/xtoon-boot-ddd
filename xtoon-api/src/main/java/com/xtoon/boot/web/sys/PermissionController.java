@@ -2,9 +2,10 @@ package com.xtoon.boot.web.sys;
 
 import com.xtoon.boot.common.AbstractController;
 import com.xtoon.boot.common.Result;
-import com.xtoon.boot.common.util.log.SysLog;
-import com.xtoon.boot.sys.facade.PermissionFacadeService;
-import com.xtoon.boot.sys.facade.dto.PermissionDTO;
+import com.xtoon.boot.util.log.SysLog;
+import com.xtoon.boot.sys.application.PermissionApplicationService;
+import com.xtoon.boot.sys.application.PermissionQueryService;
+import com.xtoon.boot.sys.application.dto.PermissionDTO;
 import com.xtoon.boot.util.validator.ValidatorUtils;
 import com.xtoon.boot.util.validator.group.AddGroup;
 import com.xtoon.boot.util.validator.group.UpdateGroup;
@@ -30,7 +31,10 @@ import java.util.Set;
 public class PermissionController extends AbstractController {
 
     @Autowired
-    private PermissionFacadeService permissionFacadeService;
+    private PermissionApplicationService permissionApplicationService;
+
+    @Autowired
+    private PermissionQueryService permissionQueryService;
 
     /**
      * 导航菜单
@@ -38,7 +42,7 @@ public class PermissionController extends AbstractController {
     @ApiOperation("导航菜单")
     @GetMapping("/nav")
     public Result nav(){
-        List<PermissionDTO> menuList = permissionFacadeService.getUserMenuTree(getUser());
+        List<PermissionDTO> menuList = permissionQueryService.getUserMenuTree(getUser());
         Set<String> permissions = getUser().getPermissionCodes();
         return Result.ok().put("menuList", menuList).put("permissions", permissions);
     }
@@ -49,7 +53,7 @@ public class PermissionController extends AbstractController {
     @ApiOperation("所有权限列表")
     @GetMapping("/list")
     public Result list(){
-        List<PermissionDTO> permissionList = permissionFacadeService.listAllPermission();
+        List<PermissionDTO> permissionList = permissionQueryService.listAllPermission();
         return Result.ok().put("permissionList", permissionList);
     }
 
@@ -59,7 +63,7 @@ public class PermissionController extends AbstractController {
     @ApiOperation("选择菜单")
     @GetMapping("/selectMenu")
     public Result selectMenu(){
-        List<PermissionDTO> menuList = permissionFacadeService.listAllMenu();
+        List<PermissionDTO> menuList = permissionQueryService.listAllMenu();
         return Result.ok().put("menuList", menuList);
     }
 
@@ -70,7 +74,7 @@ public class PermissionController extends AbstractController {
     @GetMapping("/info/{id}")
     @RequiresPermissions("sys:permission:info")
     public Result info(@PathVariable("id") String id){
-        PermissionDTO permission = permissionFacadeService.getById(id);
+        PermissionDTO permission = permissionQueryService.getById(id);
         return Result.ok().put("permission", permission);
     }
 
@@ -86,7 +90,7 @@ public class PermissionController extends AbstractController {
         PermissionDTO permissionDTO = new PermissionDTO(permissionCommand.getId(),permissionCommand.getParentId(),permissionCommand.getPermissionName(),
                 permissionCommand.getPermissionType(),permissionCommand.getPermissionLevel(),permissionCommand.getPermissionCodes(),
                 permissionCommand.getMenuIcon(),permissionCommand.getOrderNum(),permissionCommand.getMenuUrl());
-        permissionFacadeService.saveOrUpdate(permissionDTO);
+        permissionApplicationService.saveOrUpdate(permissionDTO);
         return Result.ok();
     }
 
@@ -102,7 +106,7 @@ public class PermissionController extends AbstractController {
         PermissionDTO permissionDTO = new PermissionDTO(permissionCommand.getId(),permissionCommand.getParentId(),permissionCommand.getPermissionName(),
                 permissionCommand.getPermissionType(),permissionCommand.getPermissionLevel(),permissionCommand.getPermissionCodes(),
                 permissionCommand.getMenuIcon(),permissionCommand.getOrderNum(),permissionCommand.getMenuUrl());
-        permissionFacadeService.saveOrUpdate(permissionDTO);
+        permissionApplicationService.saveOrUpdate(permissionDTO);
         return Result.ok();
     }
 
@@ -114,7 +118,7 @@ public class PermissionController extends AbstractController {
     @PostMapping("/delete/{id}")
     @RequiresPermissions("sys:permission:delete")
     public Result delete(@PathVariable("id") String id){
-        permissionFacadeService.delete(id);
+        permissionApplicationService.delete(id);
         return Result.ok();
     }
 
@@ -126,7 +130,7 @@ public class PermissionController extends AbstractController {
     @PostMapping("/disable/{id}")
     @RequiresPermissions("sys:permission:disable")
     public Result disable(@PathVariable("id") String id){
-        permissionFacadeService.disable(id);
+        permissionApplicationService.disable(id);
         return Result.ok();
     }
 

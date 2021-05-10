@@ -1,31 +1,31 @@
 package com.xtoon.boot.sys.application.impl;
 
+import com.xtoon.boot.common.util.TenantContext;
 import com.xtoon.boot.sys.application.UserApplicationService;
-import com.xtoon.boot.sys.domain.external.TokenGeneratorExternalService;
-import com.xtoon.boot.sys.domain.factory.UserFactory;
-import com.xtoon.boot.sys.domain.model.types.*;
-import com.xtoon.boot.sys.domain.model.user.User;
-import com.xtoon.boot.sys.domain.repository.TenantRepository;
-import com.xtoon.boot.sys.domain.repository.UserRepository;
-import com.xtoon.boot.sys.domain.specification.LoginByAccountSpecification;
+import com.xtoon.boot.sys.application.assembler.UserDTOAssembler;
+import com.xtoon.boot.sys.application.dto.UserDTO;
+import com.xtoon.boot.sys.domain.model.user.UserFactory;
+import com.xtoon.boot.sys.domain.model.role.RoleId;
+import com.xtoon.boot.sys.domain.model.tenant.TenantId;
+import com.xtoon.boot.sys.domain.model.user.*;
+import com.xtoon.boot.sys.domain.model.tenant.TenantRepository;
+import com.xtoon.boot.sys.domain.model.user.UserRepository;
 import com.xtoon.boot.sys.domain.specification.UserUpdateSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 用户ServiceImpl
+ * 用户应用服务实现类
  *
  * @author haoxin
  * @date 2021-02-09
  **/
 @Service
 public class UserApplicationServiceImpl implements UserApplicationService {
-
-    @Autowired
-    private TokenGeneratorExternalService tokenGeneratorExternalService;
 
     @Autowired
     private UserRepository userRepository;
@@ -38,57 +38,31 @@ public class UserApplicationServiceImpl implements UserApplicationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public User login(Mobile mobile, String password) {
-        List<User> users = userRepository.find(mobile);
-        if(users == null || users.isEmpty()) {
-            throw new RuntimeException("用户或密码不正确");
+    public void save(UserDTO userDTO) {
+        List<RoleId> roleIdList = new ArrayList<>();
+        if(userDTO.getRoleIdList() != null) {
+            userDTO.getRoleIdList().forEach(roleId -> {
+                roleIdList.add(new RoleId(roleId));
+            });
         }
-        User user = users.get(0);
-        LoginByAccountSpecification loginByUserNameSpecification = new LoginByAccountSpecification(password);
-        loginByUserNameSpecification.isSatisfiedBy(user);
-        user.refreshToken(tokenGeneratorExternalService.generateValue());
-        userRepository.store(user);
-        return user;
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public User login(Mobile mobile) {
-        List<User> users = userRepository.find(mobile);
-        if(users == null || users.isEmpty()) {
-            throw new RuntimeException("用户不存在");
-        }
-        User user = users.get(0);
-        user.refreshToken(tokenGeneratorExternalService.generateValue());
-        userRepository.store(user);
-        return user;
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void logout(UserId userId) {
-        User user = userRepository.find(userId);
-        user.refreshToken(tokenGeneratorExternalService.generateValue());
+        User user = userFactory.createUser(new Mobile(userDTO.getMobile()), new Email(userDTO.getEmail()), Password.create(Password.DEFAULT),
+                new UserName(userDTO.getUserName()), roleIdList,new TenantId(TenantContext.getTenantId()));
         userRepository.store(user);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void changePassword(UserId userId, String oldPasswordStr, String newPasswordStr) {
-        User user = userRepository.find(userId);
-        user.changePassword(oldPasswordStr, newPasswordStr);
-        userRepository.store(user);
+    public void update(UserDTO userDTO) {
+        userRepository.store(UserDTOAssembler.toUser(userDTO));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(User user) {
-        userRepository.store(user);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void delete(List<UserId> userIds) {
+    public void deleteBatch(List<String> ids) {
+        List<UserId> userIds= new ArrayList<>();
+        ids.forEach(id -> {
+            userIds.add(new UserId(id));
+        });
         UserUpdateSpecification userUpdateSpecification = new UserUpdateSpecification(tenantRepository);
         for(UserId userId:userIds) {
             User user = userRepository.find(userId);
@@ -99,8 +73,8 @@ public class UserApplicationServiceImpl implements UserApplicationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void disable(UserId userId) {
-        User user = userRepository.find(userId);
+    public void disable(String id) {
+        User user = userRepository.find(new UserId(id));
         UserUpdateSpecification userUpdateSpecification = new UserUpdateSpecification(tenantRepository);
         userUpdateSpecification.isSatisfiedBy(user);
         user.disable();
@@ -109,8 +83,9 @@ public class UserApplicationServiceImpl implements UserApplicationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addUser(Mobile mobile, Email email, Password password, UserName userName, List<RoleId> roleIdList, TenantId tenantId) {
-        User user = userFactory.createUser(mobile, email, password, userName, roleIdList, tenantId);
+    public void changePassword(String userId, String oldPasswordStr, String newPasswordStr) {
+        User user = userRepository.find(new UserId(userId));
+        user.changePassword(oldPasswordStr, newPasswordStr);
         userRepository.store(user);
     }
 }

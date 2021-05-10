@@ -2,9 +2,8 @@ package com.xtoon.boot.web.sys;
 
 import com.xtoon.boot.common.AbstractController;
 import com.xtoon.boot.common.Result;
-import com.xtoon.boot.common.util.log.SysLog;
-import com.xtoon.boot.sys.facade.CaptchaFacadeService;
-import com.xtoon.boot.sys.facade.TenantFacadeService;
+import com.xtoon.boot.util.log.SysLog;
+import com.xtoon.boot.sys.application.AuthenticationApplicationService;
 import com.xtoon.boot.util.validator.ValidatorUtils;
 import com.xtoon.boot.util.validator.group.AddGroup;
 import com.xtoon.boot.web.sys.command.RegisterTenantCommand;
@@ -26,10 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegisterController extends AbstractController {
 
     @Autowired
-    private TenantFacadeService tenantFacadeService;
-
-    @Autowired
-    private CaptchaFacadeService captchaFacadeService;
+    private AuthenticationApplicationService authenticationApplicationService;
 
     /**
      * 注册租户
@@ -39,11 +35,11 @@ public class RegisterController extends AbstractController {
     @PostMapping("/sys/registerTenant")
     public Result registerTenantAndUser(@RequestBody RegisterTenantCommand registerTenantCommand) {
         ValidatorUtils.validateEntity(registerTenantCommand, AddGroup.class);
-        boolean captcha = captchaFacadeService.validate(registerTenantCommand.getUuid(), registerTenantCommand.getCaptcha());
+        boolean captcha = authenticationApplicationService.validate(registerTenantCommand.getUuid(), registerTenantCommand.getCaptcha());
         if(!captcha){
             return Result.error("验证码不正确");
         }
-        tenantFacadeService.registerTenant(registerTenantCommand.getTenantName(),registerTenantCommand.getTenantCode(),registerTenantCommand.getUserName(),
+        authenticationApplicationService.registerTenant(registerTenantCommand.getTenantName(),registerTenantCommand.getTenantCode(),registerTenantCommand.getUserName(),
                 registerTenantCommand.getMobile(),registerTenantCommand.getPassword());
         return Result.ok();
     }

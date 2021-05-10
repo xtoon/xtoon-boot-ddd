@@ -1,8 +1,8 @@
 package com.xtoon.boot.sys.domain.specification;
 
 import com.xtoon.boot.common.domain.AbstractSpecification;
-import com.xtoon.boot.sys.domain.model.Tenant;
-import com.xtoon.boot.sys.domain.repository.TenantRepository;
+import com.xtoon.boot.sys.domain.model.tenant.Tenant;
+import com.xtoon.boot.sys.domain.model.tenant.TenantRepository;
 
 /**
  * 租户创建Specification

@@ -1,7 +1,6 @@
 package com.xtoon.boot.sys.domain.model.user;
 
 import com.xtoon.boot.common.domain.Entity;
-import com.xtoon.boot.sys.domain.model.types.*;
 
 /**
  * 账号

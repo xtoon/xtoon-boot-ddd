@@ -4,9 +4,10 @@ import com.xtoon.boot.common.AbstractController;
 import com.xtoon.boot.common.Result;
 import com.xtoon.boot.common.util.CommonConstant;
 import com.xtoon.boot.common.util.Page;
-import com.xtoon.boot.common.util.log.SysLog;
-import com.xtoon.boot.sys.facade.UserFacadeService;
-import com.xtoon.boot.sys.facade.dto.UserDTO;
+import com.xtoon.boot.util.log.SysLog;
+import com.xtoon.boot.sys.application.UserApplicationService;
+import com.xtoon.boot.sys.application.UserQueryService;
+import com.xtoon.boot.sys.application.dto.UserDTO;
 import com.xtoon.boot.util.validator.ValidatorUtils;
 import com.xtoon.boot.util.validator.group.AddGroup;
 import com.xtoon.boot.util.validator.group.UpdateGroup;
@@ -33,7 +34,10 @@ import java.util.Map;
 public class UserController extends AbstractController {
 
     @Autowired
-    private UserFacadeService userFacadeService;
+    private UserApplicationService userApplicationService;
+
+    @Autowired
+    private UserQueryService userQueryService;
 
     /**
      * 用户分页查询
@@ -42,7 +46,7 @@ public class UserController extends AbstractController {
     @GetMapping("/list")
     @RequiresPermissions("sys:user:list")
     public Result list(@RequestParam Map<String, Object> params){
-        Page page = userFacadeService.queryPage(params);
+        Page page = userQueryService.queryPage(params);
         return Result.ok().put(CommonConstant.PAGE, page);
     }
 
@@ -63,7 +67,7 @@ public class UserController extends AbstractController {
     @PostMapping("/password")
     public Result changePassword(@RequestBody PasswordCommand passwordCommand){
         ValidatorUtils.validateEntity(passwordCommand);
-        userFacadeService.changePassword(getUser().getId(),passwordCommand.getPassword(),passwordCommand.getNewPassword());
+        userApplicationService.changePassword(getUser().getId(),passwordCommand.getPassword(),passwordCommand.getNewPassword());
         return Result.ok();
     }
 
@@ -74,7 +78,7 @@ public class UserController extends AbstractController {
     @GetMapping("/info/{id}")
     @RequiresPermissions("sys:user:info")
     public Result info(@PathVariable("id") String id){
-        return Result.ok().put("user", userFacadeService.find(id));
+        return Result.ok().put("user", userQueryService.find(id));
     }
 
     /**
@@ -86,7 +90,7 @@ public class UserController extends AbstractController {
     @RequiresPermissions("sys:user:save")
     public Result save(@RequestBody UserCommand userCommand){
         ValidatorUtils.validateEntity(userCommand, AddGroup.class);
-        userFacadeService.save(new UserDTO(userCommand.getId(),userCommand.getUserName(),userCommand.getEmail(),userCommand.getMobile(),
+        userApplicationService.save(new UserDTO(userCommand.getId(),userCommand.getUserName(),userCommand.getEmail(),userCommand.getMobile(),
                 null,userCommand.getRoleIdList()));
         return Result.ok();
     }
@@ -100,7 +104,7 @@ public class UserController extends AbstractController {
     @RequiresPermissions("sys:user:update")
     public Result update(@RequestBody UserCommand userCommand){
         ValidatorUtils.validateEntity(userCommand, UpdateGroup.class);
-        userFacadeService.update(new UserDTO(userCommand.getId(),userCommand.getUserName(),userCommand.getEmail(),userCommand.getMobile(),
+        userApplicationService.update(new UserDTO(userCommand.getId(),userCommand.getUserName(),userCommand.getEmail(),userCommand.getMobile(),
                 null,userCommand.getRoleIdList()));
         return Result.ok();
     }
@@ -113,7 +117,7 @@ public class UserController extends AbstractController {
     @PostMapping("/delete")
     @RequiresPermissions("sys:user:delete")
     public Result delete(@RequestBody String[] userIds){
-        userFacadeService.deleteBatch(Arrays.asList(userIds));
+        userApplicationService.deleteBatch(Arrays.asList(userIds));
         return Result.ok();
     }
 
@@ -125,7 +129,7 @@ public class UserController extends AbstractController {
     @PostMapping("/disable/{id}")
     @RequiresPermissions("sys:user:disable")
     public Result disable(@PathVariable("id") String id){
-        userFacadeService.disable(id);
+        userApplicationService.disable(id);
         return Result.ok();
     }
 }

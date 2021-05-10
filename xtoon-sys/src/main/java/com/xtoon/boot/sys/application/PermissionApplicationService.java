@@ -1,10 +1,9 @@
 package com.xtoon.boot.sys.application;
 
-import com.xtoon.boot.sys.domain.model.Permission;
-import com.xtoon.boot.sys.domain.model.types.PermissionId;
+import com.xtoon.boot.sys.application.dto.PermissionDTO;
 
 /**
- * 权限Service
+ * 权限应用服务接口
  *
  * @author haoxin
  * @date 2021-02-17
@@ -12,24 +11,23 @@ import com.xtoon.boot.sys.domain.model.types.PermissionId;
 public interface PermissionApplicationService {
 
     /**
-     * 保存
+     * 保存或更新
      *
-     * @param permission
-     *
+     * @param permissionDTO
      */
-    void saveOrUpdate(Permission permission);
+    void saveOrUpdate(PermissionDTO permissionDTO);
 
     /**
      * 删除
      *
-     * @param permissionId
+     * @param id
      */
-    void delete(PermissionId permissionId);
+    void delete(String id);
 
     /**
      * 禁用
      *
-     * @param permissionId
+     * @param id
      */
-    void disable(PermissionId permissionId);
+    void disable(String id);
 }

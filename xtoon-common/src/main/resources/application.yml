@@ -36,9 +36,9 @@ spring:
 
 #mybatis
 mybatis-plus:
-  mapper-locations: classpath*:com/xtoon/**/infrastructure/repository/mapper/xml/*Mapper.xml
+  mapper-locations: classpath*:com/xtoon/**/infrastructure/persistence/mapper/xml/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.xtoon.*.infrastructure.repository.entity
+  typeAliasesPackage: com.xtoon.*.infrastructure.persistence.entity
   global-config:
     #数据库相关配置
     db-config:

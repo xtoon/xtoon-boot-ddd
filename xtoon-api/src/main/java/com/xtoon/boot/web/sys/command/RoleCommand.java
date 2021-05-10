@@ -37,7 +37,7 @@ public class RoleCommand {
      * 角色名称
      */
     @ApiModelProperty(value = "角色名称")
-    @NotBlank(message="角色编码不能为空", groups = AddGroup.class)
+    @NotBlank(message="角色名称不能为空", groups = AddGroup.class)
     private String roleName;
 
     /**

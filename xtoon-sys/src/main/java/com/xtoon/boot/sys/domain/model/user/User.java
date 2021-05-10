@@ -1,11 +1,9 @@
 package com.xtoon.boot.sys.domain.model.user;
 
-import com.xtoon.boot.common.domain.Aggregate;
+import com.xtoon.boot.common.domain.Entity;
 import com.xtoon.boot.common.domain.StatusEnum;
-import com.xtoon.boot.sys.domain.model.types.RoleId;
-import com.xtoon.boot.sys.domain.model.types.TenantId;
-import com.xtoon.boot.sys.domain.model.types.UserId;
-import com.xtoon.boot.sys.domain.model.types.UserName;
+import com.xtoon.boot.sys.domain.model.role.RoleId;
+import com.xtoon.boot.sys.domain.model.tenant.TenantId;
 
 import java.util.List;
 
@@ -15,7 +13,7 @@ import java.util.List;
  * @author haoxin
  * @date 2021-02-02
  **/
-public class User implements Aggregate<User> {
+public class User implements Entity<User> {
 
     /**
      * UserId

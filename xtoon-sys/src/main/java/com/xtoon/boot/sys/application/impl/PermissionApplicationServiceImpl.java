@@ -1,9 +1,11 @@
 package com.xtoon.boot.sys.application.impl;
 
 import com.xtoon.boot.sys.application.PermissionApplicationService;
-import com.xtoon.boot.sys.domain.model.Permission;
-import com.xtoon.boot.sys.domain.model.types.PermissionId;
-import com.xtoon.boot.sys.domain.repository.PermissionRepository;
+import com.xtoon.boot.sys.application.assembler.PermissionDTOAssembler;
+import com.xtoon.boot.sys.application.dto.PermissionDTO;
+import com.xtoon.boot.sys.domain.model.permission.Permission;
+import com.xtoon.boot.sys.domain.model.permission.PermissionId;
+import com.xtoon.boot.sys.domain.model.permission.PermissionRepository;
 import com.xtoon.boot.sys.domain.specification.PermissionCreateSpecification;
 import com.xtoon.boot.sys.domain.specification.PermissionDeleteSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 权限ServiceImpl
+ * 权限应用服务实现类
  *
  * @author haoxin
  * @date 2021-02-17
@@ -24,7 +26,9 @@ public class PermissionApplicationServiceImpl implements PermissionApplicationSe
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveOrUpdate(Permission permission) {
+    public void saveOrUpdate(PermissionDTO permissionDTO) {
+        Permission parent = permissionRepository.find(new PermissionId(permissionDTO.getParentId()));
+        Permission permission = PermissionDTOAssembler.toPermission(permissionDTO,parent);
         PermissionCreateSpecification permissionCreateSpecification = new PermissionCreateSpecification(permissionRepository);
         permissionCreateSpecification.isSatisfiedBy(permission);
         permissionRepository.store(permission);
@@ -32,7 +36,8 @@ public class PermissionApplicationServiceImpl implements PermissionApplicationSe
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(PermissionId permissionId) {
+    public void delete(String id) {
+        PermissionId permissionId =  new PermissionId(id);
         PermissionDeleteSpecification permissionDeleteSpecification = new PermissionDeleteSpecification(permissionRepository);
         permissionDeleteSpecification.isSatisfiedBy(permissionId);
         permissionRepository.remove(permissionId);
@@ -40,7 +45,8 @@ public class PermissionApplicationServiceImpl implements PermissionApplicationSe
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void disable(PermissionId permissionId) {
+    public void disable(String id) {
+        PermissionId permissionId =  new PermissionId(id);
         Permission permission = permissionRepository.find(permissionId);
         permission.disable();
         permissionRepository.store(permission);

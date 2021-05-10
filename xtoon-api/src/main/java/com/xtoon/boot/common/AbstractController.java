@@ -1,6 +1,6 @@
 package com.xtoon.boot.common;
 
-import com.xtoon.boot.sys.facade.dto.UserDTO;
+import com.xtoon.boot.sys.application.dto.UserDTO;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

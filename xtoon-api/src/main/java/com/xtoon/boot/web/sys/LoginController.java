@@ -3,11 +3,10 @@ package com.xtoon.boot.web.sys;
 import com.xtoon.boot.common.AbstractController;
 import com.xtoon.boot.common.Result;
 import com.xtoon.boot.common.util.CommonConstant;
-import com.xtoon.boot.common.util.log.SysLog;
+import com.xtoon.boot.util.log.SysLog;
 import com.xtoon.boot.common.util.redis.RedisUtils;
-import com.xtoon.boot.sys.facade.CaptchaFacadeService;
-import com.xtoon.boot.sys.facade.UserFacadeService;
-import com.xtoon.boot.sys.facade.dto.LoginSuccessDTO;
+import com.xtoon.boot.sys.application.AuthenticationApplicationService;
+import com.xtoon.boot.sys.application.dto.LoginSuccessDTO;
 import com.xtoon.boot.util.validator.ValidatorUtils;
 import com.xtoon.boot.web.sys.command.AccountLoginCommand;
 import com.xtoon.boot.web.sys.command.MobileLoginCommand;
@@ -37,10 +36,7 @@ import java.io.IOException;
 public class LoginController extends AbstractController {
 
     @Autowired
-    private CaptchaFacadeService captchaFacadeService;
-
-    @Autowired
-    private UserFacadeService userFacadeService;
+    private AuthenticationApplicationService authenticationApplicationService;
 
     @Autowired
     private RedisUtils redisUtils;
@@ -54,7 +50,7 @@ public class LoginController extends AbstractController {
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");
         //获取图片验证码
-        BufferedImage image = captchaFacadeService.getCaptcha(uuid);
+        BufferedImage image = authenticationApplicationService.getCaptcha(uuid);
 
         ServletOutputStream out = response.getOutputStream();
         ImageIO.write(image, "jpg", out);
@@ -69,11 +65,11 @@ public class LoginController extends AbstractController {
     @PostMapping("/sys/loginByAccount")
     public Result loginByAccount(@RequestBody AccountLoginCommand accountLoginCommand) {
         ValidatorUtils.validateEntity(accountLoginCommand);
-        boolean captcha = captchaFacadeService.validate(accountLoginCommand.getUuid(), accountLoginCommand.getCaptcha());
+        boolean captcha = authenticationApplicationService.validate(accountLoginCommand.getUuid(), accountLoginCommand.getCaptcha());
         if(!captcha){
             return Result.error("验证码不正确");
         }
-        LoginSuccessDTO loginSuccessDTO = userFacadeService.loginByAccount(accountLoginCommand.getAccountName(), accountLoginCommand.getPassword());
+        LoginSuccessDTO loginSuccessDTO = authenticationApplicationService.loginByAccount(accountLoginCommand.getAccountName(), accountLoginCommand.getPassword());
         return Result.ok(loginSuccessDTO);
     }
 
@@ -90,7 +86,7 @@ public class LoginController extends AbstractController {
         if (!mobileLoginCommand.getVerificationCode().equals(verificationCodeRedis)) {
             return Result.error("验证码不正确");
         }
-        LoginSuccessDTO loginSuccessDTO = userFacadeService.loginByMobile(mobileLoginCommand.getMobile());
+        LoginSuccessDTO loginSuccessDTO = authenticationApplicationService.loginByMobile(mobileLoginCommand.getMobile());
         return Result.ok(loginSuccessDTO);
     }
 
@@ -101,7 +97,7 @@ public class LoginController extends AbstractController {
     @SysLog("退出")
     @PostMapping("/sys/logout")
     public Result logout() {
-        userFacadeService.logout(getUser().getId());
+        authenticationApplicationService.logout(getUser().getId());
         return Result.ok();
     }
 

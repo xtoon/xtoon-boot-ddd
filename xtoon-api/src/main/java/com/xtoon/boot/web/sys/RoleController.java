@@ -1,13 +1,14 @@
 package com.xtoon.boot.web.sys;
 
 import com.xtoon.boot.common.AbstractController;
+import com.xtoon.boot.common.Result;
 import com.xtoon.boot.common.util.CommonConstant;
 import com.xtoon.boot.common.util.Page;
-import com.xtoon.boot.common.Result;
-import com.xtoon.boot.common.util.log.SysLog;
+import com.xtoon.boot.util.log.SysLog;
+import com.xtoon.boot.sys.application.RoleApplicationService;
+import com.xtoon.boot.sys.application.RoleQueryService;
+import com.xtoon.boot.sys.application.dto.RoleDTO;
 import com.xtoon.boot.util.validator.ValidatorUtils;
-import com.xtoon.boot.sys.facade.RoleFacadeService;
-import com.xtoon.boot.sys.facade.dto.RoleDTO;
 import com.xtoon.boot.web.sys.command.RoleCommand;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +32,10 @@ import java.util.Map;
 public class RoleController extends AbstractController {
 
     @Autowired
-    private RoleFacadeService roleFacadeService;
+    private RoleQueryService roleQueryService;
+
+    @Autowired
+    private RoleApplicationService roleApplicationService;
 
     /**
      * 角色分页查询
@@ -40,7 +44,7 @@ public class RoleController extends AbstractController {
     @GetMapping("/list")
     @RequiresPermissions("sys:role:list")
     public Result list(@RequestParam Map<String, Object> params){
-        Page page = roleFacadeService.queryPage(params);
+        Page page = roleQueryService.queryPage(params);
         return Result.ok().put(CommonConstant.PAGE, page);
     }
 
@@ -51,7 +55,7 @@ public class RoleController extends AbstractController {
     @GetMapping("/select")
     @RequiresPermissions("sys:role:select")
     public Result select(){
-        List<RoleDTO> list = roleFacadeService.listAll();
+        List<RoleDTO> list = roleQueryService.listAll();
         return Result.ok().put("list", list);
     }
 
@@ -62,7 +66,7 @@ public class RoleController extends AbstractController {
     @GetMapping("/info/{id}")
     @RequiresPermissions("sys:role:info")
     public Result info(@PathVariable("id") String id){
-        RoleDTO role = roleFacadeService.getById(id);
+        RoleDTO role = roleQueryService.getById(id);
         return Result.ok().put("role", role);
     }
 
@@ -77,7 +81,7 @@ public class RoleController extends AbstractController {
         ValidatorUtils.validateEntity(roleCommand);
         RoleDTO roleDTO = new RoleDTO(roleCommand.getId(),roleCommand.getRoleCode(),roleCommand.getRoleName(),
                 roleCommand.getRemarks(), roleCommand.getPermissionIdList());
-        roleFacadeService.saveOrUpdate(roleDTO);
+        roleApplicationService.saveOrUpdate(roleDTO);
         return Result.ok();
     }
 
@@ -92,7 +96,7 @@ public class RoleController extends AbstractController {
         ValidatorUtils.validateEntity(roleCommand);
         RoleDTO roleDTO = new RoleDTO(roleCommand.getId(),roleCommand.getRoleCode(),roleCommand.getRoleName(),
                 roleCommand.getRemarks(), roleCommand.getPermissionIdList());
-        roleFacadeService.saveOrUpdate(roleDTO);
+        roleApplicationService.saveOrUpdate(roleDTO);
         return Result.ok();
     }
 
@@ -104,7 +108,7 @@ public class RoleController extends AbstractController {
     @PostMapping("/delete")
     @RequiresPermissions("sys:role:delete")
     public Result delete(@RequestBody String[] roleIds){
-        roleFacadeService.deleteBatch(Arrays.asList(roleIds));
+        roleApplicationService.deleteBatch(Arrays.asList(roleIds));
         return Result.ok();
     }
 
@@ -116,7 +120,7 @@ public class RoleController extends AbstractController {
     @PostMapping("/disable/{id}")
     @RequiresPermissions("sys:role:disable")
     public Result disable(@PathVariable("id") String id){
-        roleFacadeService.disable(id);
+        roleApplicationService.disable(id);
         return Result.ok();
     }
 }

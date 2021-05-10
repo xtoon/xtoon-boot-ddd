@@ -1,8 +1,8 @@
 package com.xtoon.boot.sys.domain.specification;
 
 import com.xtoon.boot.common.domain.AbstractSpecification;
-import com.xtoon.boot.sys.domain.model.Role;
-import com.xtoon.boot.sys.domain.repository.RoleRepository;
+import com.xtoon.boot.sys.domain.model.role.Role;
+import com.xtoon.boot.sys.domain.model.role.RoleRepository;
 
 /**
  * 角色创建Specification

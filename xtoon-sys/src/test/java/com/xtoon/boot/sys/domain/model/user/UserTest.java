@@ -2,7 +2,8 @@ package com.xtoon.boot.sys.domain.model.user;
 
 import com.xtoon.boot.common.domain.StatusEnum;
 import com.xtoon.boot.sys.domain.external.TokenGeneratorExternalService;
-import com.xtoon.boot.sys.domain.model.types.*;
+import com.xtoon.boot.sys.domain.model.role.RoleId;
+import com.xtoon.boot.sys.domain.model.tenant.TenantId;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

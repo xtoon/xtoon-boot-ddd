@@ -1,8 +1,8 @@
 package com.xtoon.boot.util.shiro;
 
 import com.xtoon.boot.common.util.UserContext;
-import com.xtoon.boot.sys.facade.dto.UserDTO;
-import com.xtoon.boot.sys.facade.UserFacadeService;
+import com.xtoon.boot.sys.application.UserQueryService;
+import com.xtoon.boot.sys.application.dto.UserDTO;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 public class OAuth2Realm extends AuthorizingRealm {
 
     @Autowired
-    private UserFacadeService sysUserServiceFacade;
+    private UserQueryService userQueryService;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -51,7 +51,7 @@ public class OAuth2Realm extends AuthorizingRealm {
         if(accessToken == null) {
             return null;
         }
-        UserDTO user = sysUserServiceFacade.queryByToken(accessToken);
+        UserDTO user = userQueryService.queryByToken(accessToken);
         UserContext.setUserId(user.getId());
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, accessToken, getName());
         return info;

@@ -4,8 +4,9 @@ import com.xtoon.boot.common.AbstractController;
 import com.xtoon.boot.common.Result;
 import com.xtoon.boot.common.util.CommonConstant;
 import com.xtoon.boot.common.util.Page;
-import com.xtoon.boot.common.util.log.SysLog;
-import com.xtoon.boot.sys.facade.TenantFacadeService;
+import com.xtoon.boot.util.log.SysLog;
+import com.xtoon.boot.sys.application.TenantApplicationService;
+import com.xtoon.boot.sys.application.TenantQueryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -26,7 +27,10 @@ import java.util.Map;
 public class TenantController extends AbstractController {
 
     @Autowired
-    private TenantFacadeService tenantFacadeService;
+    private TenantQueryService tenantQueryService;
+
+    @Autowired
+    private TenantApplicationService tenantApplicationService;
 
     /**
      * 用户分页查询
@@ -35,7 +39,7 @@ public class TenantController extends AbstractController {
     @GetMapping("/list")
     @RequiresPermissions("sys:tenant:list")
     public Result list(@RequestParam Map<String, Object> params){
-        Page page = tenantFacadeService.queryPage(params);
+        Page page = tenantQueryService.queryPage(params);
         return Result.ok().put(CommonConstant.PAGE, page);
     }
 
@@ -47,7 +51,7 @@ public class TenantController extends AbstractController {
     @PostMapping("/disable/{id}")
     @RequiresPermissions("sys:tenant:disable")
     public Result disable(@PathVariable("id") String id){
-        tenantFacadeService.disable(id);
+        tenantApplicationService.disable(id);
         return Result.ok();
     }
 }

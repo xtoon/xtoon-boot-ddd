@@ -4,7 +4,7 @@ import com.xtoon.boot.common.AbstractController;
 import com.xtoon.boot.common.Result;
 import com.xtoon.boot.common.util.CommonConstant;
 import com.xtoon.boot.common.util.Page;
-import com.xtoon.boot.sys.facade.LogFacadeService;
+import com.xtoon.boot.sys.application.LogQueryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -28,7 +28,7 @@ import java.util.Map;
 public class LogController extends AbstractController {
 
     @Autowired
-    private LogFacadeService logFacadeService;
+    private LogQueryService logQueryService;
 
     /**
      * 列表
@@ -37,7 +37,7 @@ public class LogController extends AbstractController {
     @GetMapping("/list")
     @RequiresPermissions("sys:log:list")
     public Result list(@RequestParam Map<String, Object> params){
-        Page page = logFacadeService.queryPage(params);
+        Page page = logQueryService.queryPage(params);
         return Result.ok().put(CommonConstant.PAGE, page);
     }
 }
