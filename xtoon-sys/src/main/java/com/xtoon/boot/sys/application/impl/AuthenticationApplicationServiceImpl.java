@@ -18,6 +18,7 @@ import com.xtoon.boot.sys.domain.model.tenant.TenantCode;
 import com.xtoon.boot.sys.domain.model.tenant.TenantName;
 import com.xtoon.boot.sys.domain.model.tenant.TenantRepository;
 import com.xtoon.boot.sys.domain.model.user.*;
+import com.xtoon.boot.sys.domain.service.CaptchaValidateService;
 import com.xtoon.boot.sys.domain.service.TenantRegisterService;
 import com.xtoon.boot.sys.domain.specification.LoginByAccountSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,8 @@ public class AuthenticationApplicationServiceImpl implements AuthenticationAppli
     @Override
     @Transactional(rollbackFor = Exception.class)
     public LoginSuccessDTO loginByAccount(AccountLoginCommand accountLoginCommand) {
-        if(!validate(accountLoginCommand.getUuid(), accountLoginCommand.getCaptcha())) {
+        CaptchaValidateService captchaValidateService = new CaptchaValidateService(captchaRepository);
+        if(!captchaValidateService.validate(new Uuid(accountLoginCommand.getUuid()), new CaptchaCode(accountLoginCommand.getCaptcha()))) {
             throw new RuntimeException("验证码不正确");
         }
         List<User> users = userRepository.find(new Mobile(accountLoginCommand.getAccountName()));
@@ -114,7 +116,8 @@ public class AuthenticationApplicationServiceImpl implements AuthenticationAppli
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void registerTenant(RegisterTenantCommand registerTenantCommand) {
-        if(!validate(registerTenantCommand.getUuid(), registerTenantCommand.getCaptcha())) {
+        CaptchaValidateService captchaValidateService = new CaptchaValidateService(captchaRepository);
+        if(!captchaValidateService.validate(new Uuid(registerTenantCommand.getUuid()), new CaptchaCode(registerTenantCommand.getCaptcha()))) {
             throw new RuntimeException("验证码不正确");
         }
         TenantRegisterService tenantRegisterService = new TenantRegisterService(tenantRepository, roleRepository, permissionRepository,userRepository,userFactory);
@@ -122,20 +125,4 @@ public class AuthenticationApplicationServiceImpl implements AuthenticationAppli
                 Password.create(registerTenantCommand.getPassword()), new UserName(registerTenantCommand.getUserName()));
     }
 
-    /**
-     * 校验验证码
-     *
-     * @param uuid
-     * @param code
-     * @return
-     */
-    private boolean validate(String uuid, String code) {
-        Captcha captcha = captchaRepository.find(new Uuid(uuid));
-        if(captcha == null){
-            return false;
-        }
-        //删除验证码
-        captchaRepository.remove(new Uuid(uuid));
-        return captcha.validate(new CaptchaCode(code));
-    }
 }

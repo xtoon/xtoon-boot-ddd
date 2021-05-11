@@ -1,6 +1,5 @@
 package com.xtoon.boot.sys.domain.model.permission;
 
-import com.xtoon.boot.sys.domain.model.permission.PermissionCodes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
