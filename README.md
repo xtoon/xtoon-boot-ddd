@@ -74,36 +74,33 @@ xtoon-boot
 │   
 ├─xtoon-api                     接口模块
 │    │ 
-│    ├─java        
+│    ├─web        
 │    │    ├─common              接口通用类
 │    │    ├─util                接口工具类
-│    │    └─web                 controller类
+│    │    └─controller          controller类
 │    └─resources 
 │        ├─static.swagger       swagger文件
 │        ├─application.yml      全局配置文件
 │        └─logback-spring.xml   日志配置文件
 │ 
-├─xtoon-sys                     系统子域模块
+├─xtoon-sys                     系统管理子域
 │    │ 
 │    └─java 
 │         ├─application         应用层
+│         │    ├─assembler      DTO转换类
+│         │    ├─command        命令入参
+│         │    ├─dto            DTO
 │         │    └─impl           应用接口实现
 │         ├─domain              领域层（核心）
-│         │    ├─factory        工厂
 │         │    ├─model          领域模型
-│         │    ├─repository     资源接口
 │         │    ├─service        领域服务
 │         │    ├─specification  规格校验
 │         │    └─external       外部接口（防腐层）
-│         ├─infrastructure      基础设施层
-│         │    ├─repository     mybatis持久化类（应该都熟悉就不展开了）
-│         │    └─external       外部服务类
-│         └─facede              门面类层
-│              ├─assembler      DTO转换类
-│              ├─dto            DTO
-│              └─impl           门面类
+│         └─infrastructure      基础设施层
+│              ├─persistence    持久化类
+│              └─external       外部服务类
 │   
-├─xtoon-org                     组织架构子域模块
+├─xtoon-org                     组织管理子域
 │       
 
 ```
