@@ -1,9 +1,9 @@
-package com.xtoon.boot.web.sys;
+package com.xtoon.boot.web.controller.sys;
 
 import com.xtoon.boot.common.util.CommonConstant;
-import com.xtoon.boot.common.Result;
+import com.xtoon.boot.web.common.Result;
 import com.xtoon.boot.common.util.exception.XTException;
-import com.xtoon.boot.util.log.SysLog;
+import com.xtoon.boot.web.util.log.SysLog;
 import com.xtoon.boot.common.util.message.AliSmsUtils;
 import com.xtoon.boot.common.util.redis.RedisUtils;
 import io.swagger.annotations.Api;

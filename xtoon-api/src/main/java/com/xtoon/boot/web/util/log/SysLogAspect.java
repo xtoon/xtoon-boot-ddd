@@ -1,4 +1,4 @@
-package com.xtoon.boot.util.log;
+package com.xtoon.boot.web.util.log;
 
 import com.google.gson.Gson;
 import com.xtoon.boot.sys.application.dto.UserDTO;
@@ -36,7 +36,7 @@ public class SysLogAspect {
     @Autowired
     private LogRepository logRepository;
 
-    @Pointcut("@annotation(com.xtoon.boot.util.log.SysLog)")
+    @Pointcut("@annotation(com.xtoon.boot.web.util.log.SysLog)")
     public void logPointCut() {
 
     }

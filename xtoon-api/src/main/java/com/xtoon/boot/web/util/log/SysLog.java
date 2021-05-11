@@ -1,4 +1,4 @@
-package com.xtoon.boot.util.log;
+package com.xtoon.boot.web.util.log;
 
 import java.lang.annotation.*;
 

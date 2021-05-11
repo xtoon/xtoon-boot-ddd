@@ -1,8 +1,8 @@
-package com.xtoon.boot.util.shiro;
+package com.xtoon.boot.web.util.shiro;
 
 import com.google.gson.Gson;
 import com.xtoon.boot.common.util.CommonConstant;
-import com.xtoon.boot.common.Result;
+import com.xtoon.boot.web.common.Result;
 import com.xtoon.boot.common.util.HttpContextUtils;
 import com.xtoon.boot.common.util.TenantContext;
 import org.apache.commons.lang.StringUtils;

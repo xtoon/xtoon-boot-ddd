@@ -1,7 +1,7 @@
-package com.xtoon.boot.web.sys;
+package com.xtoon.boot.web.controller.sys;
 
-import com.xtoon.boot.common.AbstractController;
-import com.xtoon.boot.common.Result;
+import com.xtoon.boot.web.common.AbstractController;
+import com.xtoon.boot.web.common.Result;
 import com.xtoon.boot.common.util.validator.ValidatorUtils;
 import com.xtoon.boot.common.util.validator.group.AddGroup;
 import com.xtoon.boot.common.util.validator.group.UpdateGroup;
@@ -9,7 +9,7 @@ import com.xtoon.boot.sys.application.PermissionApplicationService;
 import com.xtoon.boot.sys.application.PermissionQueryService;
 import com.xtoon.boot.sys.application.command.PermissionCommand;
 import com.xtoon.boot.sys.application.dto.PermissionDTO;
-import com.xtoon.boot.util.log.SysLog;
+import com.xtoon.boot.web.util.log.SysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;

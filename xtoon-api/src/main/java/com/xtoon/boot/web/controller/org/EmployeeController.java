@@ -1,10 +1,10 @@
-package com.xtoon.boot.web.org;
+package com.xtoon.boot.web.controller.org;
 
-import com.xtoon.boot.common.AbstractController;
-import com.xtoon.boot.common.Result;
+import com.xtoon.boot.web.common.AbstractController;
+import com.xtoon.boot.web.common.Result;
 import com.xtoon.boot.common.util.CommonConstant;
 import com.xtoon.boot.common.util.Page;
-import com.xtoon.boot.util.log.SysLog;
+import com.xtoon.boot.web.util.log.SysLog;
 import com.xtoon.boot.org.application.EmployeeApplicationService;
 import com.xtoon.boot.org.application.EmployeeQueryService;
 import com.xtoon.boot.org.application.dto.EmployeeDTO;

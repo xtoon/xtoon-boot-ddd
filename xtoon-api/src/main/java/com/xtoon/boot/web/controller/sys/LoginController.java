@@ -1,7 +1,7 @@
-package com.xtoon.boot.web.sys;
+package com.xtoon.boot.web.controller.sys;
 
-import com.xtoon.boot.common.AbstractController;
-import com.xtoon.boot.common.Result;
+import com.xtoon.boot.web.common.AbstractController;
+import com.xtoon.boot.web.common.Result;
 import com.xtoon.boot.common.util.CommonConstant;
 import com.xtoon.boot.common.util.redis.RedisUtils;
 import com.xtoon.boot.common.util.validator.ValidatorUtils;
@@ -9,7 +9,7 @@ import com.xtoon.boot.sys.application.AuthenticationApplicationService;
 import com.xtoon.boot.sys.application.command.AccountLoginCommand;
 import com.xtoon.boot.sys.application.command.MobileLoginCommand;
 import com.xtoon.boot.sys.application.dto.LoginSuccessDTO;
-import com.xtoon.boot.util.log.SysLog;
+import com.xtoon.boot.web.util.log.SysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;

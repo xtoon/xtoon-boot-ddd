@@ -1,7 +1,7 @@
-package com.xtoon.boot.web.sys;
+package com.xtoon.boot.web.controller.sys;
 
-import com.xtoon.boot.common.AbstractController;
-import com.xtoon.boot.common.Result;
+import com.xtoon.boot.web.common.AbstractController;
+import com.xtoon.boot.web.common.Result;
 import com.xtoon.boot.common.util.CommonConstant;
 import com.xtoon.boot.common.util.Page;
 import com.xtoon.boot.sys.application.LogQueryService;
