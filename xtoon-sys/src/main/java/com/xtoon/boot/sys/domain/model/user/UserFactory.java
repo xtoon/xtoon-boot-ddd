@@ -13,11 +13,13 @@ import java.util.List;
  * @author haoxin
  * @date 2021-02-24
  **/
-@Component
 public class UserFactory {
 
-    @Autowired
     private UserRepository userRepository;
+
+    public UserFactory(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User createUser(Mobile mobile, Email email, Password password, UserName userName, List<RoleId> roleIdList, TenantId currentTenantId) {
         List<User> users = userRepository.find(mobile);

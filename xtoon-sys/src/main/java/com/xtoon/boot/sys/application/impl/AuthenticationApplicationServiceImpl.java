@@ -58,9 +58,6 @@ public class AuthenticationApplicationServiceImpl implements AuthenticationAppli
     @Autowired
     private PermissionRepository permissionRepository;
 
-    @Autowired
-    private UserFactory userFactory;
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public BufferedImage getCaptcha(String uuid) {
@@ -120,7 +117,7 @@ public class AuthenticationApplicationServiceImpl implements AuthenticationAppli
         if(!captchaValidateService.validate(new Uuid(registerTenantCommand.getUuid()), new CaptchaCode(registerTenantCommand.getCaptcha()))) {
             throw new RuntimeException("验证码不正确");
         }
-        TenantRegisterService tenantRegisterService = new TenantRegisterService(tenantRepository, roleRepository, permissionRepository,userRepository,userFactory);
+        TenantRegisterService tenantRegisterService = new TenantRegisterService(tenantRepository, roleRepository, permissionRepository,userRepository);
         tenantRegisterService.registerTenant(new TenantName(registerTenantCommand.getTenantName()), new TenantCode(registerTenantCommand.getTenantCode()),new Mobile(registerTenantCommand.getMobile()),
                 Password.create(registerTenantCommand.getPassword()), new UserName(registerTenantCommand.getUserName()));
     }

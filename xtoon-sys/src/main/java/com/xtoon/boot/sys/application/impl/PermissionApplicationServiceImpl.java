@@ -6,6 +6,7 @@ import com.xtoon.boot.sys.application.command.PermissionCommand;
 import com.xtoon.boot.sys.domain.model.permission.Permission;
 import com.xtoon.boot.sys.domain.model.permission.PermissionId;
 import com.xtoon.boot.sys.domain.model.permission.PermissionRepository;
+import com.xtoon.boot.sys.domain.service.PermissionDisableService;
 import com.xtoon.boot.sys.domain.specification.PermissionCreateSpecification;
 import com.xtoon.boot.sys.domain.specification.PermissionDeleteSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,14 +47,7 @@ public class PermissionApplicationServiceImpl implements PermissionApplicationSe
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void disable(String id) {
-        PermissionId permissionId =  new PermissionId(id);
-        Permission permission = permissionRepository.find(permissionId);
-        permission.disable();
-        permissionRepository.store(permission);
-        if(permission.hasSub()) {
-            for(Permission subPermission:permission.getSubList()) {
-                permissionRepository.store(subPermission);
-            }
-        }
+        PermissionDisableService permissionDisableService = new PermissionDisableService(permissionRepository);
+        permissionDisableService.disable(new PermissionId(id));
     }
 }
