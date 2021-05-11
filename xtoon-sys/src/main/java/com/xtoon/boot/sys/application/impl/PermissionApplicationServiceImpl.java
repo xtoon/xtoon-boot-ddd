@@ -2,7 +2,7 @@ package com.xtoon.boot.sys.application.impl;
 
 import com.xtoon.boot.sys.application.PermissionApplicationService;
 import com.xtoon.boot.sys.application.assembler.PermissionDTOAssembler;
-import com.xtoon.boot.sys.application.dto.PermissionDTO;
+import com.xtoon.boot.sys.application.command.PermissionCommand;
 import com.xtoon.boot.sys.domain.model.permission.Permission;
 import com.xtoon.boot.sys.domain.model.permission.PermissionId;
 import com.xtoon.boot.sys.domain.model.permission.PermissionRepository;
@@ -26,9 +26,9 @@ public class PermissionApplicationServiceImpl implements PermissionApplicationSe
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveOrUpdate(PermissionDTO permissionDTO) {
-        Permission parent = permissionRepository.find(new PermissionId(permissionDTO.getParentId()));
-        Permission permission = PermissionDTOAssembler.toPermission(permissionDTO,parent);
+    public void saveOrUpdate(PermissionCommand permissionCommand) {
+        Permission parent = permissionRepository.find(new PermissionId(permissionCommand.getParentId()));
+        Permission permission = PermissionDTOAssembler.toPermission(permissionCommand,parent);
         PermissionCreateSpecification permissionCreateSpecification = new PermissionCreateSpecification(permissionRepository);
         permissionCreateSpecification.isSatisfiedBy(permission);
         permissionRepository.store(permission);

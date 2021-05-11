@@ -1,6 +1,7 @@
 package com.xtoon.boot.sys.application;
 
-import com.xtoon.boot.sys.application.dto.UserDTO;
+import com.xtoon.boot.sys.application.command.PasswordCommand;
+import com.xtoon.boot.sys.application.command.UserCommand;
 
 import java.util.List;
 
@@ -15,16 +16,16 @@ public interface UserApplicationService {
     /**
      * 保存用户
      *
-     * @param userDTO
+     * @param userCommand
      */
-    void save(UserDTO userDTO);
+    void save(UserCommand userCommand);
 
     /**
      * 更新用户
      *
-     * @param userDTO
+     * @param userCommand
      */
-    void update(UserDTO userDTO);
+    void update(UserCommand userCommand);
 
     /**
      * 批量删除
@@ -43,9 +44,7 @@ public interface UserApplicationService {
     /**
      * 修改密码
      *
-     * @param userId
-     * @param oldPasswordStr
-     * @param newPasswordStr
+     * @param passwordCommand
      */
-    void changePassword(String userId, String oldPasswordStr, String newPasswordStr);
+    void changePassword(PasswordCommand passwordCommand);
 }

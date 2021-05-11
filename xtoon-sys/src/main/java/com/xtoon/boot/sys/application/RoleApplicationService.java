@@ -1,5 +1,6 @@
 package com.xtoon.boot.sys.application;
 
+import com.xtoon.boot.sys.application.command.RoleCommand;
 import com.xtoon.boot.sys.application.dto.RoleDTO;
 
 import java.util.List;
@@ -15,9 +16,9 @@ public interface RoleApplicationService {
     /**
      * 保存或更新
      *
-     * @param roleDTO
+     * @param roleCommand
      */
-    void saveOrUpdate(RoleDTO roleDTO);
+    void saveOrUpdate(RoleCommand roleCommand);
 
     /**
      * 批量删除

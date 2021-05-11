@@ -4,14 +4,14 @@ import com.xtoon.boot.common.AbstractController;
 import com.xtoon.boot.common.Result;
 import com.xtoon.boot.common.util.CommonConstant;
 import com.xtoon.boot.common.util.Page;
-import com.xtoon.boot.util.log.SysLog;
+import com.xtoon.boot.common.util.validator.ValidatorUtils;
+import com.xtoon.boot.common.util.validator.group.AddGroup;
+import com.xtoon.boot.common.util.validator.group.UpdateGroup;
 import com.xtoon.boot.org.application.OfficeApplicationService;
 import com.xtoon.boot.org.application.OfficeQueryService;
+import com.xtoon.boot.org.application.command.OfficeCommand;
 import com.xtoon.boot.org.application.dto.OfficeDTO;
-import com.xtoon.boot.util.validator.ValidatorUtils;
-import com.xtoon.boot.util.validator.group.AddGroup;
-import com.xtoon.boot.util.validator.group.UpdateGroup;
-import com.xtoon.boot.web.org.command.OfficeCommand;
+import com.xtoon.boot.util.log.SysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -82,8 +82,7 @@ public class OfficeController extends AbstractController {
     @RequiresPermissions("org:office:save")
     public Result save(@RequestBody OfficeCommand officeCommand){
         ValidatorUtils.validateEntity(officeCommand, AddGroup.class);
-        officeApplicationService.saveOrUpdate(new OfficeDTO(officeCommand.getId(), officeCommand.getOfficeCode(), officeCommand.getOfficeName(),
-                officeCommand.getOfficeType(), officeCommand.getOrderNum(), officeCommand.getParentId(), officeCommand.getRemarks()));
+        officeApplicationService.saveOrUpdate(officeCommand);
         return Result.ok();
     }
 
@@ -96,8 +95,7 @@ public class OfficeController extends AbstractController {
     @RequiresPermissions("org:office:update")
     public Result update(@RequestBody OfficeCommand officeCommand){
         ValidatorUtils.validateEntity(officeCommand, UpdateGroup.class);
-        officeApplicationService.saveOrUpdate(new OfficeDTO(officeCommand.getId(), officeCommand.getOfficeCode(), officeCommand.getOfficeName(),
-                officeCommand.getOfficeType(), officeCommand.getOrderNum(), officeCommand.getParentId(), officeCommand.getRemarks()));
+        officeApplicationService.saveOrUpdate(officeCommand);
         return Result.ok();
     }
 

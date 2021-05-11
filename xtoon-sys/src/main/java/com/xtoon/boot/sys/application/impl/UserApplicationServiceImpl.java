@@ -3,13 +3,12 @@ package com.xtoon.boot.sys.application.impl;
 import com.xtoon.boot.common.util.TenantContext;
 import com.xtoon.boot.sys.application.UserApplicationService;
 import com.xtoon.boot.sys.application.assembler.UserDTOAssembler;
-import com.xtoon.boot.sys.application.dto.UserDTO;
-import com.xtoon.boot.sys.domain.model.user.UserFactory;
+import com.xtoon.boot.sys.application.command.PasswordCommand;
+import com.xtoon.boot.sys.application.command.UserCommand;
 import com.xtoon.boot.sys.domain.model.role.RoleId;
 import com.xtoon.boot.sys.domain.model.tenant.TenantId;
-import com.xtoon.boot.sys.domain.model.user.*;
 import com.xtoon.boot.sys.domain.model.tenant.TenantRepository;
-import com.xtoon.boot.sys.domain.model.user.UserRepository;
+import com.xtoon.boot.sys.domain.model.user.*;
 import com.xtoon.boot.sys.domain.specification.UserUpdateSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,22 +37,22 @@ public class UserApplicationServiceImpl implements UserApplicationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(UserDTO userDTO) {
+    public void save(UserCommand userCommand) {
         List<RoleId> roleIdList = new ArrayList<>();
-        if(userDTO.getRoleIdList() != null) {
-            userDTO.getRoleIdList().forEach(roleId -> {
+        if(userCommand.getRoleIdList() != null) {
+            userCommand.getRoleIdList().forEach(roleId -> {
                 roleIdList.add(new RoleId(roleId));
             });
         }
-        User user = userFactory.createUser(new Mobile(userDTO.getMobile()), new Email(userDTO.getEmail()), Password.create(Password.DEFAULT),
-                new UserName(userDTO.getUserName()), roleIdList,new TenantId(TenantContext.getTenantId()));
+        User user = userFactory.createUser(new Mobile(userCommand.getMobile()), new Email(userCommand.getEmail()), Password.create(Password.DEFAULT),
+                new UserName(userCommand.getUserName()), roleIdList,new TenantId(TenantContext.getTenantId()));
         userRepository.store(user);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(UserDTO userDTO) {
-        userRepository.store(UserDTOAssembler.toUser(userDTO));
+    public void update(UserCommand userCommand) {
+        userRepository.store(UserDTOAssembler.toUser(userCommand));
     }
 
     @Override
@@ -83,9 +82,9 @@ public class UserApplicationServiceImpl implements UserApplicationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void changePassword(String userId, String oldPasswordStr, String newPasswordStr) {
-        User user = userRepository.find(new UserId(userId));
-        user.changePassword(oldPasswordStr, newPasswordStr);
+    public void changePassword(PasswordCommand passwordCommand) {
+        User user = userRepository.find(new UserId(passwordCommand.getUserId()));
+        user.changePassword(passwordCommand.getPassword(), passwordCommand.getNewPassword());
         userRepository.store(user);
     }
 }

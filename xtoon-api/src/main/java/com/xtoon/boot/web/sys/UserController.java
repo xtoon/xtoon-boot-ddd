@@ -8,11 +8,11 @@ import com.xtoon.boot.util.log.SysLog;
 import com.xtoon.boot.sys.application.UserApplicationService;
 import com.xtoon.boot.sys.application.UserQueryService;
 import com.xtoon.boot.sys.application.dto.UserDTO;
-import com.xtoon.boot.util.validator.ValidatorUtils;
-import com.xtoon.boot.util.validator.group.AddGroup;
-import com.xtoon.boot.util.validator.group.UpdateGroup;
-import com.xtoon.boot.web.sys.command.PasswordCommand;
-import com.xtoon.boot.web.sys.command.UserCommand;
+import com.xtoon.boot.common.util.validator.ValidatorUtils;
+import com.xtoon.boot.common.util.validator.group.AddGroup;
+import com.xtoon.boot.common.util.validator.group.UpdateGroup;
+import com.xtoon.boot.sys.application.command.PasswordCommand;
+import com.xtoon.boot.sys.application.command.UserCommand;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -67,7 +67,8 @@ public class UserController extends AbstractController {
     @PostMapping("/password")
     public Result changePassword(@RequestBody PasswordCommand passwordCommand){
         ValidatorUtils.validateEntity(passwordCommand);
-        userApplicationService.changePassword(getUser().getId(),passwordCommand.getPassword(),passwordCommand.getNewPassword());
+        passwordCommand.setUserId(getUser().getId());
+        userApplicationService.changePassword(passwordCommand);
         return Result.ok();
     }
 
@@ -90,8 +91,7 @@ public class UserController extends AbstractController {
     @RequiresPermissions("sys:user:save")
     public Result save(@RequestBody UserCommand userCommand){
         ValidatorUtils.validateEntity(userCommand, AddGroup.class);
-        userApplicationService.save(new UserDTO(userCommand.getId(),userCommand.getUserName(),userCommand.getEmail(),userCommand.getMobile(),
-                null,userCommand.getRoleIdList()));
+        userApplicationService.save(userCommand);
         return Result.ok();
     }
 
@@ -104,8 +104,7 @@ public class UserController extends AbstractController {
     @RequiresPermissions("sys:user:update")
     public Result update(@RequestBody UserCommand userCommand){
         ValidatorUtils.validateEntity(userCommand, UpdateGroup.class);
-        userApplicationService.update(new UserDTO(userCommand.getId(),userCommand.getUserName(),userCommand.getEmail(),userCommand.getMobile(),
-                null,userCommand.getRoleIdList()));
+        userApplicationService.update(userCommand);
         return Result.ok();
     }
 

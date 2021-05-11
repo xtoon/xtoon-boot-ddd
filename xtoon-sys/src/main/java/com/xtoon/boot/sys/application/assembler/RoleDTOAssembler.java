@@ -1,11 +1,12 @@
 package com.xtoon.boot.sys.application.assembler;
 
-import com.xtoon.boot.sys.domain.model.role.Role;
+import com.xtoon.boot.sys.application.command.RoleCommand;
+import com.xtoon.boot.sys.application.dto.RoleDTO;
 import com.xtoon.boot.sys.domain.model.permission.PermissionId;
+import com.xtoon.boot.sys.domain.model.role.Role;
 import com.xtoon.boot.sys.domain.model.role.RoleCode;
 import com.xtoon.boot.sys.domain.model.role.RoleId;
 import com.xtoon.boot.sys.domain.model.role.RoleName;
-import com.xtoon.boot.sys.application.dto.RoleDTO;
 import com.xtoon.boot.sys.infrastructure.persistence.entity.SysRoleDO;
 import org.springframework.beans.BeanUtils;
 
@@ -37,27 +38,27 @@ public class RoleDTOAssembler {
         return dto;
     }
 
-    public static Role toRole(final RoleDTO roleDTO) {
+    public static Role toRole(final RoleCommand roleCommand) {
         RoleId roleId = null;
-        if(roleDTO.getId() != null) {
-            roleId = new RoleId(roleDTO.getId());
+        if(roleCommand.getId() != null) {
+            roleId = new RoleId(roleCommand.getId());
         }
         RoleCode roleCode = null;
-        if(roleDTO.getRoleCode() != null) {
-            roleCode = new RoleCode(roleDTO.getRoleCode());
+        if(roleCommand.getRoleCode() != null) {
+            roleCode = new RoleCode(roleCommand.getRoleCode());
         }
         RoleName roleName = null;
-        if(roleDTO.getRoleName() != null) {
-            roleName = new RoleName(roleDTO.getRoleName());
+        if(roleCommand.getRoleName() != null) {
+            roleName = new RoleName(roleCommand.getRoleName());
         }
         List<PermissionId> permissionIdList = null;
-        if(roleDTO.getPermissionIdList() != null) {
+        if(roleCommand.getPermissionIdList() != null) {
             permissionIdList = new ArrayList<>();
-            for(String permissionId:roleDTO.getPermissionIdList()) {
+            for(String permissionId:roleCommand.getPermissionIdList()) {
                 permissionIdList.add(new PermissionId(permissionId));
             }
         }
-        Role Role = new Role(roleId,roleCode,roleName,roleDTO.getRemarks(),null,permissionIdList);
+        Role Role = new Role(roleId,roleCode,roleName,roleCommand.getRemarks(),null,permissionIdList);
         return Role;
     }
 

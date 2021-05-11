@@ -1,4 +1,4 @@
-package com.xtoon.boot.util.validator;
+package com.xtoon.boot.common.util.validator;
 
 
 import com.xtoon.boot.common.util.exception.XTException;

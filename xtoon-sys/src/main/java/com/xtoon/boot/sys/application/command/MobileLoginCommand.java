@@ -1,4 +1,4 @@
-package com.xtoon.boot.web.sys.command;
+package com.xtoon.boot.sys.application.command;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -29,5 +29,10 @@ public class MobileLoginCommand {
     @ApiModelProperty(value = "验证码")
     @NotBlank(message="验证码不能为空")
     private String verificationCode;
+
+    /**
+     * 正确的验证码
+     */
+    private String correctVerificationCode;
 
 }

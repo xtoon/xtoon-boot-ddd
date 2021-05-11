@@ -1,4 +1,4 @@
-package com.xtoon.boot.web.sys.command;
+package com.xtoon.boot.sys.application.command;
 
 import lombok.Data;
 
@@ -20,5 +20,10 @@ public class PasswordCommand {
      * 新密码
      */
     private String newPassword;
+
+    /**
+     * 用户ID
+     */
+    private String userId;
 
 }

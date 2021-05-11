@@ -8,10 +8,10 @@ import com.xtoon.boot.util.log.SysLog;
 import com.xtoon.boot.org.application.EmployeeApplicationService;
 import com.xtoon.boot.org.application.EmployeeQueryService;
 import com.xtoon.boot.org.application.dto.EmployeeDTO;
-import com.xtoon.boot.util.validator.ValidatorUtils;
-import com.xtoon.boot.util.validator.group.AddGroup;
-import com.xtoon.boot.util.validator.group.UpdateGroup;
-import com.xtoon.boot.web.org.command.EmployeeCommand;
+import com.xtoon.boot.common.util.validator.ValidatorUtils;
+import com.xtoon.boot.common.util.validator.group.AddGroup;
+import com.xtoon.boot.common.util.validator.group.UpdateGroup;
+import com.xtoon.boot.org.application.command.EmployeeCommand;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -70,9 +70,7 @@ public class EmployeeController extends AbstractController {
     @RequiresPermissions("org:employee:save")
     public Result save(@RequestBody EmployeeCommand employeeCommand){
         ValidatorUtils.validateEntity(employeeCommand, AddGroup.class);
-        employeeApplicationService.save(new EmployeeDTO(employeeCommand.getId(), employeeCommand.getEmpNo(), employeeCommand.getEmpName(),
-                employeeCommand.getEmpSex(), employeeCommand.getMobile(), employeeCommand.getEmail(), employeeCommand.getOfficeId(),
-                employeeCommand.getPostIdList(), employeeCommand.getRemarks()));
+        employeeApplicationService.save(employeeCommand);
         return Result.ok();
     }
 
@@ -85,9 +83,7 @@ public class EmployeeController extends AbstractController {
     @RequiresPermissions("org:employee:update")
     public Result update(@RequestBody EmployeeCommand employeeCommand){
         ValidatorUtils.validateEntity(employeeCommand, UpdateGroup.class);
-        employeeApplicationService.update(new EmployeeDTO(employeeCommand.getId(), employeeCommand.getEmpNo(), employeeCommand.getEmpName(),
-                employeeCommand.getEmpSex(), employeeCommand.getMobile(), employeeCommand.getEmail(), employeeCommand.getOfficeId(),
-                employeeCommand.getPostIdList(), employeeCommand.getRemarks()));
+        employeeApplicationService.update(employeeCommand);
         return Result.ok();
     }
 

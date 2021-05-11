@@ -3,6 +3,9 @@ package com.xtoon.boot.sys.application.impl;
 import com.google.code.kaptcha.Producer;
 import com.xtoon.boot.sys.application.AuthenticationApplicationService;
 import com.xtoon.boot.sys.application.assembler.LoginSuccessDTOAssembler;
+import com.xtoon.boot.sys.application.command.AccountLoginCommand;
+import com.xtoon.boot.sys.application.command.MobileLoginCommand;
+import com.xtoon.boot.sys.application.command.RegisterTenantCommand;
 import com.xtoon.boot.sys.application.dto.LoginSuccessDTO;
 import com.xtoon.boot.sys.domain.external.TokenGeneratorExternalService;
 import com.xtoon.boot.sys.domain.model.captcha.Captcha;
@@ -68,25 +71,16 @@ public class AuthenticationApplicationServiceImpl implements AuthenticationAppli
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean validate(String uuid, String code) {
-        Captcha captcha = captchaRepository.find(new Uuid(uuid));
-        if(captcha == null){
-            return false;
+    public LoginSuccessDTO loginByAccount(AccountLoginCommand accountLoginCommand) {
+        if(!validate(accountLoginCommand.getUuid(), accountLoginCommand.getCaptcha())) {
+            throw new RuntimeException("验证码不正确");
         }
-        //删除验证码
-        captchaRepository.remove(new Uuid(uuid));
-        return captcha.validate(new CaptchaCode(code));
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public LoginSuccessDTO loginByAccount(String accountName, String password) {
-        List<User> users = userRepository.find(new Mobile(accountName));
+        List<User> users = userRepository.find(new Mobile(accountLoginCommand.getAccountName()));
         if(users == null || users.isEmpty()) {
             throw new RuntimeException("用户或密码不正确");
         }
         User user = users.get(0);
-        LoginByAccountSpecification loginByUserNameSpecification = new LoginByAccountSpecification(password);
+        LoginByAccountSpecification loginByUserNameSpecification = new LoginByAccountSpecification(accountLoginCommand.getPassword());
         loginByUserNameSpecification.isSatisfiedBy(user);
         user.refreshToken(tokenGeneratorExternalService.generateValue());
         userRepository.store(user);
@@ -95,8 +89,11 @@ public class AuthenticationApplicationServiceImpl implements AuthenticationAppli
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public LoginSuccessDTO loginByMobile(String mobile) {
-        List<User> users = userRepository.find(new Mobile(mobile));
+    public LoginSuccessDTO loginByMobile(MobileLoginCommand mobileLoginCommand) {
+        if (!mobileLoginCommand.getVerificationCode().equals(mobileLoginCommand.getCorrectVerificationCode())) {
+            throw new RuntimeException("验证码不正确");
+        }
+        List<User> users = userRepository.find(new Mobile(mobileLoginCommand.getMobile()));
         if(users == null || users.isEmpty()) {
             throw new RuntimeException("用户不存在");
         }
@@ -116,8 +113,29 @@ public class AuthenticationApplicationServiceImpl implements AuthenticationAppli
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void registerTenant(String tenantName, String tenantCode, String userName,String mobile, String password) {
+    public void registerTenant(RegisterTenantCommand registerTenantCommand) {
+        if(!validate(registerTenantCommand.getUuid(), registerTenantCommand.getCaptcha())) {
+            throw new RuntimeException("验证码不正确");
+        }
         TenantRegisterService tenantRegisterService = new TenantRegisterService(tenantRepository, roleRepository, permissionRepository,userRepository,userFactory);
-        tenantRegisterService.registerTenant(new TenantName(tenantName), new TenantCode(tenantCode),new Mobile(mobile), Password.create(password), new UserName(userName));
+        tenantRegisterService.registerTenant(new TenantName(registerTenantCommand.getTenantName()), new TenantCode(registerTenantCommand.getTenantCode()),new Mobile(registerTenantCommand.getMobile()),
+                Password.create(registerTenantCommand.getPassword()), new UserName(registerTenantCommand.getUserName()));
+    }
+
+    /**
+     * 校验验证码
+     *
+     * @param uuid
+     * @param code
+     * @return
+     */
+    private boolean validate(String uuid, String code) {
+        Captcha captcha = captchaRepository.find(new Uuid(uuid));
+        if(captcha == null){
+            return false;
+        }
+        //删除验证码
+        captchaRepository.remove(new Uuid(uuid));
+        return captcha.validate(new CaptchaCode(code));
     }
 }

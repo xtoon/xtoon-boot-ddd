@@ -1,5 +1,6 @@
 package com.xtoon.boot.sys.application;
 
+import com.xtoon.boot.sys.application.command.PermissionCommand;
 import com.xtoon.boot.sys.application.dto.PermissionDTO;
 
 /**
@@ -13,9 +14,9 @@ public interface PermissionApplicationService {
     /**
      * 保存或更新
      *
-     * @param permissionDTO
+     * @param permissionCommand
      */
-    void saveOrUpdate(PermissionDTO permissionDTO);
+    void saveOrUpdate(PermissionCommand permissionCommand);
 
     /**
      * 删除

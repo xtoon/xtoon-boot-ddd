@@ -1,6 +1,7 @@
 package com.xtoon.boot.org.application.impl;
 
 import com.xtoon.boot.org.application.OfficeApplicationService;
+import com.xtoon.boot.org.application.command.OfficeCommand;
 import com.xtoon.boot.org.application.dto.OfficeDTO;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class OfficeApplicationServiceImpl implements OfficeApplicationService {
 
     @Override
-    public void saveOrUpdate(OfficeDTO officeDTO) {
+    public void saveOrUpdate(OfficeCommand officeCommand) {
 
     }
 

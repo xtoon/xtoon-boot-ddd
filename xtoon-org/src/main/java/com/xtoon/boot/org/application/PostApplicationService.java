@@ -1,5 +1,6 @@
 package com.xtoon.boot.org.application;
 
+import com.xtoon.boot.org.application.command.PostCommand;
 import com.xtoon.boot.org.application.dto.PostDTO;
 
 import java.util.List;
@@ -15,9 +16,9 @@ public interface PostApplicationService {
     /**
      * 保存或更新
      *
-     * @param postDTO
+     * @param postCommand
      */
-    void saveOrUpdate(PostDTO postDTO);
+    void saveOrUpdate(PostCommand postCommand);
 
     /**
      * 批量删除

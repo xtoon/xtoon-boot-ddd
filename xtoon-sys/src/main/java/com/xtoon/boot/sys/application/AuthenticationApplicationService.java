@@ -1,5 +1,8 @@
 package com.xtoon.boot.sys.application;
 
+import com.xtoon.boot.sys.application.command.AccountLoginCommand;
+import com.xtoon.boot.sys.application.command.MobileLoginCommand;
+import com.xtoon.boot.sys.application.command.RegisterTenantCommand;
 import com.xtoon.boot.sys.application.dto.LoginSuccessDTO;
 
 import java.awt.image.BufferedImage;
@@ -20,29 +23,20 @@ public interface AuthenticationApplicationService {
     BufferedImage getCaptcha(String uuid);
 
     /**
-     * 验证码效验
-     * @param uuid  uuid
-     * @param code  验证码
-     * @return  true：成功  false：失败
-     */
-    boolean validate(String uuid, String code);
-
-    /**
      * 账号登录
      *
-     * @param accountName
-     * @param password
+     * @param accountLoginCommand
      * @return
      */
-    LoginSuccessDTO loginByAccount(String accountName, String password);
+    LoginSuccessDTO loginByAccount(AccountLoginCommand accountLoginCommand);
 
     /**
      * 手机号登录
      *
-     * @param mobile
+     * @param mobileLoginCommand
      * @return
      */
-    LoginSuccessDTO loginByMobile(String mobile);
+    LoginSuccessDTO loginByMobile(MobileLoginCommand mobileLoginCommand);
 
     /**
      * 登出
@@ -54,12 +48,8 @@ public interface AuthenticationApplicationService {
     /**
      * 注册租户
      *
-     * @param tenantName
-     * @param tenantCode
-     * @param userName
-     * @param mobile
-     * @param password
+     * @param registerTenantCommand
      */
-    void registerTenant(String tenantName, String tenantCode, String userName, String mobile, String password);
+    void registerTenant(RegisterTenantCommand registerTenantCommand);
 
 }

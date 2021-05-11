@@ -1,6 +1,6 @@
-package com.xtoon.boot.web.sys.command;
+package com.xtoon.boot.sys.application.command;
 
-import com.xtoon.boot.util.validator.group.AddGroup;
+import com.xtoon.boot.common.util.validator.group.AddGroup;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

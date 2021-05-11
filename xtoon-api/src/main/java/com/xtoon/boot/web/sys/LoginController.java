@@ -3,13 +3,13 @@ package com.xtoon.boot.web.sys;
 import com.xtoon.boot.common.AbstractController;
 import com.xtoon.boot.common.Result;
 import com.xtoon.boot.common.util.CommonConstant;
-import com.xtoon.boot.util.log.SysLog;
 import com.xtoon.boot.common.util.redis.RedisUtils;
+import com.xtoon.boot.common.util.validator.ValidatorUtils;
 import com.xtoon.boot.sys.application.AuthenticationApplicationService;
+import com.xtoon.boot.sys.application.command.AccountLoginCommand;
+import com.xtoon.boot.sys.application.command.MobileLoginCommand;
 import com.xtoon.boot.sys.application.dto.LoginSuccessDTO;
-import com.xtoon.boot.util.validator.ValidatorUtils;
-import com.xtoon.boot.web.sys.command.AccountLoginCommand;
-import com.xtoon.boot.web.sys.command.MobileLoginCommand;
+import com.xtoon.boot.util.log.SysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
@@ -65,11 +65,7 @@ public class LoginController extends AbstractController {
     @PostMapping("/sys/loginByAccount")
     public Result loginByAccount(@RequestBody AccountLoginCommand accountLoginCommand) {
         ValidatorUtils.validateEntity(accountLoginCommand);
-        boolean captcha = authenticationApplicationService.validate(accountLoginCommand.getUuid(), accountLoginCommand.getCaptcha());
-        if(!captcha){
-            return Result.error("验证码不正确");
-        }
-        LoginSuccessDTO loginSuccessDTO = authenticationApplicationService.loginByAccount(accountLoginCommand.getAccountName(), accountLoginCommand.getPassword());
+        LoginSuccessDTO loginSuccessDTO = authenticationApplicationService.loginByAccount(accountLoginCommand);
         return Result.ok(loginSuccessDTO);
     }
 
@@ -83,10 +79,8 @@ public class LoginController extends AbstractController {
     public Result loginByMobile(@RequestBody MobileLoginCommand mobileLoginCommand) {
         ValidatorUtils.validateEntity(mobileLoginCommand);
         String verificationCodeRedis = redisUtils.get(CommonConstant.REDIS_PHONE_CODE + mobileLoginCommand.getMobile());
-        if (!mobileLoginCommand.getVerificationCode().equals(verificationCodeRedis)) {
-            return Result.error("验证码不正确");
-        }
-        LoginSuccessDTO loginSuccessDTO = authenticationApplicationService.loginByMobile(mobileLoginCommand.getMobile());
+        mobileLoginCommand.setCorrectVerificationCode(verificationCodeRedis);
+        LoginSuccessDTO loginSuccessDTO = authenticationApplicationService.loginByMobile(mobileLoginCommand);
         return Result.ok(loginSuccessDTO);
     }
 

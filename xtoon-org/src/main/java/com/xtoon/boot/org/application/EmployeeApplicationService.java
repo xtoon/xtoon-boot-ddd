@@ -1,6 +1,6 @@
 package com.xtoon.boot.org.application;
 
-import com.xtoon.boot.org.application.dto.EmployeeDTO;
+import com.xtoon.boot.org.application.command.EmployeeCommand;
 
 import java.util.List;
 
@@ -15,16 +15,16 @@ public interface EmployeeApplicationService {
     /**
      * 保存
      *
-     * @param employeeDTO
+     * @param employeeCommand
      */
-    void save(EmployeeDTO employeeDTO);
+    void save(EmployeeCommand employeeCommand);
 
     /**
      * 更新
      *
-     * @param employeeDTO
+     * @param employeeCommand
      */
-    void update(EmployeeDTO employeeDTO);
+    void update(EmployeeCommand employeeCommand);
 
     /**
      * 批量删除

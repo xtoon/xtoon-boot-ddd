@@ -1,5 +1,6 @@
 package com.xtoon.boot.org.application;
 
+import com.xtoon.boot.org.application.command.OfficeCommand;
 import com.xtoon.boot.org.application.dto.OfficeDTO;
 
 import java.util.List;
@@ -15,9 +16,9 @@ public interface OfficeApplicationService {
     /**
      * 保存或更新
      *
-     * @param officeDTO
+     * @param officeCommand
      */
-    void saveOrUpdate(OfficeDTO officeDTO);
+    void saveOrUpdate(OfficeCommand officeCommand);
 
     /**
      * 批量删除

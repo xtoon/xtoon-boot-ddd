@@ -1,4 +1,4 @@
-package com.xtoon.boot.util.validator.group;
+package com.xtoon.boot.common.util.validator.group;
 
 /**
  * 更新数据 Group

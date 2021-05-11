@@ -4,13 +4,12 @@ import com.xtoon.boot.common.util.TenantContext;
 import com.xtoon.boot.sys.application.PermissionQueryService;
 import com.xtoon.boot.sys.application.assembler.PermissionDTOAssembler;
 import com.xtoon.boot.sys.application.dto.PermissionDTO;
-import com.xtoon.boot.sys.application.dto.UserDTO;
 import com.xtoon.boot.sys.domain.model.permission.Permission;
 import com.xtoon.boot.sys.domain.model.permission.PermissionId;
+import com.xtoon.boot.sys.domain.model.permission.PermissionRepository;
 import com.xtoon.boot.sys.domain.model.permission.PermissionTypeEnum;
 import com.xtoon.boot.sys.domain.model.role.RoleCode;
 import com.xtoon.boot.sys.domain.model.tenant.TenantId;
-import com.xtoon.boot.sys.domain.model.permission.PermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,12 +56,11 @@ public class PermissionQueryServiceImpl implements PermissionQueryService {
     }
 
     @Override
-    public List<PermissionDTO> getUserMenuTree(UserDTO user) {
-        Set<String> menuIdList = user.getPermissionIds();
-        if(menuIdList == null) {
+    public List<PermissionDTO> getUserMenuTree(Set<String> permissionIds) {
+        if(permissionIds == null) {
             return null;
         }
-        return getAllMenuList(menuIdList);
+        return getAllMenuList(permissionIds);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.xtoon.boot.sys.application.assembler;
 
+import com.xtoon.boot.sys.application.command.UserCommand;
 import com.xtoon.boot.sys.application.dto.UserDTO;
 import com.xtoon.boot.common.domain.StatusEnum;
 import com.xtoon.boot.sys.domain.model.role.RoleId;
@@ -18,8 +19,8 @@ import java.util.List;
  **/
 public class UserDTOAssembler {
 
-    public static User toUser(final UserDTO userDTO) {
-        List<String> roleIds = userDTO.getRoleIdList();
+    public static User toUser(final UserCommand userCommand) {
+        List<String> roleIds = userCommand.getRoleIdList();
         List<RoleId> roleIdList = null;
         if(roleIds != null && !roleIds.isEmpty()) {
             roleIdList = new ArrayList<>();
@@ -28,10 +29,10 @@ public class UserDTOAssembler {
             }
         }
         UserName userName = null;
-        if(userDTO.getUserName() != null) {
-            userName = new UserName(userDTO.getUserName());
+        if(userCommand.getUserName() != null) {
+            userName = new UserName(userCommand.getUserName());
         }
-        return new User(new UserId(userDTO.getId()),userName, StatusEnum.getStatusEnum(userDTO.getStatus()),null,null, roleIdList);
+        return new User(new UserId(userCommand.getId()),userName, StatusEnum.ENABLE,null,null, roleIdList);
     }
 
     public static UserDTO fromUser(final User user) {

@@ -4,6 +4,7 @@ import com.xtoon.boot.sys.application.dto.PermissionDTO;
 import com.xtoon.boot.sys.application.dto.UserDTO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 权限查询服务接口
@@ -38,8 +39,8 @@ public interface PermissionQueryService {
     /**
      * 获取权限树
      *
-     * @param user
+     * @param permissionIds
      * @return
      */
-    List<PermissionDTO> getUserMenuTree(UserDTO user);
+    List<PermissionDTO> getUserMenuTree(Set<String> permissionIds);
 }

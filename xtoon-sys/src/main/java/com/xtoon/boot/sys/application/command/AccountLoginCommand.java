@@ -1,4 +1,4 @@
-package com.xtoon.boot.web.sys.command;
+package com.xtoon.boot.sys.application.command;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

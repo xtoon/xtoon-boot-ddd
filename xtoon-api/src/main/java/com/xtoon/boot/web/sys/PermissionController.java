@@ -2,14 +2,14 @@ package com.xtoon.boot.web.sys;
 
 import com.xtoon.boot.common.AbstractController;
 import com.xtoon.boot.common.Result;
-import com.xtoon.boot.util.log.SysLog;
+import com.xtoon.boot.common.util.validator.ValidatorUtils;
+import com.xtoon.boot.common.util.validator.group.AddGroup;
+import com.xtoon.boot.common.util.validator.group.UpdateGroup;
 import com.xtoon.boot.sys.application.PermissionApplicationService;
 import com.xtoon.boot.sys.application.PermissionQueryService;
+import com.xtoon.boot.sys.application.command.PermissionCommand;
 import com.xtoon.boot.sys.application.dto.PermissionDTO;
-import com.xtoon.boot.util.validator.ValidatorUtils;
-import com.xtoon.boot.util.validator.group.AddGroup;
-import com.xtoon.boot.util.validator.group.UpdateGroup;
-import com.xtoon.boot.web.sys.command.PermissionCommand;
+import com.xtoon.boot.util.log.SysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -42,7 +42,7 @@ public class PermissionController extends AbstractController {
     @ApiOperation("导航菜单")
     @GetMapping("/nav")
     public Result nav(){
-        List<PermissionDTO> menuList = permissionQueryService.getUserMenuTree(getUser());
+        List<PermissionDTO> menuList = permissionQueryService.getUserMenuTree(getUser().getPermissionIds());
         Set<String> permissions = getUser().getPermissionCodes();
         return Result.ok().put("menuList", menuList).put("permissions", permissions);
     }
@@ -87,10 +87,7 @@ public class PermissionController extends AbstractController {
     @RequiresPermissions("sys:permission:save")
     public Result save(@RequestBody PermissionCommand permissionCommand){
         ValidatorUtils.validateEntity(permissionCommand, AddGroup.class);
-        PermissionDTO permissionDTO = new PermissionDTO(permissionCommand.getId(),permissionCommand.getParentId(),permissionCommand.getPermissionName(),
-                permissionCommand.getPermissionType(),permissionCommand.getPermissionLevel(),permissionCommand.getPermissionCodes(),
-                permissionCommand.getMenuIcon(),permissionCommand.getOrderNum(),permissionCommand.getMenuUrl());
-        permissionApplicationService.saveOrUpdate(permissionDTO);
+        permissionApplicationService.saveOrUpdate(permissionCommand);
         return Result.ok();
     }
 
@@ -103,10 +100,7 @@ public class PermissionController extends AbstractController {
     @RequiresPermissions("sys:permission:update")
     public Result update(@RequestBody PermissionCommand permissionCommand){
         ValidatorUtils.validateEntity(permissionCommand, UpdateGroup.class);
-        PermissionDTO permissionDTO = new PermissionDTO(permissionCommand.getId(),permissionCommand.getParentId(),permissionCommand.getPermissionName(),
-                permissionCommand.getPermissionType(),permissionCommand.getPermissionLevel(),permissionCommand.getPermissionCodes(),
-                permissionCommand.getMenuIcon(),permissionCommand.getOrderNum(),permissionCommand.getMenuUrl());
-        permissionApplicationService.saveOrUpdate(permissionDTO);
+        permissionApplicationService.saveOrUpdate(permissionCommand);
         return Result.ok();
     }
 

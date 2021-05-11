@@ -1,5 +1,6 @@
 package com.xtoon.boot.sys.application.assembler;
 
+import com.xtoon.boot.sys.application.command.PermissionCommand;
 import com.xtoon.boot.sys.domain.model.permission.*;
 import com.xtoon.boot.sys.application.dto.PermissionDTO;
 import org.apache.commons.lang3.StringUtils;
@@ -29,34 +30,34 @@ public class PermissionDTOAssembler {
         return dto;
     }
 
-    public static Permission toPermission(final PermissionDTO permissionDTO, Permission parent) {
+    public static Permission toPermission(final PermissionCommand permissionCommand, Permission parent) {
         PermissionId permissionId = null;
-        if(permissionDTO.getId() != null) {
-            permissionId = new PermissionId(permissionDTO.getId());
+        if(permissionCommand.getId() != null) {
+            permissionId = new PermissionId(permissionCommand.getId());
         }
         PermissionName permissionName = null;
-        if(permissionDTO.getPermissionName() != null) {
-            permissionName = new PermissionName(permissionDTO.getPermissionName());
+        if(permissionCommand.getPermissionName() != null) {
+            permissionName = new PermissionName(permissionCommand.getPermissionName());
         }
         PermissionTypeEnum permissionType = null;
-        if(permissionDTO.getPermissionType() != null) {
-            permissionType = PermissionTypeEnum.getMenuTypeEnum(permissionDTO.getPermissionType());
+        if(permissionCommand.getPermissionType() != null) {
+            permissionType = PermissionTypeEnum.getMenuTypeEnum(permissionCommand.getPermissionType());
         }
         PermissionLevelEnum permissionLevel = null;
-        if(permissionDTO.getPermissionLevel() !=null) {
-            permissionLevel = PermissionLevelEnum.getMenuLevelEnum(permissionDTO.getPermissionLevel());
+        if(permissionCommand.getPermissionLevel() !=null) {
+            permissionLevel = PermissionLevelEnum.getMenuLevelEnum(permissionCommand.getPermissionLevel());
         }
         PermissionCodes permissionCodes = null;
-        if(permissionDTO.getPermissionCodes() != null) {
+        if(permissionCommand.getPermissionCodes() != null) {
             Set<String> permsSet = new HashSet<>();
-            permsSet.addAll(Arrays.asList(permissionDTO.getPermissionCodes().trim().split(",")));
+            permsSet.addAll(Arrays.asList(permissionCommand.getPermissionCodes().trim().split(",")));
             permissionCodes = new PermissionCodes(permsSet);
         }
         MenuUrl menuUrl = null;
-        if(!StringUtils.isEmpty(permissionDTO.getMenuUrl())) {
-            menuUrl = new MenuUrl(permissionDTO.getMenuUrl());
+        if(!StringUtils.isEmpty(permissionCommand.getMenuUrl())) {
+            menuUrl = new MenuUrl(permissionCommand.getMenuUrl());
         }
-        Permission permission = new Permission(permissionId,permissionName,permissionType,permissionLevel,permissionDTO.getMenuIcon(),permissionCodes,permissionDTO.getOrderNum(),
+        Permission permission = new Permission(permissionId,permissionName,permissionType,permissionLevel,permissionCommand.getMenuIcon(),permissionCodes,permissionCommand.getOrderNum(),
                 menuUrl,parent, null,null);
         return permission;
     }

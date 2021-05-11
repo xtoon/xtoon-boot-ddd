@@ -1,7 +1,7 @@
 package com.xtoon.boot.org.application.impl;
 
 import com.xtoon.boot.org.application.EmployeeApplicationService;
-import com.xtoon.boot.org.application.dto.EmployeeDTO;
+import com.xtoon.boot.org.application.command.EmployeeCommand;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,12 +16,12 @@ import java.util.List;
 public class EmployeeApplicationServiceImpl implements EmployeeApplicationService {
 
     @Override
-    public void save(EmployeeDTO employeeDTO) {
+    public void save(EmployeeCommand employeeCommand) {
 
     }
 
     @Override
-    public void update(EmployeeDTO employeeDTO) {
+    public void update(EmployeeCommand employeeCommand) {
 
     }
 

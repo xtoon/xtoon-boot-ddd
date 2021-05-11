@@ -8,10 +8,10 @@ import com.xtoon.boot.util.log.SysLog;
 import com.xtoon.boot.org.application.PostApplicationService;
 import com.xtoon.boot.org.application.PostQueryService;
 import com.xtoon.boot.org.application.dto.PostDTO;
-import com.xtoon.boot.util.validator.ValidatorUtils;
-import com.xtoon.boot.util.validator.group.AddGroup;
-import com.xtoon.boot.util.validator.group.UpdateGroup;
-import com.xtoon.boot.web.org.command.PostCommand;
+import com.xtoon.boot.common.util.validator.ValidatorUtils;
+import com.xtoon.boot.common.util.validator.group.AddGroup;
+import com.xtoon.boot.common.util.validator.group.UpdateGroup;
+import com.xtoon.boot.org.application.command.PostCommand;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -82,8 +82,7 @@ public class PostController extends AbstractController {
     @RequiresPermissions("org:post:save")
     public Result save(@RequestBody PostCommand postCommand){
         ValidatorUtils.validateEntity(postCommand, AddGroup.class);
-        postApplicationService.saveOrUpdate(new PostDTO(postCommand.getId(), postCommand.getPostCode(), postCommand.getPostName(),
-                postCommand.getPostType(), postCommand.getOrderNum(), postCommand.getRemarks()));
+        postApplicationService.saveOrUpdate(postCommand);
         return Result.ok();
     }
 
@@ -96,8 +95,7 @@ public class PostController extends AbstractController {
     @RequiresPermissions("org:post:update")
     public Result update(@RequestBody PostCommand postCommand){
         ValidatorUtils.validateEntity(postCommand, UpdateGroup.class);
-        postApplicationService.saveOrUpdate(new PostDTO(postCommand.getId(), postCommand.getPostCode(), postCommand.getPostName(),
-                postCommand.getPostType(), postCommand.getOrderNum(), postCommand.getRemarks()));
+        postApplicationService.saveOrUpdate(postCommand);
         return Result.ok();
     }
 

@@ -2,6 +2,7 @@ package com.xtoon.boot.sys.application.impl;
 
 import com.xtoon.boot.sys.application.RoleApplicationService;
 import com.xtoon.boot.sys.application.assembler.RoleDTOAssembler;
+import com.xtoon.boot.sys.application.command.RoleCommand;
 import com.xtoon.boot.sys.application.dto.RoleDTO;
 import com.xtoon.boot.sys.domain.model.role.Role;
 import com.xtoon.boot.sys.domain.model.role.RoleId;
@@ -29,8 +30,8 @@ public class RoleApplicationServiceImpl implements RoleApplicationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveOrUpdate(RoleDTO roleDTO) {
-        Role role = RoleDTOAssembler.toRole(roleDTO);
+    public void saveOrUpdate(RoleCommand roleCommand) {
+        Role role = RoleDTOAssembler.toRole(roleCommand);
         RoleCreateSpecification roleCreateSpecification = new RoleCreateSpecification(roleRepository);
         roleCreateSpecification.isSatisfiedBy(role);
         roleRepository.store(role);

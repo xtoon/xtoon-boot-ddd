@@ -1,7 +1,7 @@
 package com.xtoon.boot.org.application.impl;
 
 import com.xtoon.boot.org.application.PostApplicationService;
-import com.xtoon.boot.org.application.dto.PostDTO;
+import com.xtoon.boot.org.application.command.PostCommand;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 public class PostApplicationServiceImpl implements PostApplicationService {
 
     @Override
-    public void saveOrUpdate(PostDTO postDTO) {
+    public void saveOrUpdate(PostCommand postCommand) {
 
     }
 

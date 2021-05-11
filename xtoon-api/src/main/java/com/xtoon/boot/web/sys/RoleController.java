@@ -8,8 +8,8 @@ import com.xtoon.boot.util.log.SysLog;
 import com.xtoon.boot.sys.application.RoleApplicationService;
 import com.xtoon.boot.sys.application.RoleQueryService;
 import com.xtoon.boot.sys.application.dto.RoleDTO;
-import com.xtoon.boot.util.validator.ValidatorUtils;
-import com.xtoon.boot.web.sys.command.RoleCommand;
+import com.xtoon.boot.common.util.validator.ValidatorUtils;
+import com.xtoon.boot.sys.application.command.RoleCommand;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -79,9 +79,7 @@ public class RoleController extends AbstractController {
     @RequiresPermissions("sys:role:save")
     public Result save(@RequestBody RoleCommand roleCommand){
         ValidatorUtils.validateEntity(roleCommand);
-        RoleDTO roleDTO = new RoleDTO(roleCommand.getId(),roleCommand.getRoleCode(),roleCommand.getRoleName(),
-                roleCommand.getRemarks(), roleCommand.getPermissionIdList());
-        roleApplicationService.saveOrUpdate(roleDTO);
+        roleApplicationService.saveOrUpdate(roleCommand);
         return Result.ok();
     }
 
@@ -94,9 +92,7 @@ public class RoleController extends AbstractController {
     @RequiresPermissions("sys:role:update")
     public Result update(@RequestBody RoleCommand roleCommand){
         ValidatorUtils.validateEntity(roleCommand);
-        RoleDTO roleDTO = new RoleDTO(roleCommand.getId(),roleCommand.getRoleCode(),roleCommand.getRoleName(),
-                roleCommand.getRemarks(), roleCommand.getPermissionIdList());
-        roleApplicationService.saveOrUpdate(roleDTO);
+        roleApplicationService.saveOrUpdate(roleCommand);
         return Result.ok();
     }
 
