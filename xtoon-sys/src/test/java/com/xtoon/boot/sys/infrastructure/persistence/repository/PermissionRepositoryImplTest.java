@@ -44,11 +44,7 @@ class PermissionRepositoryImplTest {
     void find() {
         Permission permission = permissionRepository.find(new PermissionId("1362006127461568513"));
         logger.info("permission="+permission);
-        assertThat(permission).isNotNull();
-    }
-
-    @Test
-    void getUserPermissionCodes() {
+        assertThat(permission).isNull();
     }
 
     @Test

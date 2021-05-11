@@ -1,4 +1,4 @@
-package com.xtoon.boot.util.shiro;
+package com.xtoon.boot.web.util.shiro;
 
 import com.xtoon.boot.common.util.UserContext;
 import com.xtoon.boot.sys.application.UserQueryService;

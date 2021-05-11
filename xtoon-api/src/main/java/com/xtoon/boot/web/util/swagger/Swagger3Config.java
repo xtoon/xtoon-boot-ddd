@@ -1,4 +1,4 @@
-package com.xtoon.boot.util.swagger;
+package com.xtoon.boot.web.util.swagger;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;

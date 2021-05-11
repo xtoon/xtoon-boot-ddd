@@ -1,7 +1,7 @@
-package com.xtoon.boot.web.org;
+package com.xtoon.boot.web.controller.org;
 
-import com.xtoon.boot.common.AbstractController;
-import com.xtoon.boot.common.Result;
+import com.xtoon.boot.web.common.AbstractController;
+import com.xtoon.boot.web.common.Result;
 import com.xtoon.boot.common.util.CommonConstant;
 import com.xtoon.boot.common.util.Page;
 import com.xtoon.boot.common.util.validator.ValidatorUtils;
@@ -11,7 +11,7 @@ import com.xtoon.boot.org.application.OfficeApplicationService;
 import com.xtoon.boot.org.application.OfficeQueryService;
 import com.xtoon.boot.org.application.command.OfficeCommand;
 import com.xtoon.boot.org.application.dto.OfficeDTO;
-import com.xtoon.boot.util.log.SysLog;
+import com.xtoon.boot.web.util.log.SysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;

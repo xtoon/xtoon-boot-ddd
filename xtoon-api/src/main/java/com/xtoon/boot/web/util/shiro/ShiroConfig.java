@@ -1,4 +1,4 @@
-package com.xtoon.boot.util.shiro;
+package com.xtoon.boot.web.util.shiro;
 
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;

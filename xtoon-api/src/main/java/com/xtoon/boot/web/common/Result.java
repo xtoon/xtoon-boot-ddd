@@ -1,4 +1,4 @@
-package com.xtoon.boot.common;
+package com.xtoon.boot.web.common;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;

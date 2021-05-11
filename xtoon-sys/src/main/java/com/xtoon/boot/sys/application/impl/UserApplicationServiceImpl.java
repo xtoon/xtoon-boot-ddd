@@ -30,9 +30,6 @@ public class UserApplicationServiceImpl implements UserApplicationService {
     private UserRepository userRepository;
 
     @Autowired
-    private UserFactory userFactory;
-
-    @Autowired
     private TenantRepository tenantRepository;
 
     @Override
@@ -44,6 +41,7 @@ public class UserApplicationServiceImpl implements UserApplicationService {
                 roleIdList.add(new RoleId(roleId));
             });
         }
+        UserFactory userFactory = new UserFactory(userRepository);
         User user = userFactory.createUser(new Mobile(userCommand.getMobile()), new Email(userCommand.getEmail()), Password.create(Password.DEFAULT),
                 new UserName(userCommand.getUserName()), roleIdList,new TenantId(TenantContext.getTenantId()));
         userRepository.store(user);

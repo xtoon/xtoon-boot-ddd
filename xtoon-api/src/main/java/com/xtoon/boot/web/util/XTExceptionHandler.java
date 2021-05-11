@@ -1,6 +1,6 @@
-package com.xtoon.boot.util;
+package com.xtoon.boot.web.util;
 
-import com.xtoon.boot.common.Result;
+import com.xtoon.boot.web.common.Result;
 import com.xtoon.boot.common.util.exception.XTException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;

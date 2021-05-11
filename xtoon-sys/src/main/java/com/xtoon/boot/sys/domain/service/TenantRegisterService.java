@@ -1,23 +1,13 @@
 package com.xtoon.boot.sys.domain.service;
 
 import com.xtoon.boot.common.domain.StatusEnum;
-import com.xtoon.boot.sys.domain.model.user.UserFactory;
 import com.xtoon.boot.sys.domain.model.permission.Permission;
 import com.xtoon.boot.sys.domain.model.permission.PermissionId;
 import com.xtoon.boot.sys.domain.model.permission.PermissionLevelEnum;
-import com.xtoon.boot.sys.domain.model.role.Role;
-import com.xtoon.boot.sys.domain.model.role.RoleCode;
-import com.xtoon.boot.sys.domain.model.role.RoleId;
-import com.xtoon.boot.sys.domain.model.role.RoleName;
-import com.xtoon.boot.sys.domain.model.tenant.Tenant;
-import com.xtoon.boot.sys.domain.model.tenant.TenantCode;
-import com.xtoon.boot.sys.domain.model.tenant.TenantId;
-import com.xtoon.boot.sys.domain.model.tenant.TenantName;
-import com.xtoon.boot.sys.domain.model.user.*;
 import com.xtoon.boot.sys.domain.model.permission.PermissionRepository;
-import com.xtoon.boot.sys.domain.model.role.RoleRepository;
-import com.xtoon.boot.sys.domain.model.tenant.TenantRepository;
-import com.xtoon.boot.sys.domain.model.user.UserRepository;
+import com.xtoon.boot.sys.domain.model.role.*;
+import com.xtoon.boot.sys.domain.model.tenant.*;
+import com.xtoon.boot.sys.domain.model.user.*;
 import com.xtoon.boot.sys.domain.specification.TenantCreateSpecification;
 
 import java.util.ArrayList;
@@ -41,14 +31,11 @@ public class TenantRegisterService {
 
     private UserRepository userRepository;
 
-    private UserFactory userFactory;
-
-    public TenantRegisterService(TenantRepository tenantRepository, RoleRepository roleRepository, PermissionRepository permissionRepository, UserRepository userRepository, UserFactory userFactory) {
+    public TenantRegisterService(TenantRepository tenantRepository, RoleRepository roleRepository, PermissionRepository permissionRepository, UserRepository userRepository) {
         this.tenantRepository = tenantRepository;
         this.roleRepository = roleRepository;
         this.permissionRepository = permissionRepository;
         this.userRepository = userRepository;
-        this.userFactory = userFactory;
     }
 
     public void registerTenant(TenantName tenantName, TenantCode tenantCode, Mobile mobile, Password password, UserName userName) {
@@ -70,6 +57,7 @@ public class TenantRegisterService {
         // 保存用户
         List<RoleId> roleIdList = new ArrayList<>();
         roleIdList.add(adminRoleId);
+        UserFactory userFactory = new UserFactory(userRepository);
         User user = userFactory.createUser(mobile, null, password, userName, roleIdList, new TenantId(tenantId.getId()));
         UserId userId = userRepository.store(user);
         tenant = new Tenant(tenantId,tenantCode,tenantName, StatusEnum.ENABLE,userId);
