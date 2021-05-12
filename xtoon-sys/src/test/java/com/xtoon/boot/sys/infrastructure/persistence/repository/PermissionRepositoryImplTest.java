@@ -3,7 +3,6 @@ package com.xtoon.boot.sys.infrastructure.persistence.repository;
 import com.xtoon.boot.common.domain.StatusEnum;
 import com.xtoon.boot.sys.ApplicationTest;
 import com.xtoon.boot.sys.domain.model.permission.*;
-import com.xtoon.boot.sys.domain.model.permission.PermissionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -14,7 +13,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * 权限RepositoryImpl测试类
@@ -37,14 +37,14 @@ class PermissionRepositoryImplTest {
         param.put("permissionLevel", PermissionLevelEnum.TENANT.getValue());
         List<Permission> list = permissionRepository.queryList(param);
         logger.info("list="+list);
-        assertThat(list).hasSizeGreaterThan(0);
+        assertNotNull(list);
     }
 
     @Test
     void find() {
         Permission permission = permissionRepository.find(new PermissionId("1362006127461568513"));
         logger.info("permission="+permission);
-        assertThat(permission).isNull();
+        assertNull(permission);
     }
 
     @Test

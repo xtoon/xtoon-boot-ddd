@@ -1,10 +1,8 @@
 package com.xtoon.boot.sys.domain.model.user;
 
-import com.xtoon.boot.sys.domain.model.user.AccountId;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * AccountIdTest
@@ -16,13 +14,13 @@ class AccountIdTest {
 
     @Test
     void idString() {
-        assertThat(new AccountId("1").getId()).isEqualTo("1");
+        assertEquals(new AccountId("1").getId(),"1");
     }
 
     @Test
     void sameValueAs() {
-        assertThat(new AccountId("1").sameValueAs(new AccountId("2"))).isFalse();
-        assertThat(new AccountId("1").sameValueAs(new AccountId("1"))).isTrue();
+        assertFalse(new AccountId("1").sameValueAs(new AccountId("2")));
+        assertTrue(new AccountId("1").sameValueAs(new AccountId("1")));
     }
 
 }

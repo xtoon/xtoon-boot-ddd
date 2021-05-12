@@ -1,10 +1,11 @@
 package com.xtoon.boot.sys.domain.model.user;
 
-import com.xtoon.boot.sys.domain.model.user.Password;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  * PasswordTest
@@ -18,14 +19,14 @@ class PasswordTest {
     @Test
     void create() {
         Password password = Password.create("123456");
-        assertThat(password).isNotNull();
+        assertNotNull(password);
         log.info(password.toString());
     }
 
     @Test
     void create1() {
         Password password = Password.create("123456","abc");
-        assertThat(password).isNotNull();
+        assertNotNull(password);
         log.info(password.toString());
     }
 
@@ -33,6 +34,6 @@ class PasswordTest {
     void sameValueAs() {
         Password password1 = Password.create("123456","abc");
         Password password2 = Password.create("123456","abc");
-        assertThat(password1.sameValueAs(password2)).isTrue();
+        assertTrue(password1.sameValueAs(password2));
     }
 }

@@ -1,19 +1,22 @@
 package com.xtoon.boot.sys.domain.model.user;
 
 import com.xtoon.boot.common.domain.StatusEnum;
+import com.xtoon.boot.sys.ApplicationTest;
 import com.xtoon.boot.sys.domain.external.TokenGeneratorExternalService;
 import com.xtoon.boot.sys.domain.model.role.RoleId;
 import com.xtoon.boot.sys.domain.model.tenant.TenantId;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * UserTest
@@ -22,6 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @date 2021-04-04
  **/
 @Slf4j
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes= ApplicationTest.class)
 class UserTest {
 
     @Autowired
@@ -40,32 +45,32 @@ class UserTest {
 
     @Test
     void isEnable() {
-        assertThat(user.isEnable()).isTrue();
+        assertTrue(user.isEnable());
     }
 
     @Test
     void sameIdentityAs() {
         User user2 = new User(new UserId("1"), null,null, null, null, null);
-        assertThat(user.sameIdentityAs(user2)).isTrue();
+        assertTrue(user.sameIdentityAs(user2));
     }
 
     @Test
     void disable() {
         StatusEnum statusEnum = user.getStatus();
         user.disable();
-        assertThat(statusEnum.sameValueAs(user.getStatus())).isFalse();
+        assertFalse(statusEnum.sameValueAs(user.getStatus()));
     }
 
     @Test
     void refreshToken() {
         user.refreshToken(tokenGeneratorExternalService.generateValue());
-        Assertions.assertThat(user.getAccount().getToken()).isNotNull();
+        assertNotNull(user.getAccount().getToken());
     }
 
     @Test
     void changePassword() {
         log.info(user.getAccount().getPassword().getSalt());
         user.changePassword("123456","654321");
-        Assertions.assertThat(user.getAccount().getPassword().sameValueAs(Password.create("654321","11111"))).isTrue();
+        assertTrue(user.getAccount().getPassword().sameValueAs(Password.create("654321","11111")));
     }
 }

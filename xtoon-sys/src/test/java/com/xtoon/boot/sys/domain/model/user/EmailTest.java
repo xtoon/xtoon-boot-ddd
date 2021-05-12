@@ -1,10 +1,8 @@
 package com.xtoon.boot.sys.domain.model.user;
 
-import com.xtoon.boot.sys.domain.model.user.Email;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * EmailTest
@@ -19,7 +17,7 @@ class EmailTest {
         assertThrows(IllegalArgumentException.class, () -> {
             new Email("1");
         });
-        assertThat(new Email("5252@qq.com").sameValueAs(new Email("5252@qq.com"))).isTrue();
-        assertThat(new Email("5252@qq.com").sameValueAs(new Email("52523@qq.com"))).isFalse();
+        assertTrue(new Email("5252@qq.com").sameValueAs(new Email("5252@qq.com")));
+        assertFalse(new Email("5252@qq.com").sameValueAs(new Email("52523@qq.com")));
     }
 }

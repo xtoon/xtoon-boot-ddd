@@ -1,4 +1,4 @@
-package com.xtoon.boot.web.sys;
+package com.xtoon.boot.web.controller.sys;
 
 import com.xtoon.boot.common.util.TenantContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * 日志Controller测试
@@ -54,7 +54,7 @@ class LogControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
         int status=mvcResult.getResponse().getStatus();
-        assertThat(status).isEqualTo(200);
+        assertEquals(status, 200);
         logger.info(mvcResult.getResponse().getContentAsString());
     }
 

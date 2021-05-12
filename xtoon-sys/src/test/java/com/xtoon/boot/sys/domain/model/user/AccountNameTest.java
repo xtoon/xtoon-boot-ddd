@@ -1,9 +1,7 @@
 package com.xtoon.boot.sys.domain.model.user;
 
-import com.xtoon.boot.sys.domain.model.user.AccountName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -19,7 +17,7 @@ class AccountNameTest {
         assertThrows(IllegalArgumentException.class, () -> {
             new AccountName("");
         });
-        assertThat(new AccountName("test").sameValueAs(new AccountName("test1"))).isFalse();
-        assertThat(new AccountName("test").sameValueAs(new AccountName("test"))).isTrue();
+        assertFalse(new AccountName("test").sameValueAs(new AccountName("test1")));
+        assertTrue(new AccountName("test").sameValueAs(new AccountName("test")));
     }
 }

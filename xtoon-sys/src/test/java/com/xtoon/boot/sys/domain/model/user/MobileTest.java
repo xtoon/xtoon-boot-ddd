@@ -1,9 +1,7 @@
 package com.xtoon.boot.sys.domain.model.user;
 
-import com.xtoon.boot.sys.domain.model.user.Mobile;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -19,7 +17,7 @@ class MobileTest {
         assertThrows(IllegalArgumentException.class, () -> {
             new Mobile("185555555551");
         });
-        assertThat(new Mobile("18555555555").sameValueAs(new Mobile("18555555555"))).isTrue();
-        assertThat(new Mobile("18555555555").sameValueAs(new Mobile("18555555554"))).isFalse();
+        assertTrue(new Mobile("18555555555").sameValueAs(new Mobile("18555555555")));
+        assertFalse(new Mobile("18555555555").sameValueAs(new Mobile("18555555554")));
     }
 }
