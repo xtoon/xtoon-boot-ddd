@@ -7,6 +7,7 @@ import com.xtoon.boot.sys.domain.model.role.RoleId;
 import com.xtoon.boot.sys.domain.model.tenant.TenantId;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes= ApplicationTest.class)
+@DisplayName("用户测试")
 class UserTest {
 
     @Autowired
@@ -44,17 +46,20 @@ class UserTest {
     }
 
     @Test
+    @DisplayName("是否有效")
     void isEnable() {
         assertTrue(user.isEnable());
     }
 
     @Test
+    @DisplayName("是否相等")
     void sameIdentityAs() {
         User user2 = new User(new UserId("1"), null,null, null, null, null);
         assertTrue(user.sameIdentityAs(user2));
     }
 
     @Test
+    @DisplayName("禁用")
     void disable() {
         StatusEnum statusEnum = user.getStatus();
         user.disable();
@@ -62,14 +67,15 @@ class UserTest {
     }
 
     @Test
+    @DisplayName("刷新token")
     void refreshToken() {
         user.refreshToken(tokenGeneratorExternalService.generateValue());
         assertNotNull(user.getAccount().getToken());
     }
 
     @Test
+    @DisplayName("修改密码")
     void changePassword() {
-        log.info(user.getAccount().getPassword().getSalt());
         user.changePassword("123456","654321");
         assertTrue(user.getAccount().getPassword().sameValueAs(Password.create("654321","11111")));
     }

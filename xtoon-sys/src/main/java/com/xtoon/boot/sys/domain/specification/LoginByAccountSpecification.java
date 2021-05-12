@@ -4,7 +4,7 @@ import com.xtoon.boot.common.domain.AbstractSpecification;
 import com.xtoon.boot.sys.domain.model.user.User;
 
 /**
- * 用户名登录Specification
+ * 账号登录Specification
  *
  * @author haoxin
  * @date 2021-02-20

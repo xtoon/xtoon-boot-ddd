@@ -22,6 +22,9 @@ public class CaptchaConverter {
     }
 
     public static Captcha toCaptcha(SysCaptchaDO sysCaptchaDO) {
+        if(sysCaptchaDO == null) {
+            return null;
+        }
         Captcha captcha = new Captcha(new Uuid(sysCaptchaDO.getUuid()), new CaptchaCode(sysCaptchaDO.getCode()),
                 sysCaptchaDO.getExpireTime());
         return captcha;

@@ -1,5 +1,6 @@
 package com.xtoon.boot.sys.domain.model.user;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,9 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author haoxin
  * @date 2021-02-25
  **/
+@DisplayName("email测试")
 class EmailTest {
 
     @Test
+    @DisplayName("是否相等")
     void sameValueAs() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Email("1");

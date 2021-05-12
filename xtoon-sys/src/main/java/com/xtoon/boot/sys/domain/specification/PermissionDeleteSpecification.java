@@ -6,7 +6,7 @@ import com.xtoon.boot.sys.domain.model.permission.PermissionId;
 import com.xtoon.boot.sys.domain.model.permission.PermissionRepository;
 
 /**
- * 权限创建Specification
+ * 权限删除Specification
  *
  * @author haoxin
  * @date 2021-02-20
