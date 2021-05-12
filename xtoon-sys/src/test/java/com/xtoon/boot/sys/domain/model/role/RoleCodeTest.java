@@ -1,9 +1,8 @@
 package com.xtoon.boot.sys.domain.model.role;
 
-import com.xtoon.boot.sys.domain.model.role.RoleCode;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -12,14 +11,16 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author haoxin
  * @date 2021-02-25
  **/
+@DisplayName("角色编码测试")
 class RoleCodeTest {
 
     @Test
+    @DisplayName("角色编码相等")
     void sameValueAs() {
         assertThrows(IllegalArgumentException.class, () -> {
             new RoleCode("你");
         });
-        assertThat(new RoleCode("5252com").sameValueAs(new RoleCode("5252com"))).isTrue();
-        assertThat(new RoleCode("5252com").sameValueAs(new RoleCode("5252co1"))).isFalse();
+        assertTrue(new RoleCode("5252com").sameValueAs(new RoleCode("5252com")));
+        assertFalse(new RoleCode("5252com").sameValueAs(new RoleCode("5252co1")));
     }
 }

@@ -1,28 +1,30 @@
 package com.xtoon.boot.sys.domain.model.user;
 
-import com.xtoon.boot.sys.domain.model.user.AccountId;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * AccountIdTest
+ * 账号ID测试
  *
  * @author haoxin
  * @date 2021-02-25
  **/
+@DisplayName("账号ID测试")
 class AccountIdTest {
 
     @Test
+    @DisplayName("获取ID")
     void idString() {
-        assertThat(new AccountId("1").getId()).isEqualTo("1");
+        assertEquals(new AccountId("1").getId(),"1");
     }
 
     @Test
+    @DisplayName("相等")
     void sameValueAs() {
-        assertThat(new AccountId("1").sameValueAs(new AccountId("2"))).isFalse();
-        assertThat(new AccountId("1").sameValueAs(new AccountId("1"))).isTrue();
+        assertFalse(new AccountId("1").sameValueAs(new AccountId("2")));
+        assertTrue(new AccountId("1").sameValueAs(new AccountId("1")));
     }
 
 }
